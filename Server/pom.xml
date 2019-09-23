@@ -52,8 +52,8 @@
         <version>1.6.0</version>  
         <configuration>
           <schemaVersion>V2</schemaVersion>
-          <resourceGroup>DurakServer-1569236632639-rg</resourceGroup>
-          <appName>DurakServer-1569236632639</appName>
+          <resourceGroup>DurakServer</resourceGroup>
+          <appName>DurakServer</appName>
           <region>westeurope</region>
           <pricingTier>P1V2</pricingTier>
             <appSettings>
