@@ -1,22 +1,17 @@
 package Server;
 
-import com.mongodb.MongoClientURI;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoDatabase;
 
 public class DB {
-    private static com.mongodb.DB mongoDB;
+    private static MongoDatabase mongoDB;
 
-    synchronized public static com.mongodb.DB Instance(){
+    synchronized public static MongoDatabase Instance(){
         if(mongoDB == null){
-            MongoClientURI mongoClientURI = new MongoClientURI(
-                    "mongodb://durak:durak@durakdb-shard-00-00-b1ola.azure.mongodb.net:27017,durakdb-shard-00-01-b1ola.azure.mongodb.net:27017,durakdb-shard-00-02-b1ola.azure.mongodb.net:27017/test?ssl=true&replicaSet=DurakDB-shard-0&authSource=admin&retryWrites=true&w=majority");
-            try{
-                MongoClient mongoClient = new MongoClient(mongoClientURI);
-                mongoDB = mongoClient.getDB("test");
-            } catch (java.net.UnknownHostException ex){
-
-            }
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://durak:durak@durakdb-b1ola.azure.mongodb.net/test?retryWrites=true&w=majority");
+            mongoDB = mongoClient.getDatabase("Durak");
         }
-        return  mongoDB;
+        return mongoDB;
     }
 }
