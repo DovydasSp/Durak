@@ -1,18 +1,62 @@
 package Game;
+import java.util.*;
+import Game.cardstatic.*;
 
-import org.bson.types.ObjectId;
-import java.util.ArrayList;
 
 public class Deck {
-    private ObjectId id;
-    private Durak durak;
-    private ArrayList<Player> players;
-    private ArrayList<Card> cards;
 
-    public Deck(Durak durak, ArrayList<Player> players, ArrayList<Card> cards){
-        id = new ObjectId();
-        this.durak = durak;
-        this.players = players;
-        this.cards = cards;
+    private Stack<Card> cards;
+
+    // Creates a standard shuffled 36 card deck
+    public Deck() {
+        cards = new Stack<Card>();
+
+        ArrayList<Card> allCards = new ArrayList<Card>();
+        for (String rank : Static.ranks) {
+            for (String suit : Static.suits) {
+                allCards.add(new Card(rank, suit));
+                Collections.shuffle(allCards);
+            }
+        }
+
+        for (Card card : allCards) {
+            cards.push(card);
+        }
     }
+
+    // Take a care from the top.
+    // If empty stack, return null.
+    public Card draw() {
+        if (!isEmpty()) {
+            return cards.pop();
+        } else {
+            return null;
+        }
+    }
+
+    public boolean isEmpty() {
+        return cards.empty();
+    }
+
+    public int size() {
+        return cards.size();
+    }
+
+    // Strangely, once a trump is drawn and viewed at the beginning of a game of Durak,
+    // it is then reinserted at the bottom of the deck.
+    // It is for this single purpose that the intent of the stack will be broken, using the inherited add method from Vector.
+    public void reinsert(Card t) {
+        cards.add(0, t);
+    }
+
+    @Override
+    public String toString() {
+        String ret = new String("[Bottom]\n");
+        for (Card card : cards) {
+            ret += card + "\n";
+        }
+        ret += "[Top]\n";
+        return ret;
+    }
+
 }

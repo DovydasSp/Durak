@@ -1,13 +1,46 @@
 package Server;
 
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+//import Game.Lobby;
+import Game.Durak;
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RestController
 public class ServerController {
 
-    @RequestMapping("/")
-    public String greeting() {
-        return "Welcome to Durak";
+    //private Lobby lobby;
+    private HashMap<String, Durak> gameMap = new HashMap<>();
+    Thread thread;
+
+    @RequestMapping(value= "/createGame", method = RequestMethod.POST)
+    public ResponseEntity<Object> createGame(@RequestBody String json) {
+        Durak durak = new Durak();
+        JSONObject obj = new JSONObject(json);
+        durak.getPlayerOne().setName(obj.getString("playerName"));
+        gameMap.put(durak.getID().toString(), durak);
+        return new ResponseEntity<>(Message.formGameCreated(durak.getID().toString(), durak.getPlayerOne()), HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/joinGame", method = RequestMethod.POST)
+    public ResponseEntity<Object> joinGame(@RequestBody String json) {
+        JSONObject obj = new JSONObject(json);
+        gameMap.get(obj.getString("gameID")).getPlayerTwo().setName(obj.getString("playerName"));
+        thread = new Thread(gameMap.get(obj.getString("gameID")));
+        thread.start();
+        return new ResponseEntity<>(Message.formPlayerJoined(gameMap.get(obj.getString("gameID")).getPlayerTwo()) ,HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/input", method = RequestMethod.POST)
+    public ResponseEntity<Object> input(@RequestBody String json) {
+        JSONObject obj = new JSONObject(json);
+        Durak durak = gameMap.get(obj.getString("gameID"));
+        durak.addInput(obj.getString("playerID"), obj.getInt("command"));
+        return new ResponseEntity<>("success", HttpStatus.CREATED);
+    }
+
 }
