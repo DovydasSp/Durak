@@ -1,0 +1,1 @@
+cardstatic.Static
