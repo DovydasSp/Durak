@@ -87,6 +87,27 @@ public class Message {
         return builder.build();
     }
 
+    public static JsonObject formNoMessages(){
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("header", "NoMessages");
+        return builder.build();
+    }
+
+    public static JsonObject formRole(Boolean attacker){
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("header", "role");
+        if(attacker)
+            builder.add("role", "attacker");
+        else
+            builder.add("role", "defender");
+        return builder.build();
+    }
+
+    public static JsonObject formRoundEnd(){
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("header", "roundEnd");
+        return builder.build();
+    }
 
 
 }

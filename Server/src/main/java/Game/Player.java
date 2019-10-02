@@ -1,6 +1,9 @@
 package Game;
+import Server.Message;
 import org.bson.types.ObjectId;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import java.util.*;
 
 public class Player {
@@ -12,6 +15,7 @@ public class Player {
     //private static int count = 0;
     private boolean attacker;
     private Stack<Integer> input = new Stack<>();
+    private Stack<JsonObject> messages = new Stack<>();
 
     // Create a new Player with an empty hand and set to draw from a default deck (does not draw).
     public Player() {
@@ -72,6 +76,7 @@ public class Player {
         for (int i = 0; i < n; i++) {
             draw();
         }
+        addMessage(Message.formPlayersHand(hand));
     }
 
     public void takeCard(Card c) {
@@ -91,6 +96,7 @@ public class Player {
     public void replenish() {
         int toDraw = hand.numberToDraw();
         drawCards(toDraw);
+        addMessage(Message.formPlayersHand(hand));
     }
 
     // Victory check
@@ -104,10 +110,12 @@ public class Player {
 
     public void makeAttacker() {
         attacker = true;
+        addMessage(Message.formRole(attacker));
     }
 
     public void makeDefender() {
         attacker = false;
+        addMessage(Message.formRole(attacker));
     }
 
     public void switchRole() {
@@ -165,8 +173,18 @@ public class Player {
         }
     }
 
+    public void addMessage(JsonObject msg){ messages.add(msg); }
+    public JsonObject popMessage() {
+        synchronized (messages){
+            if(messages.size() != 0)
+                return messages.pop();
+            return Message.formNoMessages();
+        }
+    }
+
     public void setDeck(Deck deck){ this.deck = deck; }
     public void setHand(Hand hand) { this.hand = hand;}
+    public Hand getHand() {return hand;}
 
     public Stack<Integer> getInputStack() { return input; }
 }
