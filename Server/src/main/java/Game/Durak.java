@@ -1,4 +1,5 @@
 package Game;
+import Server.Message;
 import org.bson.types.ObjectId;
 
 import java.util.*;
@@ -80,11 +81,12 @@ public class Durak implements Runnable {
         //two = new Player(deck, two.getName());
         two.setDeck(deck);
         two.drawCards(6);
-
         System.out.println("Determining trump card...\n");
         Card trumpCard = deck.draw();
         String trumpSuit = trumpCard.getSuit();
         TRUMP = trumpSuit;
+        one.addMessage(Message.formTrump(TRUMP));
+        two.addMessage(Message.formTrump(TRUMP));
 
         System.out.println("The trump is: " + TRUMP + "!\n");
 
@@ -201,9 +203,13 @@ public class Durak implements Runnable {
         Field roundField = new Field(initialAttackCard); // Generate a Field
         currentField = roundField;
         roundInitiated = true;
+        one.addMessage(Message.formField(currentField));
+        two.addMessage(Message.formField(currentField));
 
         while (!roundField.isCompleted()) {
             boolean defenderTurn = defenderResponse(roundField);
+            one.addMessage(Message.formField(currentField));
+            two.addMessage(Message.formField(currentField));
             if (defenderTurn || victoryAchieved()) {
                 // Defender took the cards, ended the round
                 // OR as a result of the defender's turn, victory was achieved (CARD PLAYED: Check for victory!)
@@ -215,6 +221,8 @@ public class Durak implements Runnable {
             // Defender responded by playing a card
 
             boolean attackerTurn = attackerResponse(roundField);
+            one.addMessage(Message.formField(currentField));
+            two.addMessage(Message.formField(currentField));
             if (attackerTurn || victoryAchieved()) {
                 // Attacker declared the round to be over
                 // OR as a result of the attacker's turn, victory was achieved (CARD PLAYED: Check for victory!)
@@ -223,7 +231,8 @@ public class Durak implements Runnable {
                 return true; // Pop out of round
             }
         }
-
+        one.addMessage(Message.formRoundEnd());
+        two.addMessage(Message.formRoundEnd());
         return true; // Satisfy Java
     }
 
@@ -312,9 +321,10 @@ public class Durak implements Runnable {
             }
             if (!properInput) {
                 System.out.println("Invalid input. Please enter an acceptable value.");
+                p.addMessage(Message.formInput(2));
             }
         }
-
+        p.addMessage(Message.formInput(1));
         return playerSelection;
     }
 
@@ -440,12 +450,14 @@ public class Durak implements Runnable {
             two.addInput(input);
         }
     }
-    /*public int getInput(Player player){
-        while(input.size() == 0);
-        synchronized(input){
-            return input.pop();
-        }
-    }*/
+
+    public Player getPlayerByID(String id){
+        if(one.getID().toString().compareTo(id) == 0)
+            return one;
+        else if(two.getID().toString().compareTo(id) == 0)
+            return two;
+        return null;
+    }
 
     public ObjectId getID() { return id; }
 }
