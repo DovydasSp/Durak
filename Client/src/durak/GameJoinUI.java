@@ -11,16 +11,18 @@ import javafx.util.Pair;
 
 public class GameJoinUI{
     GameConnectionToAPI connection = new GameConnectionToAPI();
+    JFrame frame;
     
     JTextField tf1, tf2;
     JButton b1,b2;
     JLabel l1,l2;
+
+    GameJoinUI(JFrame frame0) {
+        frame = frame0;
+    }
     
     public void start(){
-        JFrame frame = new JFrame("Durak - Create or join a game");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1616, 1000);
-        frame.setBackground(Color.gray);
+        frame.setTitle("Durak - Create or join a game");
         
         l1=new JLabel("Enter username");  
         l1.setBounds(750,300, 100,30);
@@ -47,7 +49,9 @@ public class GameJoinUI{
                          pair = connection.createGame(s1);
                          System.out.println("GameID: "+pair.getKey()+" PlayerID: "+pair.getValue());
                          //JOptionPane.showMessageDialog(frame,"Created. PlayerName: "+s1+" GameID: "+pair.getKey()+" PlayerID: "+pair.getValue());
-                         GameUI game = new GameUI();
+                         frame.getContentPane().removeAll();
+                         frame.repaint();
+                         GameUI game = new GameUI(frame);
                          game.drawGameBoard(pair.getKey(), pair.getValue(), s1);
                      } catch (Exception ex) {
                          Logger.getLogger(GameJoinUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -66,7 +70,9 @@ public class GameJoinUI{
                          pair = connection.joinGame(s1, s2);
                          System.out.println("GameID: "+pair.getKey()+" PlayerID: "+pair.getValue());
                          //JOptionPane.showMessageDialog(frame,"Joined. PlayerName: "+s1+" GameID: "+pair.getKey()+" PlayerID: "+pair.getValue());
-                         GameUI game = new GameUI();
+                         frame.getContentPane().removeAll();
+                         frame.repaint();
+                         GameUI game = new GameUI(frame);
                          game.drawGameBoard(pair.getKey(), pair.getValue(), s1);
                      } catch (Exception ex) {
                          Logger.getLogger(GameJoinUI.class.getName()).log(Level.SEVERE, null, ex);
