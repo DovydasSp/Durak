@@ -85,8 +85,6 @@ public class Durak implements Runnable {
         Card trumpCard = deck.draw();
         String trumpSuit = trumpCard.getSuit();
         TRUMP = trumpSuit;
-        one.addMessage(Message.formTrump(TRUMP));
-        two.addMessage(Message.formTrump(TRUMP));
 
         System.out.println("The trump is: " + TRUMP + "!\n");
 
@@ -109,8 +107,8 @@ public class Durak implements Runnable {
             setAttacker(two);
             setDefender(one);
         }
-
-
+        one.addMessage(Message.formTrump(TRUMP));
+        two.addMessage(Message.formTrump(TRUMP));
 
         System.out.println("The initial attacker is: " + attacker + ".");
         System.out.println("The initial defender is: " + defender + ".\n\n");
