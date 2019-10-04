@@ -97,7 +97,6 @@ public class Player {
     public void replenish() {
         int toDraw = hand.numberToDraw();
         drawCards(toDraw);
-        addMessage(Message.formPlayersHand(hand));
     }
 
     // Victory check

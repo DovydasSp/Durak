@@ -113,5 +113,12 @@ public class Message {
         return builder;
     }
 
+    public static JSONObject formPlayerTurnEvent(boolean turn){
+        JSONObject builder = new JSONObject();
+        builder.put("header", "yourTurn");
+        builder.put("yourTurn", turn);
+        return builder;
+    }
+
 
 }
