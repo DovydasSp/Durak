@@ -51,8 +51,8 @@ public class GameJoinUI{
                          //JOptionPane.showMessageDialog(frame,"Created. PlayerName: "+s1+" GameID: "+pair.getKey()+" PlayerID: "+pair.getValue());
                          frame.getContentPane().removeAll();
                          frame.repaint();
-                         GameUI game = new GameUI(frame);
-                         game.drawGameBoard(pair.getKey(), pair.getValue(), s1);
+                         GameUI game = new GameUI(frame, pair.getKey(), pair.getValue());
+                         game.drawGameBoard(s1);
                      } catch (Exception ex) {
                          Logger.getLogger(GameJoinUI.class.getName()).log(Level.SEVERE, null, ex);
                      }
@@ -72,8 +72,8 @@ public class GameJoinUI{
                          //JOptionPane.showMessageDialog(frame,"Joined. PlayerName: "+s1+" GameID: "+pair.getKey()+" PlayerID: "+pair.getValue());
                          frame.getContentPane().removeAll();
                          frame.repaint();
-                         GameUI game = new GameUI(frame);
-                         game.drawGameBoard(pair.getKey(), pair.getValue(), s1);
+                         GameUI game = new GameUI(frame, pair.getKey(), pair.getValue());
+                         game.drawGameBoard(s1);
                      } catch (Exception ex) {
                          Logger.getLogger(GameJoinUI.class.getName()).log(Level.SEVERE, null, ex);
                      }

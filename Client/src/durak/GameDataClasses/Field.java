@@ -1,4 +1,4 @@
-package durak.GameClasses;
+package durak.GameDataClasses;
 
 import java.io.*;
 import java.util.*;
@@ -9,16 +9,28 @@ public class Field {
 
 	// ArrayList of Pairs
 
-	private ArrayList<Pair> pairs;
-	private ArrayList<String> playedRanks;
+	private ArrayList<CardPair> pairs;
+	//private ArrayList<String> playedRanks;
 	private boolean completed;
 
 	// Empty field
 	public Field() {
-		pairs = new ArrayList<Pair>();
-		playedRanks = new ArrayList<String>();
+		pairs = new ArrayList<CardPair>();
+		//playedRanks = new ArrayList<String>();
 		completed = false;
 	}
+        
+        public void addPair(CardPair cardPair){
+            pairs.add(cardPair);
+        }
+        
+        public void setCompleted(){
+            completed = true;
+        }
+        
+        public ArrayList<CardPair> getPairs(){
+            return pairs;
+        }
 /*
 	// Field generated from a new attack
 	public Field(Card a) {
