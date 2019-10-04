@@ -106,5 +106,12 @@ public class Message {
         return builder;
     }
 
+    public static JSONObject formEnemyCardCount(Hand hand){
+        JSONObject builder = new JSONObject();
+        builder.put("header", "enemyPlayerCardCount");
+        builder.put("count", hand.size());
+        return builder;
+    }
+
 
 }

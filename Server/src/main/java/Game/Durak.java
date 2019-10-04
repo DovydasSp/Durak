@@ -192,6 +192,8 @@ public class Durak implements Runnable {
         int initialAttack = playerInput(attacker);
         Card initialAttackCard = attacker.useCard(initialAttack);
         announceCardPlayed(attacker, initialAttackCard);
+        attacker.addMessage(Message.formPlayersHand(attacker.getHand()));
+        defender.addMessage(Message.formEnemyCardCount(attacker.getHand()));
         //  (CARD PLAYED: Check for victory!)
 
         if (victoryAchieved()) {
@@ -213,9 +215,12 @@ public class Durak implements Runnable {
                 // OR as a result of the defender's turn, victory was achieved (CARD PLAYED: Check for victory!)
                 roundInitiated = false;
                 currentField = null;
+                one.addMessage(Message.formRoundEnd());
+                two.addMessage(Message.formRoundEnd());
                 return false; // Pop out of round
             }
-
+            defender.addMessage(Message.formPlayersHand(defender.getHand()));
+            attacker.addMessage(Message.formEnemyCardCount(defender.getHand()));
             // Defender responded by playing a card
 
             boolean attackerTurn = attackerResponse(roundField);
@@ -226,11 +231,13 @@ public class Durak implements Runnable {
                 // OR as a result of the attacker's turn, victory was achieved (CARD PLAYED: Check for victory!)
                 roundInitiated = false;
                 currentField = null;
+                one.addMessage(Message.formRoundEnd());
+                two.addMessage(Message.formRoundEnd());
                 return true; // Pop out of round
             }
+            attacker.addMessage(Message.formPlayersHand(attacker.getHand()));
+            defender.addMessage(Message.formEnemyCardCount(attacker.getHand()));
         }
-        one.addMessage(Message.formRoundEnd());
-        two.addMessage(Message.formRoundEnd());
         return true; // Satisfy Java
     }
 
