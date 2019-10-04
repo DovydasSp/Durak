@@ -1,4 +1,4 @@
-package durak.GameClasses;
+package durak.GameDataClasses;
 
 import java.io.*;
 import java.util.*;
@@ -6,11 +6,14 @@ import durak.Static.*;
 
 public class Card /*implements Comparable*/ {
 
-	private final String rank;
-	private final String suit;
-	private final String color; 
+	private String rank;
+	private String suit;
+	private String color; 
 
 	//private Random r = new Random();
+        
+        public Card() {
+        }
         
         public Card(String rank_, String suit_, String color_) {
             rank = rank_;

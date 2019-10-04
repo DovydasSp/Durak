@@ -54,4 +54,14 @@ public class Static {
 		colorsMap.put("Spades", "Black");
 		colors = Collections.unmodifiableMap(colorsMap);
 	}
+        
+        public static final Map<String, String> symbols;
+	static {
+		Map<String, String> symbolsMap = new HashMap<String, String>();
+		symbolsMap.put("Hearts", "♥");
+		symbolsMap.put("Diamonds", "♦");
+		symbolsMap.put("Clubs", "♣");
+		symbolsMap.put("Spades", "♠");
+		symbols = Collections.unmodifiableMap(symbolsMap);
+	}
 }

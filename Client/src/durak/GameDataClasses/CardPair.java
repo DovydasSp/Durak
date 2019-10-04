@@ -1,10 +1,10 @@
-package durak.GameClasses;
+package durak.GameDataClasses;
 
 import java.io.*;
 import java.util.*;
 import durak.Static.*;
 
-public class Pair {
+public class CardPair {
 	// An attack/defense pair as part of gameplay
 
 	private Card attacker;
@@ -12,11 +12,24 @@ public class Pair {
 
 	private boolean completed;
 
-	/*public Pair(Card a) {
+	public CardPair(Card a, Card d, boolean completed_) {
 		attacker = a; 
-		completed = false; // Completed means: did it receive a response (does it have a defender?)
+                defender = d;
+		completed = completed_; // Completed means: did it receive a response (does it have a defender?)
 	}
-
+        
+        public boolean isCompleted(){
+            return completed;
+        }
+        
+        public Card getAttacker(){
+            return attacker;
+        }
+        
+        public Card getDefender(){
+            return defender;
+        }
+        /*
 	// Defender responds
 	public void response(Card d) {
 		setDefender(d);

@@ -1,4 +1,4 @@
-package durak.GameClasses;
+package durak.GameDataClasses;
 
 import java.io.*;
 import java.util.*;

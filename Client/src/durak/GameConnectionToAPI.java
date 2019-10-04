@@ -1,5 +1,9 @@
 package durak;
 
+import durak.GameDataClasses.Card;
+import durak.GameDataClasses.CardPair;
+import durak.GameDataClasses.Field;
+import durak.GameDataClasses.Hand;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,7 +14,6 @@ import java.net.URL;
 import javafx.util.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
-import durak.GameClasses.*;
 import java.util.ArrayList;
 
 
@@ -47,10 +50,8 @@ public class GameConnectionToAPI {
             }
                 
             JSONObject myResponse = new JSONObject(response.toString());
-            JSONObject gameid_data = myResponse.getJSONObject("gameID");
-            gameID = gameid_data.getString("string");
-            JSONObject playerid_data = myResponse.getJSONObject("playerID");
-            playerID = playerid_data.getString("string");
+            gameID = myResponse.getString("gameID");
+            playerID = myResponse.getString("playerID");
         }
         
         Pair<String, String> pair = new Pair<String, String>(gameID, playerID);
@@ -88,8 +89,7 @@ public class GameConnectionToAPI {
             }
                 
             JSONObject myResponse = new JSONObject(response.toString());
-            JSONObject playerid_data = myResponse.getJSONObject("playerID");
-            playerID = playerid_data.getString("string");
+            playerID = myResponse.getString("playerID");
         }
         
         Pair<String, String> pair = new Pair<String, String>(gameID, playerID);
@@ -122,15 +122,12 @@ public class GameConnectionToAPI {
             }
                 
             JSONObject myResponse = new JSONObject(response.toString());
-            JSONObject isrole_data = myResponse.getJSONObject("header");
-            isrole = isrole_data.getString("string");
+            isrole = myResponse.getString("header");
             if(isrole.equals("role"))
             {
-                JSONObject role_data = myResponse.getJSONObject("role");
-                role = role_data.getString("string");
+                role = myResponse.getString("role");
             }
         }
-        System.out.println("role:"+role);
         conn.disconnect();
         return role;
     }
@@ -160,19 +157,16 @@ public class GameConnectionToAPI {
             }
                 
             JSONObject myResponse = new JSONObject(response.toString());
-            JSONObject isrole_data = myResponse.getJSONObject("header");
-            istrump = isrole_data.getString("string");
+            istrump = myResponse.getString("header");
             if(istrump.equals("trump"))
             {
-                JSONObject role_data = myResponse.getJSONObject("trump");
-                trump = role_data.getString("string");
+                trump = myResponse.getString("trump");
             }
         }
-        System.out.println(trump);
         conn.disconnect();
         return trump;
     }
-    /*
+    
     public Hand getPlayersHand(String playerID, String gameID) throws ProtocolException, IOException, JSONException{
         try {
             URL url = new URL("https://durakserver.azurewebsites.net/poll/"+gameID+"/"+playerID);
@@ -182,8 +176,8 @@ public class GameConnectionToAPI {
         }
         
         String isPlayersHand = "";
-        String numberOfCards = "";
-        Hand hand = new Hand();
+        int numberOfCards = -1;
+        Hand hand = null;
         
         conn.setRequestMethod("GET");
 	conn.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -199,18 +193,153 @@ public class GameConnectionToAPI {
             }
                 
             JSONObject myResponse = new JSONObject(response.toString());
-            JSONObject isrole_data = myResponse.getJSONObject("header");
-            isPlayersHand = isrole_data.getString("string");
+            isPlayersHand = myResponse.getString("header");
             if(isPlayersHand.equals("playersHand"))
             {
-                JSONObject role_data = myResponse.getJSONObject("numberOfCards");
-                //trump = role_data.getString("integral");
-                System.out.println("integral:"+role_data.getBoolean("integral"));
-                System.out.println("valueType:"+role_data.getString("valueType"));
+                numberOfCards = myResponse.getInt("numberOfCards");
+                if(numberOfCards > 0){
+                    hand = new Hand();
+                }
+                for(int i=0; i < numberOfCards; i++){
+                    JSONObject card_data = myResponse.getJSONObject("card"+i);
+                    String color = card_data.getString("color");
+                    String rank = card_data.getString("rank");
+                    String suit = card_data.getString("suit");
+                    Card card = new Card(rank, suit, color);
+                    hand.add(card);
+                }
             }
         }
-        //System.out.println(trump);
         conn.disconnect();
         return hand;
-    }*/
+    }
+    
+    public String input(String playerID, String gameID, int cardNr) throws Exception{
+        try {
+            URL url = new URL("https://durakserver.azurewebsites.net/input");
+            conn = (HttpURLConnection)url.openConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        String success = "";
+        
+        conn.setRequestMethod("POST");
+	conn.setRequestProperty("Content-Type", "application/json; utf-8");
+        conn.setRequestProperty("Accept", "application/json");
+	conn.setDoOutput(true);
+        String jsonInputString = "{gameID: "+gameID+", playerID: "+playerID+", command: "+cardNr+"}"; //galima pridėt daugiau body elementų
+        
+        try(OutputStream os = conn.getOutputStream()) { //sudeda body parametrus
+            byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);           
+        }
+            
+        try(BufferedReader br = new BufferedReader(
+            new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+            response.append(responseLine.trim());
+            }
+
+            success = response.toString();
+        }
+        conn.disconnect();
+        return success;
+    }
+    
+    public Field getField(String playerID, String gameID) throws ProtocolException, IOException, JSONException{
+        try {
+            URL url = new URL("https://durakserver.azurewebsites.net/poll/"+gameID+"/"+playerID);
+            conn = (HttpURLConnection)url.openConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        String isPlayersHand = "";
+        int numberOfPairs = -1;
+        Field field = new Field();;
+
+        conn.setRequestMethod("GET");
+	conn.setRequestProperty("Content-Type", "application/json; utf-8");
+        conn.setRequestProperty("Accept", "application/json");
+	conn.setDoOutput(true);
+            
+        try(BufferedReader br = new BufferedReader(
+            new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+            response.append(responseLine.trim());
+            }
+                
+            JSONObject myResponse = new JSONObject(response.toString());
+            isPlayersHand = myResponse.getString("header");
+            if(isPlayersHand.equals("field"))
+            {
+                numberOfPairs = myResponse.getInt("numberOfPairs");
+                for(int i=0; i < numberOfPairs; i++){
+                    JSONObject pair_data = myResponse.getJSONObject("pair"+i);
+                    boolean completed = pair_data.getBoolean("completed");
+                    JSONObject att_data = pair_data.getJSONObject("atackerCard");
+                    String color = att_data.getString("color");
+                    String rank = att_data.getString("rank");
+                    String suit = att_data.getString("suits");
+                    Card attCard = new Card(rank, suit, color);
+                    CardPair pair = new CardPair(attCard, new Card(), completed);
+                    if(completed){
+                        JSONObject def_data = pair_data.getJSONObject("defenderCard");
+                        color = def_data.getString("color");
+                        rank = def_data.getString("rank");
+                        suit = def_data.getString("suits");
+                        Card defCard = new Card(rank, suit, color);
+                        pair = new CardPair(attCard, defCard, completed);
+                    }
+                    field.addPair(pair);
+                    if(i==5 && completed == true){
+                        field.setCompleted();
+                    }
+                }
+                return field;
+            }
+        }
+        //conn.disconnect();
+        return null;
+    }
+    
+    public int getInput(String playerID, String gameID) throws ProtocolException, IOException, JSONException{
+        try {
+            URL url = new URL("https://durakserver.azurewebsites.net/poll/"+gameID+"/"+playerID);
+            conn = (HttpURLConnection)url.openConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        String isinput = "";
+        int input = -1;
+        
+        conn.setRequestMethod("GET");
+	conn.setRequestProperty("Content-Type", "application/json; utf-8");
+        conn.setRequestProperty("Accept", "application/json");
+	conn.setDoOutput(true);
+            
+        try(BufferedReader br = new BufferedReader(
+            new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+            response.append(responseLine.trim());
+            }
+                
+            JSONObject myResponse = new JSONObject(response.toString());
+            isinput = myResponse.getString("header");
+            if(isinput.equals("input"))
+            {
+                input = myResponse.getInt("info");
+            }
+        }
+        conn.disconnect();
+        return input;
+    }
 }
