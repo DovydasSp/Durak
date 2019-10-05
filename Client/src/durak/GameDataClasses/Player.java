@@ -3,25 +3,84 @@ package durak.GameDataClasses;
 import java.io.*;
 import java.util.*;
 import durak.Static.*;
+import javafx.util.Pair;
 
 public class Player {
 
+        private String playerName;
+        private String playerID;
+        private String gameID;
 	private Hand hand;
-	private String name;
-	private final int id;
-	//private Deck deck;
-	private static int count = 0;
-	private boolean attacker;
+        private String trump;
+        private boolean isAttacker;
+        private boolean yourTurn;
+        private int oponentCardCount;
 
-	// Create a new Player with an empty hand and set to draw from a default deck (does not draw).
 	public Player() {
-		count++;
-		id = count;
-		name = "Player " + id;
-		hand = new Hand();
-		//deck = new Deck();
-		attacker = false;
+            playerName = "";
+            playerID = "";
+            gameID = "";
+            trump = "";
+            hand = new Hand();
+            isAttacker = false;
+            yourTurn = false;
+            oponentCardCount = 6;
 	}
+        
+        public void setPlayerIds(String playerName_, String playerID_, String gameID_){
+            playerName = playerName_;
+            playerID = playerID_;
+            gameID = gameID_;
+        }
+        
+        public String getPlayerName(){
+            return playerName;
+        }
+        
+        public Pair<String, String> getIDs(){
+            return new Pair<>(gameID, playerID);
+        }
+        
+        public void setHand(Hand hand_){
+            hand = hand_;
+        }
+        
+        public Hand getHand(){
+            return hand;
+        }
+        
+        public void setTrump(String trump_){
+            trump = trump_;
+        }
+        
+        public String getTrump(){
+            return trump;
+        }
+        
+        public void setIsAttacker(boolean isAttacker_){
+            isAttacker = isAttacker_;
+        }
+        
+        public boolean getIsAttacker(){
+            return isAttacker;
+        }
+        
+        public void setYourTurn(boolean yourTurn_){
+            yourTurn = yourTurn_;
+        }
+        
+        public boolean getYourTurn(){
+            return yourTurn;
+        }
+        
+        public void setOponentCardCount(int oponentCardCount_){
+            oponentCardCount = oponentCardCount_;
+        }
+        
+        public int getOponentCardCount(){
+            return oponentCardCount;
+        }
+        
 /*
 	// Create a new Player and draw five cards from given deck.
 	public Player(Deck d) {

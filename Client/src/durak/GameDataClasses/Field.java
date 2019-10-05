@@ -10,6 +10,7 @@ public class Field {
 	// ArrayList of Pairs
 
 	private ArrayList<CardPair> pairs;
+        private int pairCount = 0;
 	//private ArrayList<String> playedRanks;
 	private boolean completed;
 
@@ -30,6 +31,14 @@ public class Field {
         
         public ArrayList<CardPair> getPairs(){
             return pairs;
+        }
+        
+        public int getPairCount(){
+            return pairCount;
+        }
+        
+        public void setPairCount(int p){
+            pairCount = p;
         }
 /*
 	// Field generated from a new attack

@@ -2,10 +2,8 @@ package durak;
 
 import durak.GameDataClasses.Card;
 import durak.GameDataClasses.CardPair;
-import durak.GameDataClasses.Field;
-import durak.GameDataClasses.Hand;
+import durak.GameDataClasses.GameData;
 import durak.Static.Static;
-import durak.Threads.tablePollingThread;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,172 +15,197 @@ import java.util.logging.Logger;
 import javax.swing.border.LineBorder;
 import org.json.JSONException;
 
-
 public class GameUI {
-    GameConnectionToAPI connection = new GameConnectionToAPI();
-    JFrame frame;
-    String gameID;
-    String playerID;
-
-    GameUI(JFrame frame0, String gameID_, String playerID_) {
-        frame = frame0;
-        gameID = gameID_;
-        playerID = playerID_;
+    private Game game;
+    private JFrame frame;
+    private JPanel backPanel;
+    private JPanel infoPanel;
+    private JPanel tablePanel;
+    private JPanel handCardPanel;
+    
+    GameUI(Game game_){
+        game = game_;
     }
-
-    public void drawGameBoard(String userName) throws IOException, ProtocolException, JSONException, InterruptedException{
-        
-        frame.setTitle("Durak - "+userName);
-        
-        JPanel backPanel = new JPanel();
+    
+    public void createFrame(){
+        frame = new JFrame("Durak");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1616, 1000);
+        frame.setBackground(Color.gray);
+    }
+    
+    public void createBackPanel(){
+        backPanel = new JPanel();
         backPanel.setBounds(0,0,1600,1000);
         backPanel.setBackground(Color.black);
-        
-        JPanel infoPanel = new JPanel();
+    }
+    
+    public void createInfoPanel(){
+        infoPanel = new JPanel();
         infoPanel.setBounds(0,0,1600,100);
         infoPanel.setBackground(Color.green.darker().darker());
         infoPanel.setLayout(null);
-        
-        JLabel usernameLabel=new JLabel("UserName: "+userName);  
-        usernameLabel.setBounds(0,0,400,30);
-        usernameLabel.setForeground(Color.white);
-        infoPanel.add(usernameLabel);
-        
-        JPanel tablePanel = new JPanel();
+    }
+    
+    public void createTablePanel(){
+        tablePanel = new JPanel();
         tablePanel.setBounds(0,100,1600,500);
         tablePanel.setBackground(Color.green.darker().darker());
         tablePanel.setLayout(null);
-        
-        JPanel handCardPanel = new JPanel();
+    }
+    
+    public void createHandCardPanel(){
+        handCardPanel = new JPanel();
         handCardPanel.setBounds(0,600,1600,400);
         handCardPanel.setBackground(Color.DARK_GRAY);
-        
-        String trump = "";
-        while(trump.equals("")){
-            trump = connection.getTrump(playerID, gameID);
-            Thread.sleep(100);
-        }
-        String suitSymbol = Static.symbols.get(trump);
-
-        JLabel trumpLabel=new JLabel(suitSymbol);  
-        trumpLabel.setBounds(750,0,100,100);
-        if(Static.colors.get(trump).equals("Red")){
-            trumpLabel.setForeground(Color.red);
-        } if(Static.colors.get(trump).equals("Black"))
-        {
-            trumpLabel.setForeground(Color.black);
-        }
-        trumpLabel.setFont(new Font("Arial", Font.PLAIN, 100));
-        infoPanel.add(trumpLabel);
-        
+    }
+    
+    public JFrame getFrame(){
+        return frame;
+    }
+    
+    public JPanel getBackPanel(){
+        return backPanel;
+    }
+    
+    public JPanel getInfoPanel(){
+        return infoPanel;
+    }
+    
+    public JPanel getTablePanel(){
+        return tablePanel;
+    }
+    
+    public JPanel getHandCardPanel(){
+        return handCardPanel;
+    }
+    
+    public void drawGameBoard(){
         frame.add(infoPanel);
         frame.add(tablePanel);
         frame.add(handCardPanel);
         frame.add(backPanel);
-        
         frame.setVisible(true);
-        
-        handPolling(infoPanel, tablePanel, handCardPanel);
     }
     
-    private void handPolling(JPanel infoPanel, JPanel tablePanel, JPanel handCardPanel) throws IOException, ProtocolException, JSONException, InterruptedException{     
-        String role = "";
-        while(role.equals("")){
-            role = connection.getRole(playerID, gameID);
-            Thread.sleep(500);
+    public void refreshPlayer(GameData gd) throws IOException, JSONException, InterruptedException{
+        System.out.println("Should refresh player");
+        if(gd.getWhatsChangedInPlayer().equals("hand")){
+            refreshHandCardPanel(gd);
         }
-        JLabel roleLabel=new JLabel("Role: "+role);  
-        roleLabel.setBounds(0,30,400,30);
+        else{
+            if(gd.getWhatsChangedInPlayer().equals("yourTurn")){
+                refreshHandCardPanel(gd);
+                refreshInfoPanel(gd);
+            }
+            else{
+                refreshInfoPanel(gd);   
+            }
+        }
+    }
+    
+    private void refreshInfoPanel(GameData gd){
+        infoPanel.removeAll();
+        
+        String userName = gd.getPlayer().getPlayerName();
+        String trump = gd.getPlayer().getTrump();
+        
+        if(!userName.equals("")){
+            JLabel usernameLabel=new JLabel("UserName: "+userName);  
+            usernameLabel.setBounds(0,0,400,25);
+            usernameLabel.setForeground(Color.white);
+            infoPanel.add(usernameLabel);
+        }
+
+        JLabel roleLabel=new JLabel("You are attaker: "+gd.getPlayer().getIsAttacker());  
+        roleLabel.setBounds(0,25,400,25);
         roleLabel.setForeground(Color.white);
         infoPanel.add(roleLabel);
+        
+        if(!trump.equals("")){
+            String suitSymbol = Static.symbols.get(trump);
+            JLabel trumpLabel=new JLabel(suitSymbol);  
+            trumpLabel.setBounds(750,0,100,100);
+            if(Static.colors.get(trump).equals("Red")){
+                trumpLabel.setForeground(Color.red);
+            } if(Static.colors.get(trump).equals("Black"))
+            {
+                trumpLabel.setForeground(Color.black);
+            }
+            trumpLabel.setFont(new Font("Arial", Font.PLAIN, 100));
+            infoPanel.add(trumpLabel);
+        }
+        
+        JLabel turnLabel=new JLabel("Your turn: "+gd.getPlayer().getYourTurn());  
+        turnLabel.setBounds(0,50,400,25);
+        turnLabel.setForeground(Color.white);
+        infoPanel.add(turnLabel);
+        
+        JLabel oponentCardCount=new JLabel("Oponent card count: "+gd.getPlayer().getOponentCardCount());  
+        oponentCardCount.setBounds(0,75,400,25);
+        oponentCardCount.setForeground(Color.white);
+        infoPanel.add(oponentCardCount);
+        
+        if(gd.getPlayer().getYourTurn() && gd.getField().getPairCount() > 0){
+            if(gd.getPlayer().getIsAttacker()){
+                JButton button = new JButton("DONE");
+                button.setBackground(Color.white);
+                button.setBorder(new LineBorder(Color.BLACK));
+                button.setFont(new Font("Arial", Font.PLAIN, 20));
+                button.setBounds(1500,30,80,40);
+                button.addActionListener(new ActionListener(){  
+                    @Override
+                    public void actionPerformed(ActionEvent e){  
+                        try {
+                            game.sendInput(0);
+                        } catch (Exception ex) {
+                            Logger.getLogger(GameUI.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                }});
+                infoPanel.add(button);
+            }
+            else{
+                JButton button = new JButton("TAKE");
+                button.setBackground(Color.white);
+                button.setBorder(new LineBorder(Color.BLACK));
+                button.setFont(new Font("Arial", Font.PLAIN, 20));
+                button.setBounds(1500,30,80,40);
+                button.addActionListener(new ActionListener(){  
+                    @Override
+                    public void actionPerformed(ActionEvent e){  
+                        try {
+                            game.sendInput(0);
+                        } catch (Exception ex) {
+                            Logger.getLogger(GameUI.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                }});
+                infoPanel.add(button);
+            }
+        }
+        
         infoPanel.revalidate();
         infoPanel.repaint();
-        
-        Hand hand = null;
-        while(hand == null){
-            hand = connection.getPlayersHand(playerID, gameID);
-            Thread.sleep(500);
-        }
-        
-        refreshHand(handCardPanel, hand, tablePanel, role);
-        tablePolling(tablePanel, handCardPanel);
     }
     
-    private void tablePolling(JPanel tablePanel, JPanel handCardPanel) throws IOException, ProtocolException, JSONException, InterruptedException{     
-        Field field = null;
-
-        tablePollingThread thread = new tablePollingThread(connection, playerID, gameID);
-        FieldObserver fo = new FieldObserver(this, handCardPanel, tablePanel);
-        thread.addObserver(fo);
-        Thread t = new Thread(thread);
-        t.start();
-        };
-    
-    private void refreshHand(JPanel handCardPanel, Hand hand, JPanel tablePanel, String role) throws IOException, ProtocolException, JSONException, InterruptedException{
-        handCardPanel.removeAll();
-        handCardPanel.revalidate();
-        handCardPanel.repaint();
-        int cardNr=1;
-        for(Card c : hand.getCards()){
-            createCardButton(c, handCardPanel, role, cardNr);
-            cardNr++;
-        }
-    }
-    
-    void refreshTable(JPanel handCardPanel, JPanel tablePanel, Field field){
+    public void refreshField(GameData gd){
+        System.out.println("Should refresh field");
+        tablePanel.removeAll();
+        tablePanel.revalidate();
+        tablePanel.repaint();
         //tikrint cia ar yra kortu kurias reikia kirst ir pagal tai createCardButton buttonus enablint
         int nr = 1;
-        for(CardPair c : field.getPairs()){
+        for(CardPair c : gd.getField().getPairs()){
             //System.out.println(c.getAttacker().getColor()+" "+c.getAttacker().getRank()+" "+c.getAttacker().getSuit());
-            createTableCardButton(c.getAttacker(), tablePanel, nr, false);
+            createTableCardButton(c.getAttacker(), nr, false);
             if(c.isCompleted()){
                 //System.out.println(c.getDefender().getColor()+" "+c.getDefender().getRank()+" "+c.getDefender().getSuit());
-                createTableCardButton(c.getDefender(), tablePanel, nr, true);
+                createTableCardButton(c.getDefender(), nr, true);
             }
             nr++;
         }
     }
     
-    private void createCardButton(Card card, JPanel handCardPanel, String role, int cardNr) throws IOException, ProtocolException, JSONException, InterruptedException
-    {
-        String suitSymbol = Static.symbols.get(card.getSuit());
-        
-        String color = card.getColor();
-        JButton button = new JButton(suitSymbol+card.getRank());
-        button.setBackground(Color.white);
-        button.setBorder(new LineBorder(Color.BLACK));
-        button.setPreferredSize(new Dimension(100, 170));
-        button.setFont(new Font("Arial", Font.PLAIN, 20));
-        if(color.equals("Red")){
-            button.setForeground(Color.red);
-        } if(color.equals("Black"))
-        {
-            button.setForeground(Color.black);
-        }
-        if(/*role.equals("attacker")*/true){
-            button.addActionListener(new ActionListener(){  
-            public void actionPerformed(ActionEvent e){  
-                try {
-                    String success = connection.input(playerID, gameID, cardNr);
-                    if(success.equals("success")){
-                        handCardPanel.remove(button);
-                        handCardPanel.revalidate();
-                        handCardPanel.repaint();
-                    }
-                } catch (Exception ex) {
-                    Logger.getLogger(GameUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                 
-                
-            }
-        });
-        }
-        handCardPanel.add(button);
-        handCardPanel.revalidate();
-        handCardPanel.repaint();
-    }
-    
-    private void createTableCardButton(Card card, JPanel tablePanel, int cardNr, boolean isDefending)
+    private void createTableCardButton(Card card, int cardNr, boolean isDefending)
     {
         String suitSymbol = Static.symbols.get(card.getSuit());
         
@@ -210,4 +233,49 @@ public class GameUI {
         tablePanel.revalidate();
         tablePanel.repaint();
     }
+    
+    private void refreshHandCardPanel(GameData gd) throws IOException, JSONException, InterruptedException{
+        handCardPanel.removeAll();
+        int cardNr=1;
+        for(Card c : gd.getPlayer().getHand().getCards()){
+            createCardButton(gd, c, cardNr);
+            cardNr++;
+        }
+    }
+    
+    private void createCardButton(GameData gd, Card card, int cardNr) throws IOException, JSONException, InterruptedException
+    {
+        String suitSymbol = Static.symbols.get(card.getSuit());
+        
+        String color = card.getColor();
+        JButton button = new JButton(suitSymbol+card.getRank());
+        button.setBackground(Color.white);
+        button.setBorder(new LineBorder(Color.BLACK));
+        button.setPreferredSize(new Dimension(100, 170));
+        button.setFont(new Font("Arial", Font.PLAIN, 20));
+        if(color.equals("Red")){
+            button.setForeground(Color.red);
+        } if(color.equals("Black"))
+        {
+            button.setForeground(Color.black);
+        }
+        if(gd.getPlayer().getYourTurn()){
+            button.addActionListener(new ActionListener(){  
+            @Override
+            public void actionPerformed(ActionEvent e){  
+                try {
+                    game.sendInput(cardNr);
+                } catch (Exception ex) {
+                    Logger.getLogger(GameUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        }
+        handCardPanel.add(button);
+        handCardPanel.revalidate();
+        handCardPanel.repaint();
+    }
+    
+    
+    
 }
