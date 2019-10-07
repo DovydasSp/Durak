@@ -120,7 +120,8 @@ public class Durak implements Runnable {
         while (!gameOver) {
 
             boolean thisRound = round(); // Run a round
-
+            one.addMessage(Message.formRoundEnd());
+            two.addMessage(Message.formRoundEnd());
             if (victoryAchieved()) {
                 // Victory was achieved by the playing of cards at some point
                 // Arrived here after breaking out of the round instantly
@@ -216,8 +217,6 @@ public class Durak implements Runnable {
                 // OR as a result of the defender's turn, victory was achieved (CARD PLAYED: Check for victory!)
                 roundInitiated = false;
                 currentField = null;
-                one.addMessage(Message.formRoundEnd());
-                two.addMessage(Message.formRoundEnd());
                 return false; // Pop out of round
             }
             defender.addMessage(Message.formPlayersHand(defender.getHand()));
@@ -232,8 +231,6 @@ public class Durak implements Runnable {
                 // OR as a result of the attacker's turn, victory was achieved (CARD PLAYED: Check for victory!)
                 roundInitiated = false;
                 currentField = null;
-                one.addMessage(Message.formRoundEnd());
-                two.addMessage(Message.formRoundEnd());
                 return true; // Pop out of round
             }
             attacker.addMessage(Message.formPlayersHand(attacker.getHand()));
