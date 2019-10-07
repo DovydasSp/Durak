@@ -52,9 +52,9 @@ public class Game {
     }
     
     public void sendInput(int cardNr) throws Exception{
-        if(checkIfTurnValid(cardNr)){
+        //if(checkIfTurnValid(cardNr)){
             connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), cardNr);
-        }
+        //}
     }
     
     public boolean checkIfTurnValid(int cardNr){
