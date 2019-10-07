@@ -135,5 +135,6 @@ public class Field {
     }
 
     public ArrayList<Pair> getPairs() { return pairs; }
+    public ArrayList<String> getPlayedRanks() {return playedRanks;}
 
 }

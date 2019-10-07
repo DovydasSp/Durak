@@ -360,6 +360,7 @@ public class Durak implements Runnable {
                     defender.useCard(defenderResponse); // useCard() is like committing to the card
                     announceCardPlayed(defender, defenderResponseCard);
                     defender.addMessage(Message.formInput(1));
+                    f.getPlayedRanks().add(defenderResponseCard.getRank());
                     return false;
                 } else {
                     // This is not a card.
@@ -401,6 +402,7 @@ public class Durak implements Runnable {
                     attacker.useCard(attackerResponse);
                     announceCardPlayed(attacker, attackerResponseCard);
                     attacker.addMessage(Message.formInput(1));
+                    f.getPlayedRanks().add(attackerResponseCard.getRank());
                     return false;
                 } else {
                     // This is not a card.
