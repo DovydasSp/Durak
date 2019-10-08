@@ -2,9 +2,6 @@ package Game;
 import Server.Message;
 import org.bson.types.ObjectId;
 import org.json.JSONObject;
-
-import javax.json.Json;
-import javax.json.JsonObject;
 import java.util.*;
 
 public class Player {
@@ -15,8 +12,8 @@ public class Player {
     private Deck deck;
     //private static int count = 0;
     private boolean attacker;
-    private Queue<Integer> input = new LinkedList<>();
-    private Queue<JSONObject> messages = new LinkedList<>();
+    private Stack<Integer> input = new Stack<>();
+    private Stack<JSONObject> messages = new Stack<>();
 
     // Create a new Player with an empty hand and set to draw from a default deck (does not draw).
     public Player() {
@@ -169,15 +166,20 @@ public class Player {
     public int getInput(){
         while(input.size() == 0);
         synchronized(input){
-            return input.poll();
+            int res = input.get(0);
+            input.remove(0);
+            return res;
         }
     }
 
     public void addMessage(JSONObject msg){ messages.add(msg); }
     public JSONObject popMessage() {
         synchronized (messages){
-            if(messages.size() != 0)
-                return messages.poll();
+            if(messages.size() != 0){
+                JSONObject res = messages.get(0);
+                messages.remove(0);
+                return res;
+            }
             return Message.formNoMessages();
         }
     }
@@ -185,6 +187,4 @@ public class Player {
     public void setDeck(Deck deck){ this.deck = deck; }
     public void setHand(Hand hand) { this.hand = hand;}
     public Hand getHand() {return hand;}
-
-    public Queue<Integer> getInputStack() { return input; }
 }
