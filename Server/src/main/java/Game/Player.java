@@ -164,8 +164,10 @@ public class Player {
         }
     }
 
-    public int getInput(){
-        while(input.size() == 0);
+    public int getInput() throws InterruptedException {
+        while(input.size() == 0){
+            Thread.sleep(300);
+        }
         synchronized(input){
             int res = input.get(0);
             input.remove(0);

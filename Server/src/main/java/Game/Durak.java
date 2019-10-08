@@ -32,10 +32,14 @@ public class Durak implements Runnable {
     }
 
     public void run() {
-        start();
+        try {
+            start();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void start(){
+    public void start() throws InterruptedException {
         boolean running = true;
         r.setSeed(4564654654L);
         setup();
@@ -82,7 +86,7 @@ public class Durak implements Runnable {
     }
 
     // Running a game instance
-    public void game() {
+    public void game() throws InterruptedException {
         System.out.println("Determining initial attacker...\n");
         if (r.nextInt(2) < 1) {
             setAttacker(one);
@@ -164,7 +168,7 @@ public class Durak implements Runnable {
     // Runs a single round, given references to attacker and defender
     // Returns true if attacker succeeded
     // Returns false if defender succeeded
-    public boolean round() {
+    public boolean round() throws InterruptedException {
         // Create references to attacker and defender
 
 
@@ -299,7 +303,7 @@ public class Durak implements Runnable {
 
     // Prints player options and accepts input
     // Handles improper input (not in terms of playable cards, but if it was available as a selection numerically)
-    public int playerInput(Player p) {
+    public int playerInput(Player p) throws InterruptedException {
         boolean isAttacker = p.isAttacker();
 
         turnPrompt(p);
@@ -370,7 +374,7 @@ public class Durak implements Runnable {
                     defender.addMessage(Message.formInput(1));
                     return true;
                 }
-            } catch (IllegalArgumentException e) { // Invalid defender, another one will be solicited
+            } catch (IllegalArgumentException | InterruptedException e) { // Invalid defender, another one will be solicited
                 System.out.println("\n\nInvalid defender!");
                 defender.addMessage(Message.formInput(2));
                 properDefenderResponse = false;
@@ -408,7 +412,7 @@ public class Durak implements Runnable {
                     attacker.addMessage(Message.formInput(1));
                     return true;
                 }
-            } catch (IllegalArgumentException e) { // Invalid attack card, another one will be solicited
+            } catch (IllegalArgumentException | InterruptedException e) { // Invalid attack card, another one will be solicited
                 System.out.println("Invalid attack card!");
                 attacker.addMessage(Message.formInput(2));
                 properAttackerResponse = false;
