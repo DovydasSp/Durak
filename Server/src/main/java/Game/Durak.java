@@ -41,21 +41,6 @@ public class Durak implements Runnable {
             setup();
             game();
             System.out.println("The game has ended.");
-            System.out.println("Play again? y/n");
-
-            boolean validResponse = false;
-            while (!validResponse) {
-                String response = sc.nextLine();
-                if (response.equals("y")) {
-                    validResponse = true;
-                    running = true;
-                } else if (response.equals("n")) {
-                    validResponse = true;
-                    running = false;
-                } else {
-                    validResponse = false;
-                }
-            }
         }
     }
 
@@ -132,19 +117,26 @@ public class Durak implements Runnable {
                 attacker.replenish();
                 defender.replenish();
                 round++; // Increment round number
-                if (thisRound) {
+                /*if (thisRound) {
                     // Attacker won the round
                     // Attacker goes again; no switching occurs
                 } else {
                     // Defender won the round
                     // Roles switch
                     switchRoles();
-                }
+                }*/
             }
         }
 
         System.out.println("Game over!\n");
         System.out.println("The winner is " + determineWinner() + "!\n");
+        if(determineWinner() == one) {
+            one.addMessage(Message.formGameEnd(true));
+            two.addMessage(Message.formGameEnd(false));
+        }else{
+            one.addMessage(Message.formGameEnd(false));
+            two.addMessage(Message.formGameEnd(true));
+        }
         return;
     }
 
@@ -217,6 +209,7 @@ public class Durak implements Runnable {
                 // OR as a result of the defender's turn, victory was achieved (CARD PLAYED: Check for victory!)
                 roundInitiated = false;
                 currentField = null;
+                switchRoles();
                 return false; // Pop out of round
             }
             defender.addMessage(Message.formPlayersHand(defender.getHand()));
