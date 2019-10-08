@@ -2,9 +2,6 @@ package Game;
 import Server.Message;
 import org.bson.types.ObjectId;
 import org.json.JSONObject;
-
-import javax.json.Json;
-import javax.json.JsonObject;
 import java.util.*;
 
 public class Player {
@@ -120,6 +117,7 @@ public class Player {
 
     public void switchRole() {
         attacker = !attacker;
+        addMessage(Message.formRole(attacker));
     }
 
     @Override
@@ -169,15 +167,20 @@ public class Player {
     public int getInput(){
         while(input.size() == 0);
         synchronized(input){
-            return input.pop();
+            int res = input.get(0);
+            input.remove(0);
+            return res;
         }
     }
 
     public void addMessage(JSONObject msg){ messages.add(msg); }
     public JSONObject popMessage() {
         synchronized (messages){
-            if(messages.size() != 0)
-                return messages.pop();
+            if(messages.size() != 0){
+                JSONObject res = messages.get(0);
+                messages.remove(0);
+                return res;
+            }
             return Message.formNoMessages();
         }
     }
@@ -185,6 +188,4 @@ public class Player {
     public void setDeck(Deck deck){ this.deck = deck; }
     public void setHand(Hand hand) { this.hand = hand;}
     public Hand getHand() {return hand;}
-
-    public Stack<Integer> getInputStack() { return input; }
 }

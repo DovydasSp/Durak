@@ -15,6 +15,7 @@ public class Durak implements Runnable {
     private Player defender;
     private Field currentField;
     private boolean roundInitiated; // If a round is occurring and has completed its initiation stages
+    private Player initialAttacker;
 
     private Stack<Integer> playerOneInput = new Stack<>();
     private Stack<Integer> playerTwoInput = new Stack<>();
@@ -36,27 +37,10 @@ public class Durak implements Runnable {
 
     public void start(){
         boolean running = true;
-
-        while (running) {
-            setup();
-            game();
-            System.out.println("The game has ended.");
-            System.out.println("Play again? y/n");
-
-            boolean validResponse = false;
-            while (!validResponse) {
-                String response = sc.nextLine();
-                if (response.equals("y")) {
-                    validResponse = true;
-                    running = true;
-                } else if (response.equals("n")) {
-                    validResponse = true;
-                    running = false;
-                } else {
-                    validResponse = false;
-                }
-            }
-        }
+        r.setSeed(4564654654L);
+        setup();
+        game();
+        System.out.println("The game has ended.");
     }
 
     // Setting up for a game instance
@@ -103,9 +87,11 @@ public class Durak implements Runnable {
         if (r.nextInt(2) < 1) {
             setAttacker(one);
             setDefender(two);
+            initialAttacker = one;
         } else {
             setAttacker(two);
             setDefender(one);
+            initialAttacker = two;
         }
         one.addMessage(Message.formTrump(TRUMP));
         two.addMessage(Message.formTrump(TRUMP));
@@ -145,6 +131,13 @@ public class Durak implements Runnable {
 
         System.out.println("Game over!\n");
         System.out.println("The winner is " + determineWinner() + "!\n");
+        if(determineWinner() == one) {
+            one.addMessage(Message.formGameEnd(true));
+            two.addMessage(Message.formGameEnd(false));
+        }else{
+            one.addMessage(Message.formGameEnd(false));
+            two.addMessage(Message.formGameEnd(true));
+        }
         return;
     }
 
@@ -187,6 +180,10 @@ public class Durak implements Runnable {
         System.out.println(roundName + " has begun!\n");
 
         // Initiation of round and its associated field
+        attacker.addMessage(Message.formDeckCount(deck));
+        defender.addMessage(Message.formDeckCount(deck));
+        defender.addMessage(Message.formEnemyCardCount(attacker.getHand()));
+        attacker.addMessage(Message.formEnemyCardCount(defender.getHand()));
 
         System.out.println(attacker + ", initiate the attack!");
 
@@ -217,7 +214,8 @@ public class Durak implements Runnable {
                 // OR as a result of the defender's turn, victory was achieved (CARD PLAYED: Check for victory!)
                 roundInitiated = false;
                 currentField = null;
-                return false; // Pop out of round
+                //switchRoles();
+                return true; // Pop out of round
             }
             defender.addMessage(Message.formPlayersHand(defender.getHand()));
             attacker.addMessage(Message.formEnemyCardCount(defender.getHand()));
@@ -231,7 +229,7 @@ public class Durak implements Runnable {
                 // OR as a result of the attacker's turn, victory was achieved (CARD PLAYED: Check for victory!)
                 roundInitiated = false;
                 currentField = null;
-                return true; // Pop out of round
+                return false; // Pop out of round
             }
             attacker.addMessage(Message.formPlayersHand(attacker.getHand()));
             defender.addMessage(Message.formEnemyCardCount(attacker.getHand()));
@@ -437,6 +435,21 @@ public class Durak implements Runnable {
     }
 
     public void switchRoles() {
+        /*if(attacker == one){
+            one.switchRole();
+            two.switchRole();
+            attacker = two;
+            defender = one;
+            //initialAttacker = two;
+        }else{
+            one.switchRole();
+            two.switchRole();
+            attacker = one;
+            defender = two;
+            //initialAttacker= one;
+        }*/
+
+
         Player temp = attacker;
         attacker = defender;
         defender = temp;

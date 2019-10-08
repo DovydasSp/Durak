@@ -1,9 +1,11 @@
 package Server;
 
 
+import Game.Deck;
 import Game.Field;
 import Game.Hand;
 import Game.Player;
+import com.mongodb.util.JSON;
 import org.json.JSONObject;
 
 public class Message {
@@ -117,6 +119,20 @@ public class Message {
         JSONObject builder = new JSONObject();
         builder.put("header", "yourTurn");
         builder.put("yourTurn", turn);
+        return builder;
+    }
+
+    public static JSONObject formGameEnd(boolean win){
+        JSONObject builder = new JSONObject();
+        builder.put("header", "gameEnd");
+        builder.put("win", win);
+        return builder;
+    }
+
+    public static JSONObject formDeckCount(Deck deck){
+        JSONObject builder = new JSONObject();
+        builder.put("header", "deckCount");
+        builder.put("count", deck.size());
         return builder;
     }
 
