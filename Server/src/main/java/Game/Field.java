@@ -35,6 +35,7 @@ public class Field {
     public void attack(Card a) {
         if (canAttack() && isValidAttack(a)) {
             Pair newAttackPair = new Pair(a);
+            pairs.add(newAttackPair);
         } else {
             throw new IllegalArgumentException("You can't attack.");
         }
@@ -135,5 +136,6 @@ public class Field {
     }
 
     public ArrayList<Pair> getPairs() { return pairs; }
+    public ArrayList<String> getPlayedRanks() {return playedRanks;}
 
 }
