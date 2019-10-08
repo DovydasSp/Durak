@@ -15,6 +15,8 @@ public class Player {
         private boolean isAttacker;
         private boolean yourTurn;
         private int oponentCardCount;
+        private int roundCount;
+        private boolean newRound;
 
 	public Player() {
             playerName = "";
@@ -25,6 +27,7 @@ public class Player {
             isAttacker = false;
             yourTurn = false;
             oponentCardCount = 6;
+            roundCount = 1;
 	}
         
         public void setPlayerIds(String playerName_, String playerID_, String gameID_){

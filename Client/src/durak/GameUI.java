@@ -203,6 +203,8 @@ public class GameUI {
             }
             nr++;
         }
+        //frame.revalidate();
+        //frame.repaint();
     }
     
     private void createTableCardButton(Card card, int cardNr, boolean isDefending)
