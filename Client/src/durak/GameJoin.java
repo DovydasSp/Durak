@@ -27,6 +27,16 @@ public class GameJoin{
     }
     
     public void join(){
+        gameUI.getTablePanel().removeAll();
+        gameUI.getTablePanel().revalidate();
+        gameUI.getTablePanel().repaint();
+        gameUI.getInfoPanel().removeAll();
+        gameUI.getInfoPanel().revalidate();
+        gameUI.getInfoPanel().repaint();
+        gameUI.getHandCardPanel().removeAll();
+        gameUI.getHandCardPanel().revalidate();
+        gameUI.getHandCardPanel().repaint();
+        
         gameUI.getFrame().setTitle("Durak - Create or join a game");
         
         l1=new JLabel("Enter username"); 

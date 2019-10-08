@@ -94,7 +94,7 @@ public class GameUI {
             refreshHandCardPanel(gd);
         }
         else{
-            if(gd.getWhatsChangedInPlayer().equals("yourTurn")){
+            if(gd.getWhatsChangedInPlayer().equals("yourTurn") || gd.getWhatsChanged().equals("gameEnd")){
                 refreshHandCardPanel(gd);
                 refreshInfoPanel(gd);
             }
@@ -142,9 +142,14 @@ public class GameUI {
         infoPanel.add(turnLabel);
         
         JLabel oponentCardCount=new JLabel("Oponent card count: "+gd.getPlayer().getOponentCardCount());  
-        oponentCardCount.setBounds(0,75,400,25);
+        oponentCardCount.setBounds(0,75,200,25);
         oponentCardCount.setForeground(Color.white);
         infoPanel.add(oponentCardCount);
+        
+        JLabel deckCardCount=new JLabel("Deck card count: "+gd.getPlayer().getDeckCardCount());  
+        deckCardCount.setBounds(200,75,200,25);
+        deckCardCount.setForeground(Color.white);
+        infoPanel.add(deckCardCount);
         
         if(gd.getPlayer().getYourTurn() && gd.getField().getPairCount() > 0){
             if(gd.getPlayer().getIsAttacker()){
@@ -192,19 +197,51 @@ public class GameUI {
         tablePanel.removeAll();
         tablePanel.revalidate();
         tablePanel.repaint();
-        //tikrint cia ar yra kortu kurias reikia kirst ir pagal tai createCardButton buttonus enablint
-        int nr = 1;
-        for(CardPair c : gd.getField().getPairs()){
-            //System.out.println(c.getAttacker().getColor()+" "+c.getAttacker().getRank()+" "+c.getAttacker().getSuit());
-            createTableCardButton(c.getAttacker(), nr, false);
-            if(c.isCompleted()){
-                //System.out.println(c.getDefender().getColor()+" "+c.getDefender().getRank()+" "+c.getDefender().getSuit());
-                createTableCardButton(c.getDefender(), nr, true);
+        if(gd.getWhatsChanged().equals("gameEnd")){
+            System.out.println("Should refresh field+label");
+            JLabel wonLabel = new JLabel();
+            if(gd.getPlayer().getWon()){
+                wonLabel=new JLabel("You won! ☺");
             }
-            nr++;
+            else{
+                wonLabel=new JLabel("You lost...");
+            }
+            wonLabel.setBounds(750,250,150,50);
+            wonLabel.setForeground(Color.white);
+            wonLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+            tablePanel.add(wonLabel);
+            
+            JButton button = new JButton("PLAY AGAIN");
+                button.setBackground(Color.white);
+                button.setBorder(new LineBorder(Color.BLACK));
+                button.setFont(new Font("Arial", Font.PLAIN, 20));
+                button.setBounds(700,300,200,100);
+                button.addActionListener(new ActionListener(){  
+                    @Override
+                    public void actionPerformed(ActionEvent e){  
+                        try {
+                            game.join();
+                        } catch (Exception ex) {
+                            Logger.getLogger(GameUI.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                }});
+                tablePanel.add(button);
+            
+            tablePanel.revalidate();
+            tablePanel.repaint();
         }
-        //frame.revalidate();
-        //frame.repaint();
+        else{
+           int nr = 1;
+            for(CardPair c : gd.getField().getPairs()){
+                //System.out.println(c.getAttacker().getColor()+" "+c.getAttacker().getRank()+" "+c.getAttacker().getSuit());
+                createTableCardButton(c.getAttacker(), nr, false);
+                if(c.isCompleted()){
+                    //System.out.println(c.getDefender().getColor()+" "+c.getDefender().getRank()+" "+c.getDefender().getSuit());
+                    createTableCardButton(c.getDefender(), nr, true);
+                }
+                nr++;
+            } 
+        }
     }
     
     private void createTableCardButton(Card card, int cardNr, boolean isDefending)
@@ -238,6 +275,8 @@ public class GameUI {
     
     private void refreshHandCardPanel(GameData gd) throws IOException, JSONException, InterruptedException{
         handCardPanel.removeAll();
+        handCardPanel.revalidate();
+        handCardPanel.repaint();
         int cardNr=1;
         for(Card c : gd.getPlayer().getHand().getCards()){
             createCardButton(gd, c, cardNr);

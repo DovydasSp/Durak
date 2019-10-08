@@ -24,6 +24,10 @@ public class Game {
         gameUI.createHandCardPanel();
         gameUI.drawGameBoard();
         
+        join();
+    }
+    
+    public void join(){
         GameJoin join = new GameJoin(connection, gameUI, this);
         join.join();
     }
@@ -31,7 +35,6 @@ public class Game {
     public void play(GameData gd){
         gameData = gd;
         gameUI.getFrame().setTitle("Durak - "+gameData.getPlayer().getPlayerName());
-        //System.out.println("Started playing "+gameData.getPlayer().getPlayerName());
         
         pollingThread thread = new pollingThread(connection, gameData, this);
         GameObserver fo = new GameObserver(this, gameData);
@@ -42,23 +45,30 @@ public class Game {
     
     public void refreshUI(GameData gd) throws IOException, JSONException, InterruptedException{
         gameData = gd;
-        
+
         if(gameData.getWhatsChanged().equals("player")){
+            gameUI.refreshPlayer(gameData);
+        }
+        else if(gameData.getWhatsChanged().equals("gameEnd")){
+            gameUI.refreshField(gameData);
             gameUI.refreshPlayer(gameData);
         }
         else if(gameData.getWhatsChanged().equals("roundEnd")){
             gameUI.refreshField(gameData);
             gameUI.refreshPlayer(gameData);
         }
-        else {
+        else if(gameData.getWhatsChanged().equals("field")){
             gameUI.refreshField(gameData);
         }
     }
     
     public void sendInput(int cardNr) throws Exception{
-        //if(checkIfTurnValid(cardNr)){
+        if(cardNr == 0){
             connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), cardNr);
-        //}
+        }
+        else if(checkIfTurnValid(cardNr)){
+            connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), cardNr);
+        }
     }
     
     public boolean checkIfTurnValid(int cardNr){

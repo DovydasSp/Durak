@@ -15,8 +15,10 @@ public class Player {
         private boolean isAttacker;
         private boolean yourTurn;
         private int oponentCardCount;
+        private int deckCardCount;
         private int roundCount;
         private boolean newRound;
+        private boolean won;
 
 	public Player() {
             playerName = "";
@@ -27,7 +29,9 @@ public class Player {
             isAttacker = false;
             yourTurn = false;
             oponentCardCount = 6;
+            deckCardCount = 36;
             roundCount = 1;
+            won = false;
 	}
         
         public void setPlayerIds(String playerName_, String playerID_, String gameID_){
@@ -82,6 +86,22 @@ public class Player {
         
         public int getOponentCardCount(){
             return oponentCardCount;
+        }
+        
+        public void setWon(boolean won_){
+            won = won_;
+        }
+        
+        public boolean getWon(){
+            return won;
+        }
+        
+        public void setDeckCardCount(int deckCardCount_){
+            deckCardCount = deckCardCount_;
+        }
+        
+        public int getDeckCardCount(){
+            return deckCardCount;
         }
         
 /*

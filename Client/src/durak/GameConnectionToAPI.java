@@ -18,10 +18,12 @@ import org.json.JSONObject;
 
 public class GameConnectionToAPI {
     HttpURLConnection conn;
+    //private String urlas = "https://durakserver.azurewebsites.net/";
+    private String urlas = "http://192.168.0.106:8080/";
     
     public Pair<String, String> createGame(String playerName) throws Exception{
         try {
-            URL url = new URL("https://durakserver.azurewebsites.net/createGame");
+            URL url = new URL(urlas+"createGame");
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +62,7 @@ public class GameConnectionToAPI {
     
     public Pair<String, String> joinGame(String playerName, String gameID) throws Exception{
         try {
-            URL url = new URL("https://durakserver.azurewebsites.net/joinGame");
+            URL url = new URL(urlas+"joinGame");
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,7 +100,7 @@ public class GameConnectionToAPI {
     
     public void/*String*/ input(String playerID, String gameID, int cardNr) throws Exception{
         try {
-            URL url = new URL("https://durakserver.azurewebsites.net/input");
+            URL url = new URL(urlas+"input");
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,7 +136,7 @@ public class GameConnectionToAPI {
     
     public GameData poll(GameData gameData) throws IOException, JSONException{
         try {
-            URL url = new URL("https://durakserver.azurewebsites.net/poll/"+gameData.getPlayer().getIDs().getKey()+"/"+gameData.getPlayer().getIDs().getValue());
+            URL url = new URL(urlas+"poll/"+gameData.getPlayer().getIDs().getKey()+"/"+gameData.getPlayer().getIDs().getValue());
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
             e.printStackTrace();
@@ -265,6 +267,28 @@ public class GameConnectionToAPI {
                 System.out.println("GOT ROUND END CALL");
                 gameData.setWhatsChanged("roundEnd");
                 gameData.setField(new Field());
+                return gameData;
+            }
+            if(header.equals("deckCount"))
+            {
+                conn.disconnect();
+                int deckCount = myResponse.getInt("count");
+                gameData.getPlayer().setDeckCardCount(deckCount);
+                gameData.setWhatsChanged("player");
+                gameData.setWhatsChangedInPlayer("deckCount");
+                return gameData;
+            }
+            if(header.equals("gameEnd")){
+                conn.disconnect();
+                boolean win = myResponse.getBoolean("win");
+                gameData.getPlayer().setWon(win);
+                gameData.getPlayer().setHand(new Hand());
+                if(win == false){
+                    gameData.getPlayer().setOponentCardCount(0);
+                }
+                gameData.setField(new Field());
+                gameData.setWhatsChanged("gameEnd");
+                System.out.println("GOT GAME END CALL");
                 return gameData;
             }
         }
