@@ -23,7 +23,7 @@ public class pollingThread extends Observable implements Runnable {
         { 
             boolean run = true;
             while(run){
-                Thread.sleep(1000);
+                Thread.sleep(100);
                 GameData gd = connection.poll(gameData);
                 if(gd != null){
                     gameData = gd;
@@ -40,7 +40,7 @@ public class pollingThread extends Observable implements Runnable {
         catch (Exception e) 
         { 
             // Throwing an exception 
-            System.out.println ("Exception is caught: "+e);
+            System.out.println ("pollingThread Exception is caught: "+e);
             game.play(gameData);
             
         }

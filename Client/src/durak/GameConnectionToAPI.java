@@ -25,6 +25,8 @@ public class GameConnectionToAPI {
         try {
             URL url = new URL(urlas+"createGame");
             conn = (HttpURLConnection)url.openConnection();
+            
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,15 +100,14 @@ public class GameConnectionToAPI {
         return pair;
     }
     
-    public void/*String*/ input(String playerID, String gameID, int cardNr) throws Exception{
+    public void input(String playerID, String gameID, int cardNr) throws Exception{
         try {
             URL url = new URL(urlas+"input");
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
+            System.out.println("input failed");
             e.printStackTrace();
         }
-        
-        //String success = "";
         
         conn.setRequestMethod("POST");
 	conn.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -126,11 +127,8 @@ public class GameConnectionToAPI {
             while ((responseLine = br.readLine()) != null) {
             response.append(responseLine.trim());
             }
-
-            //success = response.toString();
         }
         conn.disconnect();
-        //return success;
     }
     
     

@@ -6,6 +6,7 @@ import durak.GameDataClasses.Field;
 import durak.GameDataClasses.GameData;
 import durak.GameDataClasses.Player;
 import durak.Static.Static;
+import durak.Threads.inputThread;
 import durak.Threads.pollingThread;
 import java.io.IOException;
 import java.util.Observer;
@@ -63,11 +64,19 @@ public class Game {
     }
     
     public void sendInput(int cardNr) throws Exception{
+        GameConnectionToAPI connection2 = new GameConnectionToAPI();
+        inputThread thread2 = new inputThread(connection2, gameData, cardNr);
+        Thread t2 = new Thread(thread2);
         if(cardNr == 0){
-            connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), cardNr);
+            
+            t2.start();
+            t2.join();
+            //connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), cardNr);
         }
         else if(checkIfTurnValid(cardNr)){
-            connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), cardNr);
+            t2.start();
+            t2.join();
+            //connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), cardNr);
         }
     }
     
