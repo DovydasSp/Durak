@@ -15,8 +15,8 @@ public class Player {
     private Deck deck;
     //private static int count = 0;
     private boolean attacker;
-    private Stack<Integer> input = new Stack<>();
-    private Stack<JSONObject> messages = new Stack<>();
+    private Queue<Integer> input = new LinkedList<>();
+    private Queue<JSONObject> messages = new LinkedList<>();
 
     // Create a new Player with an empty hand and set to draw from a default deck (does not draw).
     public Player() {
@@ -169,7 +169,7 @@ public class Player {
     public int getInput(){
         while(input.size() == 0);
         synchronized(input){
-            return input.pop();
+            return input.poll();
         }
     }
 
@@ -177,7 +177,7 @@ public class Player {
     public JSONObject popMessage() {
         synchronized (messages){
             if(messages.size() != 0)
-                return messages.pop();
+                return messages.poll();
             return Message.formNoMessages();
         }
     }
@@ -186,5 +186,5 @@ public class Player {
     public void setHand(Hand hand) { this.hand = hand;}
     public Hand getHand() {return hand;}
 
-    public Stack<Integer> getInputStack() { return input; }
+    public Queue<Integer> getInputStack() { return input; }
 }
