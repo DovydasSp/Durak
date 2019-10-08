@@ -1,6 +1,7 @@
 package Server;
 
 
+import Game.Deck;
 import Game.Field;
 import Game.Hand;
 import Game.Player;
@@ -125,6 +126,13 @@ public class Message {
         JSONObject builder = new JSONObject();
         builder.put("header", "gameEnd");
         builder.put("win", win);
+        return builder;
+    }
+
+    public static JSONObject formDeckCount(Deck deck){
+        JSONObject builder = new JSONObject();
+        builder.put("header", "deckCount");
+        builder.put("count", deck.size());
         return builder;
     }
 

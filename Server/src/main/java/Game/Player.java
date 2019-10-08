@@ -117,6 +117,7 @@ public class Player {
 
     public void switchRole() {
         attacker = !attacker;
+        addMessage(Message.formRole(attacker));
     }
 
     @Override
