@@ -259,6 +259,14 @@ public class GameConnectionToAPI {
                 gameData.setWhatsChangedInPlayer("");
                 return gameData;
             }
+            if(header.equals("roundEnd"))
+            {
+                conn.disconnect();
+                System.out.println("GOT ROUND END CALL");
+                gameData.setWhatsChanged("roundEnd");
+                gameData.setField(new Field());
+                return gameData;
+            }
         }
         return null;
     }

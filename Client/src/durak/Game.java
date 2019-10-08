@@ -46,7 +46,11 @@ public class Game {
         if(gameData.getWhatsChanged().equals("player")){
             gameUI.refreshPlayer(gameData);
         }
-        else{
+        else if(gameData.getWhatsChanged().equals("roundEnd")){
+            gameUI.refreshField(gameData);
+            gameUI.refreshPlayer(gameData);
+        }
+        else {
             gameUI.refreshField(gameData);
         }
     }
