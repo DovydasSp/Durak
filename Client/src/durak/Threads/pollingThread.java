@@ -21,14 +21,20 @@ public class pollingThread extends Observable implements Runnable {
     { 
         try
         { 
-            while(true){
+            boolean run = true;
+            while(run){
                 Thread.sleep(1000);
                 GameData gd = connection.poll(gameData);
                 if(gd != null){
                     gameData = gd;
+                    if(gameData.getWhatsChanged().equals("gameEnd"))
+                    {
+                        run = false;
+                    }
                     setChanged();
                     notifyObservers(gameData);
                 }
+                
             }
         } 
         catch (Exception e) 
