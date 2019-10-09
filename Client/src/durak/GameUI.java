@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.net.ProtocolException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.border.LineBorder;
@@ -89,7 +88,7 @@ public class GameUI {
     }
     
     public void refreshPlayer(GameData gd) throws IOException, JSONException, InterruptedException{
-        System.out.println("Should refresh player");
+        System.out.println("Refreshing player");
         if(gd.getWhatsChangedInPlayer().equals("hand")){
             refreshHandCardPanel(gd);
         }
@@ -187,18 +186,18 @@ public class GameUI {
                 infoPanel.add(button);
             }
         }
-        
+        System.out.println("Refreshed infoPanel");
         infoPanel.revalidate();
         infoPanel.repaint();
     }
     
     public void refreshField(GameData gd){
-        System.out.println("Should refresh field");
+        System.out.println("Refreshing field");
         tablePanel.removeAll();
         tablePanel.revalidate();
         tablePanel.repaint();
         if(gd.getWhatsChanged().equals("gameEnd")){
-            System.out.println("Should refresh field+label");
+            System.out.println("Refreshed UI to game ending screen");
             JLabel wonLabel = new JLabel();
             if(gd.getPlayer().getWon()){
                 wonLabel=new JLabel("You won! ☺");
@@ -282,6 +281,7 @@ public class GameUI {
             createCardButton(gd, c, cardNr);
             cardNr++;
         }
+        System.out.println("Refreshed hand card panel");
     }
     
     private void createCardButton(GameData gd, Card card, int cardNr) throws IOException, JSONException, InterruptedException

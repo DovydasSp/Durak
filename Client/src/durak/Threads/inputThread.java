@@ -1,6 +1,5 @@
 package durak.Threads;
 
-import durak.Game;
 import durak.GameConnectionToAPI;
 import durak.GameDataClasses.GameData;
 import java.util.Observable;

@@ -105,7 +105,7 @@ public class GameConnectionToAPI {
             URL url = new URL(urlas+"input");
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
-            System.out.println("input failed");
+            System.out.println("Input send to API failed");
             e.printStackTrace();
         }
         
@@ -168,6 +168,7 @@ public class GameConnectionToAPI {
                 gameData.getPlayer().setYourTurn(yourTurn);
                 gameData.setWhatsChanged("player");
                 gameData.setWhatsChangedInPlayer("yourTurn");
+                System.out.println("API sent your turn update");
                 return gameData;
             }
             if(header.equals("role"))
@@ -182,6 +183,7 @@ public class GameConnectionToAPI {
                 }
                 gameData.setWhatsChanged("player");
                 gameData.setWhatsChangedInPlayer("isAttacker");
+                System.out.println("API sent role update");
                 return gameData;
             }
             if(header.equals("trump"))
@@ -191,6 +193,7 @@ public class GameConnectionToAPI {
                 gameData.getPlayer().setTrump(trump);
                 gameData.setWhatsChanged("player");
                 gameData.setWhatsChangedInPlayer("trump");
+                System.out.println("API sent trump update");
                 return gameData;
             }
             if(header.equals("enemyPlayerCardCount"))
@@ -200,6 +203,7 @@ public class GameConnectionToAPI {
                 gameData.getPlayer().setOponentCardCount(enemyPlayerCardCount);
                 gameData.setWhatsChanged("player");
                 gameData.setWhatsChangedInPlayer("oponentCardCount");
+                System.out.println("API sent enemy card count update");
                 return gameData;
             }
             if(header.equals("input"))
@@ -224,6 +228,7 @@ public class GameConnectionToAPI {
                 gameData.getPlayer().setHand(hand);
                 gameData.setWhatsChanged("player");
                 gameData.setWhatsChangedInPlayer("hand");
+                System.out.println("API sent hand update");
                 return gameData;
             }
             if(header.equals("field"))
@@ -257,6 +262,7 @@ public class GameConnectionToAPI {
                 gameData.setField(field);
                 gameData.setWhatsChanged("field");
                 gameData.setWhatsChangedInPlayer("");
+                System.out.println("API sent field update");
                 return gameData;
             }
             if(header.equals("roundEnd"))
@@ -265,6 +271,7 @@ public class GameConnectionToAPI {
                 System.out.println("GOT ROUND END CALL");
                 gameData.setWhatsChanged("roundEnd");
                 gameData.setField(new Field());
+                System.out.println("API sent roundEnd call");
                 return gameData;
             }
             if(header.equals("deckCount"))
@@ -274,6 +281,7 @@ public class GameConnectionToAPI {
                 gameData.getPlayer().setDeckCardCount(deckCount);
                 gameData.setWhatsChanged("player");
                 gameData.setWhatsChangedInPlayer("deckCount");
+                System.out.println("API sent deckCount update");
                 return gameData;
             }
             if(header.equals("gameEnd")){
@@ -286,7 +294,7 @@ public class GameConnectionToAPI {
                 }
                 gameData.setField(new Field());
                 gameData.setWhatsChanged("gameEnd");
-                System.out.println("GOT GAME END CALL");
+                System.out.println("API sent gameEnd call");
                 return gameData;
             }
         }

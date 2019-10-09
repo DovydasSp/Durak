@@ -2,14 +2,11 @@ package durak;
 
 import durak.GameDataClasses.Card;
 import durak.GameDataClasses.CardPair;
-import durak.GameDataClasses.Field;
 import durak.GameDataClasses.GameData;
-import durak.GameDataClasses.Player;
 import durak.Static.Static;
 import durak.Threads.inputThread;
 import durak.Threads.pollingThread;
 import java.io.IOException;
-import java.util.Observer;
 import org.json.JSONException;
 
 public class Game {
