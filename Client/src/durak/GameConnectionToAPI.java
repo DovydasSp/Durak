@@ -1,6 +1,7 @@
 package durak;
 
 import durak.GameDataClasses.Card;
+import durak.GameDataClasses.CardBuilder;
 import durak.GameDataClasses.CardPair;
 import durak.GameDataClasses.Field;
 import durak.GameDataClasses.GameData;
@@ -156,6 +157,7 @@ public class GameConnectionToAPI {
             JSONObject myResponse = new JSONObject(response.toString());
             String header = "";
             header = myResponse.getString("header");
+            CardBuilder cb = new CardBuilder();
             if(header.equals("NoMessages"))
             {
                 conn.disconnect();
@@ -217,13 +219,10 @@ public class GameConnectionToAPI {
                 conn.disconnect();
                 int numberOfCards = myResponse.getInt("numberOfCards");
                 Hand hand = new Hand();
+                
                 for(int i=0; i < numberOfCards; i++){
                     JSONObject card_data = myResponse.getJSONObject("card"+i);
-                    String color = card_data.getString("color");
-                    String rank = card_data.getString("rank");
-                    String suit = card_data.getString("suit");
-                    Card card = new Card(rank, suit, color);
-                    hand.add(card);
+                    hand.add(cb.setColor(card_data.getString("color")).setRank(card_data.getString("rank")).setSuit(card_data.getString("suit")).getCard());
                 }
                 gameData.getPlayer().setHand(hand);
                 gameData.setWhatsChanged("player");
@@ -240,17 +239,11 @@ public class GameConnectionToAPI {
                     JSONObject pair_data = myResponse.getJSONObject("pair"+i);
                     boolean completed = pair_data.getBoolean("completed");
                     JSONObject att_data = pair_data.getJSONObject("atackerCard");
-                    String color = att_data.getString("color");
-                    String rank = att_data.getString("rank");
-                    String suit = att_data.getString("suits");
-                    Card attCard = new Card(rank, suit, color);
+                    Card attCard = cb.setColor(att_data.getString("color")).setRank(att_data.getString("rank")).setSuit(att_data.getString("suit")).getCard();
                     CardPair pair = new CardPair(attCard, new Card(), completed);
                     if(completed){
                         JSONObject def_data = pair_data.getJSONObject("defenderCard");
-                        color = def_data.getString("color");
-                        rank = def_data.getString("rank");
-                        suit = def_data.getString("suits");
-                        Card defCard = new Card(rank, suit, color);
+                        Card defCard = cb.setColor(def_data.getString("color")).setRank(def_data.getString("rank")).setSuit(def_data.getString("suit")).getCard();
                         pair = new CardPair(attCard, defCard, completed);
                     }
                     field.addPair(pair);
