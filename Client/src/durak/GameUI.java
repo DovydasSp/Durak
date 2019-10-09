@@ -1,5 +1,8 @@
 package durak;
 
+import durak.Factory.Factory;
+import durak.Factory.UnitFactory;
+import durak.Factory.Button;
 import durak.GameDataClasses.Card;
 import durak.GameDataClasses.CardPair;
 import durak.GameDataClasses.GameData;
@@ -150,13 +153,18 @@ public class GameUI {
         deckCardCount.setForeground(Color.white);
         infoPanel.add(deckCardCount);
         
+        Factory factory = new UnitFactory();
+        
         if(gd.getPlayer().getYourTurn() && gd.getField().getPairCount() > 0){
             if(gd.getPlayer().getIsAttacker()){
-                JButton button = new JButton("DONE");
+                Button b = factory.getButtons("green", "DONE");
+                JButton button = b.createButton();               
+                
+                /*JButton button = new JButton("DONE");
                 button.setBackground(Color.white);
                 button.setBorder(new LineBorder(Color.BLACK));
                 button.setFont(new Font("Arial", Font.PLAIN, 20));
-                button.setBounds(1500,30,80,40);
+                button.setBounds(1500,30,80,40);*/
                 button.addActionListener(new ActionListener(){  
                     @Override
                     public void actionPerformed(ActionEvent e){  
@@ -169,11 +177,13 @@ public class GameUI {
                 infoPanel.add(button);
             }
             else{
-                JButton button = new JButton("TAKE");
+                Button b = factory.getButtons("red", "TAKE");
+                JButton button = b.createButton(); 
+                /*JButton button = new JButton("TAKE");
                 button.setBackground(Color.white);
                 button.setBorder(new LineBorder(Color.BLACK));
                 button.setFont(new Font("Arial", Font.PLAIN, 20));
-                button.setBounds(1500,30,80,40);
+                button.setBounds(1500,30,80,40);*/
                 button.addActionListener(new ActionListener(){  
                     @Override
                     public void actionPerformed(ActionEvent e){  
