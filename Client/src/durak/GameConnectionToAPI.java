@@ -239,11 +239,11 @@ public class GameConnectionToAPI {
                     JSONObject pair_data = myResponse.getJSONObject("pair"+i);
                     boolean completed = pair_data.getBoolean("completed");
                     JSONObject att_data = pair_data.getJSONObject("atackerCard");
-                    Card attCard = cb.setColor(att_data.getString("color")).setRank(att_data.getString("rank")).setSuit(att_data.getString("suit")).getCard();
+                    Card attCard = cb.setColor(att_data.getString("color")).setRank(att_data.getString("rank")).setSuit(att_data.getString("suits")).getCard();
                     CardPair pair = new CardPair(attCard, new Card(), completed);
                     if(completed){
                         JSONObject def_data = pair_data.getJSONObject("defenderCard");
-                        Card defCard = cb.setColor(def_data.getString("color")).setRank(def_data.getString("rank")).setSuit(def_data.getString("suit")).getCard();
+                        Card defCard = cb.setColor(def_data.getString("color")).setRank(def_data.getString("rank")).setSuit(def_data.getString("suits")).getCard();
                         pair = new CardPair(attCard, defCard, completed);
                     }
                     field.addPair(pair);
