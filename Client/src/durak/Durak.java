@@ -1,4 +1,4 @@
-package durak;
+ package durak;
 
 public class Durak {
 

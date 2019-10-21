@@ -1,5 +1,6 @@
 package durak;
 
+import durak.Observer.GameObserver;
 import durak.GameDataClasses.Card;
 import durak.GameDataClasses.CardPair;
 import durak.GameDataClasses.GameData;

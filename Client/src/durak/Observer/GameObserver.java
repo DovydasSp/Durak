@@ -1,9 +1,8 @@
-package durak;
+package durak.Observer;
 
+import durak.Game;
 import durak.GameDataClasses.GameData;
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONException;
@@ -12,14 +11,14 @@ public class GameObserver implements Observer{
     private Game game;
     private GameData gameData = new GameData();
 
-    GameObserver(Game game_, GameData gameData_) {
+    public GameObserver(Game game_, GameData gameData_) {
         game = game_;
         gameData = gameData_;
     }
     
     
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Object arg) {
         gameData = (GameData)arg;
         try {
             game.refreshUI(gameData);

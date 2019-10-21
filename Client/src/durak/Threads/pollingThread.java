@@ -3,7 +3,7 @@ package durak.Threads;
 import durak.Game;
 import durak.GameConnectionToAPI;
 import durak.GameDataClasses.GameData;
-import java.util.Observable;
+import durak.Observer.Observable;
 
 public class pollingThread extends Observable implements Runnable {
     private final GameConnectionToAPI connection;
@@ -31,7 +31,6 @@ public class pollingThread extends Observable implements Runnable {
                     {
                         run = false;
                     }
-                    setChanged();
                     notifyObservers(gameData);
                 }
                 
