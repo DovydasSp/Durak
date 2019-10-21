@@ -133,7 +133,7 @@ public class GameConnectionToAPI {
     }
     
     
-    public GameData poll(GameData gameData) throws IOException, JSONException{
+    public JSONObject poll(GameData gameData) throws IOException, JSONException{
         try {
             URL url = new URL(urlas+"poll/"+gameData.getPlayer().getIDs().getKey()+"/"+gameData.getPlayer().getIDs().getValue());
             conn = (HttpURLConnection)url.openConnection();
@@ -145,7 +145,8 @@ public class GameConnectionToAPI {
 	conn.setRequestProperty("Content-Type", "application/json; utf-8");
         conn.setRequestProperty("Accept", "application/json");
 	conn.setDoOutput(true);
-            
+          
+        JSONObject myResponse = null;
         try(BufferedReader br = new BufferedReader(
             new InputStreamReader(conn.getInputStream(), "utf-8"))) {
             StringBuilder response = new StringBuilder();
@@ -153,10 +154,14 @@ public class GameConnectionToAPI {
             while ((responseLine = br.readLine()) != null) {
             response.append(responseLine.trim());
             }
-                
-            JSONObject myResponse = new JSONObject(response.toString());
-            String header = "";
-            header = myResponse.getString("header");
+            
+            myResponse = new JSONObject(response.toString());
+        }
+        conn.disconnect();
+        return myResponse;
+    }
+        /*
+        //---------------------------------------------------------------------------------------        
             CardBuilder cb = new CardBuilder();
             if(header.equals("NoMessages"))
             {
@@ -290,7 +295,7 @@ public class GameConnectionToAPI {
                 System.out.println("API sent gameEnd call");
                 return gameData;
             }
-        }
+        //---------------------------------------------------------------------------------------  
         return null;
-    }
+    }*/
 }
