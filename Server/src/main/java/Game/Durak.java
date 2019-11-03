@@ -617,6 +617,13 @@ public class Durak implements Runnable, Serializable {
         one.addMessage(Message.formDeckCount(deck));
         two.addMessage(Message.formDeckCount(deck));
 
+        if(whosTurn == one){
+            one.addMessage(Message.formPlayerTurnEvent(true));
+            two.addMessage(Message.formPlayerTurnEvent(false));
+        } else{
+            one.addMessage(Message.formPlayerTurnEvent(false));
+            two.addMessage(Message.formPlayerTurnEvent(true));
+        }
         one.addMessage(Message.formRole(one.isAttacker()));
         two.addMessage(Message.formRole(two.isAttacker()));
 
@@ -634,8 +641,5 @@ public class Durak implements Runnable, Serializable {
             one.addMessage(Message.formField(empty));
             two.addMessage(Message.formField(empty));
         }
-
-        one.addMessage(Message.formPlayerTurnEvent(one.isAttacker()));
-        two.addMessage(Message.formPlayerTurnEvent(two.isAttacker()));
     }
 }
