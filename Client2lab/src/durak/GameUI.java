@@ -1,8 +1,9 @@
 package durak;
 
-import durak.Factory.Factory;
+/*import durak.Factory.Factory;
 import durak.Factory.UnitFactory;
-import durak.Factory.Button;
+import durak.Factory.Button;*/
+import durak.Decorator.*;
 import durak.GameDataClasses.Card;
 import durak.GameDataClasses.CardPair;
 import durak.GameDataClasses.GameData;
@@ -153,10 +154,10 @@ public class GameUI {
         deckCardCount.setForeground(Color.white);
         infoPanel.add(deckCardCount);
         
-        Factory factory = new UnitFactory();
+        //Factory factory = new UnitFactory();
         
         System.out.println ("FACTORY: White button was requested");
-                Button bu = factory.getButtons("white", "UNDO");
+                Buttonn bu = new WhiteButton("UNDO");//factory.getButtons("white", "UNDO");
                 JButton button0 = bu.createButton();               
                 button0.addActionListener(new ActionListener(){  
                     @Override
@@ -172,7 +173,7 @@ public class GameUI {
         if(gd.getPlayer().getYourTurn() && gd.getField().getPairCount() > 0){
             if(gd.getPlayer().getIsAttacker()){
                 System.out.println ("FACTORY: Green button was requested");
-                Button b = factory.getButtons("green", "DONE");
+                Buttonn b = new GreenButton("DONE", bu);//factory.getButtons("green", "DONE");
                 JButton button = b.createButton();               
                 button.addActionListener(new ActionListener(){  
                     @Override
@@ -187,7 +188,7 @@ public class GameUI {
             }
             else{
                 System.out.println ("FACTORY: Red button was requested");
-                Button b = factory.getButtons("red", "TAKE");
+                Buttonn b = new RedButton("TAKE", bu);//factory.getButtons("red", "TAKE");
                 JButton button = b.createButton(); 
                 button.addActionListener(new ActionListener(){  
                     @Override
