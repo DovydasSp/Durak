@@ -68,7 +68,7 @@ public class ServerController {
     public ResponseEntity<String> undo(@RequestBody String json) {
         JSONObject obj = new JSONObject(json);
         String gameID = obj.getString("gameID");
-        if(gameCommands.get(gameID).size() != 0){
+        if(gameCommands.get(gameID) != null && gameCommands.get(gameID).size() != 0){
             CommandInvoker invoker = new CommandInvoker();
             invoker.setCommand(gameCommands.get(gameID).pop());
             Thread thread = invoker.undoCommand();
