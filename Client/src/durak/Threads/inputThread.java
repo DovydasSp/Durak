@@ -2,9 +2,8 @@ package durak.Threads;
 
 import durak.GameConnectionToAPI;
 import durak.GameDataClasses.GameData;
-import java.util.Observable;
 
-public class inputThread extends Observable implements Runnable {
+public class inputThread implements Runnable {
     private final GameConnectionToAPI connection;
     private GameData gameData;
     private int input;
