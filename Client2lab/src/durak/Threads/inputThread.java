@@ -20,9 +20,11 @@ public class inputThread implements Runnable {
         try
         { 
             if(input == -1){
+                System.out.println ("inputThread: sent UNDO request");
                 connection.undo(gameData.getPlayer().getIDs().getKey());
             }
             else{
+                System.out.println ("inputThread: sent input request");
                 connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), input);
             }
         } 
@@ -30,6 +32,7 @@ public class inputThread implements Runnable {
         { 
             // Throwing an exception 
             System.out.println ("inputThread Exception is caught: "+e);
+            run();
         }
     } 
     
