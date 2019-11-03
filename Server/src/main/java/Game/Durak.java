@@ -1,10 +1,18 @@
 package Game;
+import Server.DB;
 import Server.Message;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
-public class Durak implements Runnable {
+public class Durak implements Runnable, java.io.Serializable {
     public static String TRUMP;
     private ObjectId id;
     private Player one;
@@ -15,12 +23,12 @@ public class Durak implements Runnable {
     private Player defender;
     private Field currentField;
     private boolean roundInitiated; // If a round is occurring and has completed its initiation stages
-    private Player initialAttacker;
-
+    private boolean startAgain = false;
     private Stack<Integer> playerOneInput = new Stack<>();
     private Stack<Integer> playerTwoInput = new Stack<>();
+    private Stack<String> durakBinaries = new Stack<>();
 
-    public Scanner sc = new Scanner(System.in);
+    //public Scanner sc = new Scanner(System.in);
     public Random r = new Random();
     public Stack<Integer> input = new Stack<>();
 
@@ -33,7 +41,12 @@ public class Durak implements Runnable {
 
     public void run() {
         try {
-            start();
+            if(startAgain == false) {
+                startAgain = true;
+                start();
+            }
+            else
+                startDurakAgain();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -91,11 +104,9 @@ public class Durak implements Runnable {
         if (r.nextInt(2) < 1) {
             setAttacker(one);
             setDefender(two);
-            initialAttacker = one;
         } else {
             setAttacker(two);
             setDefender(one);
-            initialAttacker = two;
         }
         one.addMessage(Message.formTrump(TRUMP));
         two.addMessage(Message.formTrump(TRUMP));
@@ -192,11 +203,13 @@ public class Durak implements Runnable {
         System.out.println(attacker + ", initiate the attack!");
 
         int initialAttack = playerInput(attacker);
+
         attacker.addMessage(Message.formInput(1));
         Card initialAttackCard = attacker.useCard(initialAttack);
         announceCardPlayed(attacker, initialAttackCard);
         attacker.addMessage(Message.formPlayersHand(attacker.getHand()));
         defender.addMessage(Message.formEnemyCardCount(attacker.getHand()));
+        storeDurakToDB();
         //  (CARD PLAYED: Check for victory!)
 
         if (victoryAchieved()) {
@@ -213,6 +226,7 @@ public class Durak implements Runnable {
             boolean defenderTurn = defenderResponse(roundField);
             one.addMessage(Message.formField(currentField));
             two.addMessage(Message.formField(currentField));
+            storeDurakToDB();
             if (defenderTurn || victoryAchieved()) {
                 // Defender took the cards, ended the round
                 // OR as a result of the defender's turn, victory was achieved (CARD PLAYED: Check for victory!)
@@ -228,6 +242,7 @@ public class Durak implements Runnable {
             boolean attackerTurn = attackerResponse(roundField);
             one.addMessage(Message.formField(currentField));
             two.addMessage(Message.formField(currentField));
+            storeDurakToDB();
             if (attackerTurn || victoryAchieved()) {
                 // Attacker declared the round to be over
                 // OR as a result of the attacker's turn, victory was achieved (CARD PLAYED: Check for victory!)
@@ -439,21 +454,6 @@ public class Durak implements Runnable {
     }
 
     public void switchRoles() {
-        /*if(attacker == one){
-            one.switchRole();
-            two.switchRole();
-            attacker = two;
-            defender = one;
-            //initialAttacker = two;
-        }else{
-            one.switchRole();
-            two.switchRole();
-            attacker = one;
-            defender = two;
-            //initialAttacker= one;
-        }*/
-
-
         Player temp = attacker;
         attacker = defender;
         defender = temp;
@@ -477,15 +477,6 @@ public class Durak implements Runnable {
         return roundInitiated;
     }
 
-    public void addInput(String playerID, int input){
-        if(playerID.compareTo(one.getID().toString()) == 0){
-            one.addInput(input);
-        }
-        else if(playerID.compareTo(two.getID().toString()) == 0){
-            two.addInput(input);
-        }
-    }
-
     public Player getPlayerByID(String id){
         if(one.getID().toString().compareTo(id) == 0)
             return one;
@@ -495,4 +486,82 @@ public class Durak implements Runnable {
     }
 
     public ObjectId getID() { return id; }
+    private void storeDurakToDB(){
+        try{
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream( stream );
+            oos.writeObject( this );
+            oos.close();
+            String objectBinary = Base64.getEncoder().encodeToString(stream.toByteArray());
+            if(DB.collectionExists(id.toString())){
+                MongoCollection collection  = DB.Instance().getCollection(id.toString());
+                collection.updateOne(Filters.eq("id", id.toString()), Updates.set("binary", objectBinary));
+            }else{
+                DB.Instance().createCollection(id.toString());
+                MongoCollection collection  = DB.Instance().getCollection(id.toString());
+                collection.insertOne(new Document("id", id.toString()).append("binary", objectBinary));
+            }
+            durakBinaries.add(objectBinary);
+        } catch (IOException ex){
+            System.out.println(ex.toString());
+        }
+
+    }
+
+    public void startDurakAgain() throws InterruptedException {
+        boolean gameOver = false;
+
+        while (!gameOver) {
+
+            boolean thisRound = round(); // Run a round
+            one.addMessage(Message.formRoundEnd());
+            two.addMessage(Message.formRoundEnd());
+            if (victoryAchieved()) {
+                // Victory was achieved by the playing of cards at some point
+                // Arrived here after breaking out of the round instantly
+                gameOver = true; // Break out of the game loop
+            } else {
+                // No victory was achieved
+                // Draw cards, last attacker first
+                attacker.replenish();
+                defender.replenish();
+                round++; // Increment round number
+                if (thisRound) {
+                    // Attacker won the round
+                    // Attacker goes again; no switching occurs
+                } else {
+                    // Defender won the round
+                    // Roles switch
+                    switchRoles();
+                }
+            }
+        }
+
+        System.out.println("Game over!\n");
+        System.out.println("The winner is " + determineWinner() + "!\n");
+        if(determineWinner() == one) {
+            one.addMessage(Message.formGameEnd(true));
+            two.addMessage(Message.formGameEnd(false));
+        }else{
+            one.addMessage(Message.formGameEnd(false));
+            two.addMessage(Message.formGameEnd(true));
+        }
+    }
+
+    public void sendStatusToClient(){
+        one.addMessage(Message.formDeckCount(deck));
+        two.addMessage(Message.formDeckCount(deck));
+
+        one.addMessage(Message.formRole(one.isAttacker()));
+        two.addMessage(Message.formRole(two.isAttacker()));
+
+        one.addMessage(Message.formPlayersHand(one.getHand()));
+        two.addMessage(Message.formPlayersHand(two.getHand()));
+
+        one.addMessage(Message.formEnemyCardCount(two.getHand()));
+        two.addMessage(Message.formEnemyCardCount(one.getHand()));
+
+        one.addMessage(Message.formField(currentField));
+        two.addMessage(Message.formField(currentField));
+    }
 }
