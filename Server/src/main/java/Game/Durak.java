@@ -563,5 +563,8 @@ public class Durak implements Runnable, java.io.Serializable {
 
         one.addMessage(Message.formField(currentField));
         two.addMessage(Message.formField(currentField));
+
+        one.addMessage(Message.formPlayerTurnEvent(one.isAttacker()));
+        two.addMessage(Message.formPlayerTurnEvent(two.isAttacker()));
     }
 }
