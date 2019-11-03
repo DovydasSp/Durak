@@ -31,7 +31,7 @@ public class PlayerInputCommand implements Command, Serializable {
         else if(playerID.compareTo(durak.getPlayerTwo().getID().toString()) == 0){
             durak.getPlayerTwo().addInput(input);
         }
-        System.out.println("PlayerInputCommand execute" + input);
+        System.out.println("PlayerInputCommand execute " + input);
     }
 
     public Thread undo(){
@@ -44,7 +44,7 @@ public class PlayerInputCommand implements Command, Serializable {
             Thread newthread = new Thread(dur);
             newthread.start();
             durak = dur;
-            System.out.println("PlayerInputCommand undo" + input);
+            System.out.println("PlayerInputCommand undo");
             durak.sendStatusToClient();
             return newthread;
         } catch (IOException | ClassNotFoundException ex){

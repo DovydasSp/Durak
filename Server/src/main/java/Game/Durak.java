@@ -209,7 +209,7 @@ public class Durak implements Runnable, java.io.Serializable {
         announceCardPlayed(attacker, initialAttackCard);
         attacker.addMessage(Message.formPlayersHand(attacker.getHand()));
         defender.addMessage(Message.formEnemyCardCount(attacker.getHand()));
-        storeDurakToDB();
+        //storeDurakToDB();
         //  (CARD PLAYED: Check for victory!)
 
         if (victoryAchieved()) {
@@ -226,7 +226,7 @@ public class Durak implements Runnable, java.io.Serializable {
             boolean defenderTurn = defenderResponse(roundField);
             one.addMessage(Message.formField(currentField));
             two.addMessage(Message.formField(currentField));
-            storeDurakToDB();
+            //storeDurakToDB();
             if (defenderTurn || victoryAchieved()) {
                 // Defender took the cards, ended the round
                 // OR as a result of the defender's turn, victory was achieved (CARD PLAYED: Check for victory!)
@@ -242,7 +242,7 @@ public class Durak implements Runnable, java.io.Serializable {
             boolean attackerTurn = attackerResponse(roundField);
             one.addMessage(Message.formField(currentField));
             two.addMessage(Message.formField(currentField));
-            storeDurakToDB();
+            //storeDurakToDB();
             if (attackerTurn || victoryAchieved()) {
                 // Attacker declared the round to be over
                 // OR as a result of the attacker's turn, victory was achieved (CARD PLAYED: Check for victory!)
