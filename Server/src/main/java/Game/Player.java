@@ -178,14 +178,14 @@ public class Player implements Serializable {
     }
 
     public void addMessage(JSONObject msg){ messages.add(msg.toString()); }
-    public JSONObject popMessage() {
+    public String popMessage() {
         synchronized (messages){
             if(messages.size() != 0){
-                JSONObject res = (JSONObject)JSONObject.stringToValue(messages.get(0));
+                String res = messages.get(0);
                 messages.remove(0);
                 return res;
             }
-            return Message.formNoMessages();
+            return Message.formNoMessages().toString();
         }
     }
 
