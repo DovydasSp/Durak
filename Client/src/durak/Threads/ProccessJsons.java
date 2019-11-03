@@ -58,6 +58,7 @@ public class ProccessJsons {
 
         for (int i = 0; i < numberOfCards; i++) {
             JSONObject card_data = myResponse.getJSONObject("card" + i);
+            System.out.println ("BUILDER: building a new card.");
             hand.add(cb.setColor(card_data.getString("color")).setRank(card_data.getString("rank")).setSuit(card_data.getString("suit")).getCard());
         }
         gameData.getPlayer().setHand(hand);
@@ -75,10 +76,12 @@ public class ProccessJsons {
             JSONObject pair_data = myResponse.getJSONObject("pair" + i);
             boolean completed = pair_data.getBoolean("completed");
             JSONObject att_data = pair_data.getJSONObject("atackerCard");
+            System.out.println ("BUILDER: building a new card.");
             Card attCard = cb.setColor(att_data.getString("color")).setRank(att_data.getString("rank")).setSuit(att_data.getString("suits")).getCard();
             CardPair pair = new CardPair(attCard, new Card(), completed);
             if (completed) {
                 JSONObject def_data = pair_data.getJSONObject("defenderCard");
+                System.out.println ("BUILDER: building a new card.");
                 Card defCard = cb.setColor(def_data.getString("color")).setRank(def_data.getString("rank")).setSuit(def_data.getString("suits")).getCard();
                 pair = new CardPair(attCard, defCard, completed);
             }

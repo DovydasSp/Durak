@@ -35,10 +35,14 @@ public class Game {
         gameData = gd;
         gameUI.getFrame().setTitle("Durak - "+gameData.getPlayer().getPlayerName());
         
+        System.out.println ("OBSERVER: observable polling thread created.");
         pollingThread thread = new pollingThread(connection, gameData, this);
+        System.out.println ("OBSERVER: observer created.");
         GameObserver fo = new GameObserver(this, gameData);
+        System.out.println ("OBSERVER: observer added to thread.");
         thread.addObserver(fo);
         Thread t = new Thread(thread);
+        System.out.println ("OBSERVER: observable thread started.");
         t.start();
     }
     

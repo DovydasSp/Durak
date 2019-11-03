@@ -18,6 +18,7 @@ public class GreenButton extends Button {
         button.setBorder(new LineBorder(Color.BLACK));
         button.setFont(new Font("Arial", Font.PLAIN, 20));
         button.setBounds(1460,30,120,40);
+        System.out.println ("FACTORY: Green button was created and returned");
         return button;
     }
 }

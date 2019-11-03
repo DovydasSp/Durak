@@ -14,6 +14,7 @@ public class GameObserver implements Observer{
     public GameObserver(Game game_, GameData gameData_) {
         game = game_;
         gameData = gameData_;
+        System.out.println ("Observer was created.");
     }
     
     
@@ -21,6 +22,7 @@ public class GameObserver implements Observer{
     public void update(Object arg) {
         gameData = (GameData)arg;
         try {
+            System.out.println ("Observer refreshed UI");
             game.refreshUI(gameData);
         } catch (IOException ex) {
             Logger.getLogger(GameObserver.class.getName()).log(Level.SEVERE, null, ex);
