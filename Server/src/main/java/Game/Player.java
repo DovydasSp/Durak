@@ -2,9 +2,11 @@ package Game;
 import Server.Message;
 import org.bson.types.ObjectId;
 import org.json.JSONObject;
+
+import java.io.Serializable;
 import java.util.*;
 
-public class Player {
+public class Player implements Serializable {
 
     private Hand hand;
     private String name;
@@ -13,7 +15,7 @@ public class Player {
     //private static int count = 0;
     private boolean attacker;
     private Stack<Integer> input = new Stack<>();
-    private Stack<JSONObject> messages = new Stack<>();
+    private Stack<String> messages = new Stack<>();
 
     // Create a new Player with an empty hand and set to draw from a default deck (does not draw).
     public Player() {
@@ -175,15 +177,15 @@ public class Player {
         }
     }
 
-    public void addMessage(JSONObject msg){ messages.add(msg); }
-    public JSONObject popMessage() {
+    public void addMessage(JSONObject msg){ messages.add(msg.toString()); }
+    public String popMessage() {
         synchronized (messages){
             if(messages.size() != 0){
-                JSONObject res = messages.get(0);
+                String res = messages.get(0);
                 messages.remove(0);
                 return res;
             }
-            return Message.formNoMessages();
+            return Message.formNoMessages().toString();
         }
     }
 

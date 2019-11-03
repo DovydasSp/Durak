@@ -1,7 +1,8 @@
 package Game;
+import java.io.Serializable;
 import java.util.*;
 
-public class Field {
+public class Field implements Serializable {
     // Generated when an attacking phase is initiated
 
     // ArrayList of Pairs

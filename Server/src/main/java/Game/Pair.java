@@ -1,7 +1,8 @@
 package Game;
+import java.io.Serializable;
 import java.util.*;
 
-public class Pair {
+public class Pair implements Serializable {
     // An attack/defense pair as part of gameplay
 
     private Card attacker;

@@ -1,8 +1,9 @@
 package Game;
+import java.io.Serializable;
 import java.util.*;
 import Game.cardstatic.*;
 
-public class Card implements Comparable {
+public class Card implements Comparable, Serializable {
 
     private final String rank;
     private final String suit;

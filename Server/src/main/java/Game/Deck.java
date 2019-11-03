@@ -1,9 +1,10 @@
 package Game;
+import java.io.Serializable;
 import java.util.*;
 import Game.cardstatic.*;
 
 
-public class Deck {
+public class Deck implements Serializable {
 
     private Stack<Card> cards;
 
