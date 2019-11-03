@@ -629,6 +629,10 @@ public class Durak implements Runnable, Serializable {
         if(currentField != null){
             one.addMessage(Message.formField(currentField));
             two.addMessage(Message.formField(currentField));
+        } else{
+            Field empty = new Field();
+            one.addMessage(Message.formField(empty));
+            two.addMessage(Message.formField(empty));
         }
 
         one.addMessage(Message.formPlayerTurnEvent(one.isAttacker()));
