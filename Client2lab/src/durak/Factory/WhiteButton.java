@@ -17,7 +17,7 @@ public class WhiteButton extends Button {
         button.setBackground(getBackground());
         button.setBorder(new LineBorder(Color.BLACK));
         button.setFont(new Font("Arial", Font.PLAIN, 20));
-        button.setBounds(1400,30,80,40);
+        button.setBounds(1300,30,80,40);
         System.out.println ("FACTORY: White button was created and returned");
         return button;
     }
