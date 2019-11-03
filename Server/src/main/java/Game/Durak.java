@@ -10,9 +10,10 @@ import org.bson.types.ObjectId;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.*;
 
-public class Durak implements Runnable, java.io.Serializable {
+public class Durak implements Runnable, Serializable {
     public static String TRUMP;
     private ObjectId id;
     private Player one;
@@ -21,6 +22,7 @@ public class Durak implements Runnable, java.io.Serializable {
     private int round; // Natural number
     private Player attacker;
     private Player defender;
+    private Player whosTurn;
     private Field currentField;
     private boolean roundInitiated; // If a round is occurring and has completed its initiation stages
     private boolean startAgain = false;
@@ -201,7 +203,7 @@ public class Durak implements Runnable, java.io.Serializable {
         attacker.addMessage(Message.formEnemyCardCount(defender.getHand()));
 
         System.out.println(attacker + ", initiate the attack!");
-
+        whosTurn = attacker;
         int initialAttack = playerInput(attacker);
 
         attacker.addMessage(Message.formInput(1));
@@ -223,6 +225,7 @@ public class Durak implements Runnable, java.io.Serializable {
         two.addMessage(Message.formField(currentField));
 
         while (!roundField.isCompleted()) {
+            whosTurn = defender;
             boolean defenderTurn = defenderResponse(roundField);
             one.addMessage(Message.formField(currentField));
             two.addMessage(Message.formField(currentField));
@@ -239,6 +242,7 @@ public class Durak implements Runnable, java.io.Serializable {
             attacker.addMessage(Message.formEnemyCardCount(defender.getHand()));
             // Defender responded by playing a card
 
+            whosTurn = attacker;
             boolean attackerTurn = attackerResponse(roundField);
             one.addMessage(Message.formField(currentField));
             two.addMessage(Message.formField(currentField));
@@ -508,12 +512,73 @@ public class Durak implements Runnable, java.io.Serializable {
 
     }
 
+    public boolean restartRound() throws InterruptedException {
+        // Create references to attacker and defender
+
+
+        // Generate header
+        String roundName = "ROUND " + round;
+        String headerLine = "==================== " + roundName + " ====================" + "\n";
+        String headerContent = "Attacker: " + attacker + " | " + "Defender: " + defender + "\n";
+        String header = "\n\n\n" + headerLine + headerContent + headerLine + "\n\n\n";
+        Boolean firstCheck = true;
+        roundInitiated = false; // Round is in initial stages
+        Field roundField;
+        roundField = currentField; // Generate a Field
+
+        roundInitiated = true;
+
+        while (!roundField.isCompleted()) {
+            if(firstCheck && whosTurn == defender){
+                firstCheck = false;
+                whosTurn = defender;
+                boolean defenderTurn = defenderResponse(roundField);
+                one.addMessage(Message.formField(currentField));
+                two.addMessage(Message.formField(currentField));
+                //storeDurakToDB();
+                if (defenderTurn || victoryAchieved()) {
+                    // Defender took the cards, ended the round
+                    // OR as a result of the defender's turn, victory was achieved (CARD PLAYED: Check for victory!)
+                    roundInitiated = false;
+                    currentField = null;
+                    //switchRoles();
+                    return true; // Pop out of round
+                }
+                defender.addMessage(Message.formPlayersHand(defender.getHand()));
+                attacker.addMessage(Message.formEnemyCardCount(defender.getHand()));
+                // Defender responded by playing a card
+            }else if(firstCheck && whosTurn == attacker){
+                firstCheck = false;
+                whosTurn = attacker;
+                boolean attackerTurn = attackerResponse(roundField);
+                one.addMessage(Message.formField(currentField));
+                two.addMessage(Message.formField(currentField));
+                //storeDurakToDB();
+                if (attackerTurn || victoryAchieved()) {
+                    // Attacker declared the round to be over
+                    // OR as a result of the attacker's turn, victory was achieved (CARD PLAYED: Check for victory!)
+                    roundInitiated = false;
+                    currentField = null;
+                    return false; // Pop out of round
+                }
+                attacker.addMessage(Message.formPlayersHand(attacker.getHand()));
+                defender.addMessage(Message.formEnemyCardCount(attacker.getHand()));
+            }
+        }
+        return true; // Satisfy Java
+    }
+
     public void startDurakAgain() throws InterruptedException {
         boolean gameOver = false;
-
+        boolean restart = true;
         while (!gameOver) {
 
-            boolean thisRound = round(); // Run a round
+            boolean thisRound;
+            if(restart == true && currentField != null)
+                thisRound = restartRound(); // Run a round
+            else
+                thisRound = round();
+            restart = false;
             one.addMessage(Message.formRoundEnd());
             two.addMessage(Message.formRoundEnd());
             if (victoryAchieved()) {
@@ -561,8 +626,10 @@ public class Durak implements Runnable, java.io.Serializable {
         one.addMessage(Message.formEnemyCardCount(two.getHand()));
         two.addMessage(Message.formEnemyCardCount(one.getHand()));
 
-        one.addMessage(Message.formField(currentField));
-        two.addMessage(Message.formField(currentField));
+        if(currentField != null){
+            one.addMessage(Message.formField(currentField));
+            two.addMessage(Message.formField(currentField));
+        }
 
         one.addMessage(Message.formPlayerTurnEvent(one.isAttacker()));
         two.addMessage(Message.formPlayerTurnEvent(two.isAttacker()));
