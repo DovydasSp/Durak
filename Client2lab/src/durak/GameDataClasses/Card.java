@@ -1,6 +1,6 @@
 package durak.GameDataClasses;
 
-public class Card {
+public class Card implements Cloneable {
 
 	private String rank;
 	private String suit;
@@ -26,4 +26,10 @@ public class Card {
 	public String getRank() {
 		return rank;
 	}
+        
+        @Override
+        protected Object clone() throws CloneNotSupportedException
+        {
+            return super.clone();
+        }
 }

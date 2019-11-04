@@ -3,8 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Dovydas/Desktop/4%20KURSAS%201%20PUSMETIS/Objektinis%20programu%20projektavimas/Durak/Client/src/durak/Durak.java</file>
-            <file>file:/C:/Users/Dovydas/Desktop/4%20KURSAS%201%20PUSMETIS/Objektinis%20programu%20projektavimas/Durak/Client/src/durak/Game.java</file>
+            <file>file:/C:/Users/Dovydas/Desktop/4%20KURSAS%201%20PUSMETIS/Objektinis%20programu%20projektavimas/Durak/Client2lab/src/durak/Game.java</file>
+            <file>file:/C:/Users/Dovydas/Desktop/4%20KURSAS%201%20PUSMETIS/Objektinis%20programu%20projektavimas/Durak/Client2lab/src/durak/Observer/Observable.java</file>
+            <file>file:/C:/Users/Dovydas/Desktop/4%20KURSAS%201%20PUSMETIS/Objektinis%20programu%20projektavimas/Durak/Client2lab/src/durak/Observer/GameObserver.java</file>
+            <file>file:/C:/Users/Dovydas/Desktop/4%20KURSAS%201%20PUSMETIS/Objektinis%20programu%20projektavimas/Durak/Client2lab/src/durak/Observer/Observer.java</file>
+            <file>file:/C:/Users/Dovydas/Desktop/4%20KURSAS%201%20PUSMETIS/Objektinis%20programu%20projektavimas/Durak/Client2lab/src/durak/GameConnectionToAPI.java</file>
+            <file>file:/C:/Users/Dovydas/Desktop/4%20KURSAS%201%20PUSMETIS/Objektinis%20programu%20projektavimas/Durak/Client2lab/src/durak/Durak.java</file>
+            <file>file:/C:/Users/Dovydas/Desktop/4%20KURSAS%201%20PUSMETIS/Objektinis%20programu%20projektavimas/Durak/Client2lab/src/durak/Threads/pollingThread.java</file>
         </group>
     </open-files>
 </project-private>
