@@ -1,9 +1,9 @@
 package durak.GameDataClasses;
 
 public class CardBuilder {
-    private String rank;
-    private String suit;
-    private String color; 
+    private String rank = "";
+    private String suit = "";
+    private String color = ""; 
 
     public CardBuilder setRank(String rank) {
         System.out.println ("CardBuilder rank set.");

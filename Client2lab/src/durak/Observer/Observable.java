@@ -3,7 +3,7 @@ package durak.Observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Observable {
+public abstract class Observable {
     private Object o;
     private List<Observer> observers = new ArrayList<>();
  

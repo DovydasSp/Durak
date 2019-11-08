@@ -1,11 +1,6 @@
 package durak;
 
-import durak.GameDataClasses.Card;
-import durak.GameDataClasses.CardBuilder;
-import durak.GameDataClasses.CardPair;
-import durak.GameDataClasses.Field;
 import durak.GameDataClasses.GameData;
-import durak.GameDataClasses.Hand;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
