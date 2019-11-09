@@ -1,5 +1,9 @@
 package Game;
 
+import Server.Request;
+import Server.RequestAdapter;
+import org.javatuples.Pair;
+
 import java.io.*;
 import java.util.Base64;
 
@@ -9,13 +13,14 @@ public class PlayerInputCommand implements Command, Serializable {
     private String playerID;
     private int input;
     private String binary;
+    private Request request = new RequestAdapter();
     public PlayerInputCommand(Durak durak, String playerID, int input){
         this.durak = durak;
         this.playerID = playerID;
         this.input = input;
     }
 
-    public void execute(){
+    public boolean execute(){
         try{
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream( stream );
@@ -25,16 +30,12 @@ public class PlayerInputCommand implements Command, Serializable {
         } catch (IOException ex){
             System.out.println(ex.toString());
         }
-        if(playerID.compareTo(durak.getPlayerOne().getID().toString()) == 0){
-            durak.getPlayerOne().addInput(input);
-        }
-        else if(playerID.compareTo(durak.getPlayerTwo().getID().toString()) == 0){
-            durak.getPlayerTwo().addInput(input);
-        }
+        boolean rez = request.inputRequest(durak, playerID, input);
         System.out.println("PlayerInputCommand execute " + input);
+        return rez;
     }
 
-    public Thread undo(){
+    public Pair<Durak, Thread> undo(){
         try{
             byte [] data = Base64.getDecoder().decode(binary);
             ObjectInputStream ois = new ObjectInputStream(
@@ -46,12 +47,11 @@ public class PlayerInputCommand implements Command, Serializable {
             durak = dur;
             System.out.println("PlayerInputCommand undo");
             durak.sendStatusToClient();
-            return newthread;
+            Pair<Durak, Thread> pair = new Pair<>(durak,newthread);
+            return pair;
         } catch (IOException | ClassNotFoundException ex){
             System.out.println(ex.toString());
         }
         return null;
     }
-
-    public Durak getDurak() {return durak; }
 }

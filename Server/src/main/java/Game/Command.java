@@ -1,7 +1,8 @@
 package Game;
 
+import org.javatuples.Pair;
+
 public interface Command {
-    public void execute();
-    public Thread undo();
-    public Durak getDurak();
+    public boolean execute();
+    public Pair<Durak, Thread> undo();
 }

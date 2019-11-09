@@ -1,5 +1,9 @@
 package Game;
 
+import Server.Request;
+import Server.RequestAdapter;
+import org.javatuples.Pair;
+
 import java.io.*;
 import java.util.Base64;
 
@@ -8,12 +12,13 @@ public class RoundEndCommand implements Command, Serializable {
     private Durak durak;
     private String playerID;
     private String binary;
+    private Request request = new RequestAdapter();
     public RoundEndCommand(Durak durak, String playerID){
         this.durak = durak;
         this.playerID = playerID;
     }
 
-    public void execute(){
+    public boolean execute(){
         try{
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream( stream );
@@ -23,16 +28,12 @@ public class RoundEndCommand implements Command, Serializable {
         } catch (IOException ex){
 
         }
-        if(playerID.compareTo(durak.getPlayerOne().getID().toString()) == 0){
-            durak.getPlayerOne().addInput(0);
-        }
-        else if(playerID.compareTo(durak.getPlayerTwo().getID().toString()) == 0){
-            durak.getPlayerTwo().addInput(0);
-        }
+        boolean rez = request.inputRequest(durak, playerID, 0);
         System.out.println("RoundEndCommand execute");
+        return rez;
     }
 
-    public Thread undo(){
+    public Pair<Durak, Thread> undo(){
         try{
             byte [] data = Base64.getDecoder().decode(binary);
             ObjectInputStream ois = new ObjectInputStream(
@@ -44,12 +45,11 @@ public class RoundEndCommand implements Command, Serializable {
             durak = dur;
             System.out.println("RoundEndCommand undo");
             durak.sendStatusToClient();
-            return newthread;
+            Pair<Durak, Thread> pair = new Pair<>(durak, newthread);
+            return pair;
         } catch (IOException | ClassNotFoundException ex){
 
         }
         return null;
     }
-
-    public Durak getDurak() {return durak; }
 }

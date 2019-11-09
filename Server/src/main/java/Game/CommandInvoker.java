@@ -1,22 +1,26 @@
 package Game;
 
+import org.javatuples.Pair;
+
+import java.util.Stack;
+
 public class CommandInvoker {
 
-    private Command command;
+    private Stack<Command> commands = new Stack<>();
 
-    public void setCommand(Command command){
-        this.command = command;
-    }
-
-    public void sendCommand(){
+    public void sendCommand(Command command){
+        commands.add(command);
         command.execute();
     }
 
-    public Thread undoCommand(){
-        return command.undo();
+    public Pair<Durak, Thread> undoCommand(){
+        Command command;
+        if(commands.size() > 0){
+            command = commands.pop();
+            return command.undo();
+        }
+        return null;
     }
-
-    public Durak getDurak() { return command.getDurak(); }
 
 
 
