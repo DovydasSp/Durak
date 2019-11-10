@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class RequestAdapter implements Request {
     public boolean inputRequest(Durak durak,  String playerID, int command){
-        if(command > 0)
+        if(command >= 0)
             if(durak.getPlayerByID(playerID) != null){
                 durak.getPlayerByID(playerID).addInput(command);
                 System.out.println("RequestAdapter inputRequest success");
