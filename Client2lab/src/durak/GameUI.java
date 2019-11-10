@@ -1,8 +1,5 @@
 package durak;
 
-/*import durak.Factory.Factory;
-import durak.Factory.UnitFactory;
-import durak.Factory.Button;*/
 import durak.Decorator.*;
 import durak.GameDataClasses.Card;
 import durak.GameDataClasses.CardPair;
@@ -153,11 +150,9 @@ public class GameUI {
         deckCardCount.setBounds(200,75,200,25);
         deckCardCount.setForeground(Color.white);
         infoPanel.add(deckCardCount);
-        
-        //Factory factory = new UnitFactory();
-        
-        System.out.println ("FACTORY: White button was requested");
-                Buttonn bu = new WhiteButton("UNDO");//factory.getButtons("white", "UNDO");
+              
+        System.out.println ("Decorator: White button was requested");
+                Buttonn bu = new WhiteButton("UNDO");
                 JButton button0 = bu.createButton();               
                 button0.addActionListener(new ActionListener(){  
                     @Override
@@ -172,8 +167,8 @@ public class GameUI {
         
         if(gd.getPlayer().getYourTurn() && gd.getField().getPairCount() > 0){
             if(gd.getPlayer().getIsAttacker()){
-                System.out.println ("FACTORY: Green button was requested");
-                Buttonn b = new GreenButton("DONE", bu);//factory.getButtons("green", "DONE");
+                System.out.println ("Decorator: Green button was requested");
+                Buttonn b = new GreenButton("DONE", bu);
                 JButton button = b.createButton();               
                 button.addActionListener(new ActionListener(){  
                     @Override
@@ -187,8 +182,8 @@ public class GameUI {
                 infoPanel.add(button);
             }
             else{
-                System.out.println ("FACTORY: Red button was requested");
-                Buttonn b = new RedButton("TAKE", bu);//factory.getButtons("red", "TAKE");
+                System.out.println ("Decorator: Red button was requested");
+                Buttonn b = new RedButton("TAKE", bu);
                 JButton button = b.createButton(); 
                 button.addActionListener(new ActionListener(){  
                     @Override

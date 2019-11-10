@@ -23,7 +23,7 @@ public class ProccessJsonsAdapterImplementation implements ProccessJsonsAdapter{
     public GameData role(JSONObject myResponse, GameData gameData) throws JSONException {
         if(myResponse.has("role") && !myResponse.isNull("role")){
             System.out.println("ADAPTER: Checked role validity");
-            return proccessJsons.yourTurn(myResponse, gameData);
+            return proccessJsons.role(myResponse, gameData);
         }
         System.out.println("ADAPTER: Checked role validity. WRONG");
         return gameData;
@@ -35,7 +35,7 @@ public class ProccessJsonsAdapterImplementation implements ProccessJsonsAdapter{
             if(myResponse.getString("trump").equalsIgnoreCase(Static.suits[0]) || myResponse.getString("trump").equalsIgnoreCase(Static.suits[1]) ||
                     myResponse.getString("trump").equalsIgnoreCase(Static.suits[2]) || myResponse.getString("trump").equalsIgnoreCase(Static.suits[3])){
                 System.out.println("ADAPTER: Checked trump validity.");
-                return proccessJsons.yourTurn(myResponse, gameData);
+                return proccessJsons.trump(myResponse, gameData);
             }
             
         }
@@ -63,10 +63,10 @@ public class ProccessJsonsAdapterImplementation implements ProccessJsonsAdapter{
                     JSONObject card_data = myResponse.getJSONObject("card" + i);
                     if(card_data.has("color") && !card_data.isNull("color") && card_data.has("suit") && !card_data.isNull("suit"))
                     {
-                        if(!(card_data.getString("trump").equalsIgnoreCase(Static.suits[0]) && card_data.getString("color").equalsIgnoreCase(Static.colors.get(Static.suits[0])) || 
-                            card_data.getString("trump").equalsIgnoreCase(Static.suits[1]) && card_data.getString("color").equalsIgnoreCase(Static.colors.get(Static.suits[1])) ||
-                            card_data.getString("trump").equalsIgnoreCase(Static.suits[2]) && card_data.getString("color").equalsIgnoreCase(Static.colors.get(Static.suits[2])) || 
-                            card_data.getString("trump").equalsIgnoreCase(Static.suits[3]) && card_data.getString("color").equalsIgnoreCase(Static.colors.get(Static.suits[3]))))
+                        if(!(card_data.getString("suit").equalsIgnoreCase(Static.suits[0]) && card_data.getString("color").equalsIgnoreCase(Static.colors.get(Static.suits[0])) || 
+                            card_data.getString("suit").equalsIgnoreCase(Static.suits[1]) && card_data.getString("color").equalsIgnoreCase(Static.colors.get(Static.suits[1])) ||
+                            card_data.getString("suit").equalsIgnoreCase(Static.suits[2]) && card_data.getString("color").equalsIgnoreCase(Static.colors.get(Static.suits[2])) || 
+                            card_data.getString("suit").equalsIgnoreCase(Static.suits[3]) && card_data.getString("color").equalsIgnoreCase(Static.colors.get(Static.suits[3]))))
                         {
                             System.out.println("ADAPTER: Checked numberOfCards validity. WRONG");
                             return gameData;
