@@ -22,7 +22,7 @@ public class RoundEndCommand implements Command, Serializable {
         try{
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream( stream );
-            oos.writeObject( this );
+            oos.writeObject( durak );
             oos.close();
             binary = Base64.getEncoder().encodeToString(stream.toByteArray());
         } catch (IOException ex){
