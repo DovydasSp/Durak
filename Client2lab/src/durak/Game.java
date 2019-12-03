@@ -4,6 +4,7 @@ import durak.Observer.GameObserver;
 import durak.GameDataClasses.Card;
 import durak.GameDataClasses.CardPair;
 import durak.GameDataClasses.GameData;
+import durak.GameDataClasses.Iterator;
 import durak.Static.Static;
 import durak.Threads.inputThread;
 import durak.Threads.pollingThread;
@@ -112,8 +113,9 @@ public class Game {
         if(gameData.getPlayer().getIsAttacker() && gameData.getField().getPairCount() > 0)
         {
             Card attacking = gameData.getPlayer().getHand().getCards().get(cardNr-1);
-            for(CardPair cp : gameData.getField().getPairs())
-            {
+            //for(CardPair cp : gameData.getField().getPairs()){
+            for(Iterator iter = gameData.getField().getIterator(); iter.hasNext();){
+            CardPair cp = (CardPair) iter.next();
                 if(cp.getAttacker().getRank().equals(attacking.getRank()) || cp.getDefender().getRank().equals(attacking.getRank()))
                 {
                     return true;

@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 public class GameConnectionToAPI {
     HttpURLConnection conn;
-    private String urlas = "https://durakserver.azurewebsites.net/";
+    private String urlas = "https://durakserveris.azurewebsites.net/";
     //private String urlas = "http://192.168.0.106:8080/";
     
     public Pair<String, String> createGame(String playerName) throws Exception{

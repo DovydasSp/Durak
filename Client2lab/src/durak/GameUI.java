@@ -4,6 +4,7 @@ import durak.Decorator.*;
 import durak.GameDataClasses.Card;
 import durak.GameDataClasses.CardPair;
 import durak.GameDataClasses.GameData;
+import durak.GameDataClasses.Iterator;
 import durak.Static.Static;
 import javax.swing.*;
 import java.awt.*;
@@ -242,7 +243,9 @@ public class GameUI {
         }
         else{
            int nr = 1;
-            for(CardPair c : gd.getField().getPairs()){
+            //for(CardPair c : gd.getField().getPairs()){
+            for(Iterator iter = gd.getField().getIterator(); iter.hasNext();){
+                CardPair c = (CardPair) iter.next();
                 //System.out.println(c.getAttacker().getColor()+" "+c.getAttacker().getRank()+" "+c.getAttacker().getSuit());
                 createTableCardButton(c.getAttacker(), nr, false);
                 if(c.isCompleted()){
@@ -288,7 +291,9 @@ public class GameUI {
         handCardPanel.revalidate();
         handCardPanel.repaint();
         int cardNr=1;
-        for(Card c : gd.getPlayer().getHand().getCards()){
+        //for(Card c : gd.getPlayer().getHand().getCards()){
+        for(Iterator iter = gd.getPlayer().getHand().getIterator(); iter.hasNext();){
+        Card c = (Card) iter.next();
             createCardButton(gd, c, cardNr);
             cardNr++;
         }

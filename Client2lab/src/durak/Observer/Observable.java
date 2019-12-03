@@ -20,10 +20,6 @@ public abstract class Observable {
  
     public void notifyObservers(Object o) {
         this.o = o;
-        /*for (Observer observer : this.observers) {
-            System.out.println ("Observer '"+observer.toString()+"' was notified.");
-            observer.update(this.o);
-        }*/
         for(Iterator iter = getIterator(); iter.hasNext();){
             Observer observer = (Observer) iter.next();
             System.out.println ("Observer '"+observer.toString()+"' was notified.");
