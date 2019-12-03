@@ -2,8 +2,8 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">  
   <modelVersion>4.0.0</modelVersion>  
-  <groupId>DurakServer</groupId>  
-  <artifactId>DurakServer</artifactId>  
+  <groupId>DurakServeris</groupId>  
+  <artifactId>DurakServeris</artifactId>  
   <version>0.1</version>  
   <parent> 
     <groupId>org.springframework.boot</groupId>  
@@ -72,8 +72,8 @@
         <version>1.6.0</version>  
         <configuration>
           <schemaVersion>V2</schemaVersion>
-          <resourceGroup>DurakServer</resourceGroup>
-          <appName>DurakServer</appName>
+          <resourceGroup>DurakServeris</resourceGroup>
+          <appName>DurakServeris</appName>
           <region>westeurope</region>
           <pricingTier>P1V2</pricingTier>
             <appSettings>
