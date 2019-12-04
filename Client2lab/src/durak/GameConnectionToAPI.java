@@ -1,6 +1,6 @@
 package durak;
 
-import durak.GameDataClasses.GameData;
+import gamedataclasses.GameData;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

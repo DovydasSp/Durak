@@ -1,11 +1,14 @@
 package durak;
 
-import durak.Decorator.*;
-import durak.GameDataClasses.Card;
-import durak.GameDataClasses.CardPair;
-import durak.GameDataClasses.GameData;
-import durak.GameDataClasses.Iterator;
-import durak.Static.Static;
+import decorator.Buttonn;
+import decorator.GreenButton;
+import decorator.WhiteButton;
+import decorator.RedButton;
+import gamedataclasses.Card;
+import gamedataclasses.CardPair;
+import gamedataclasses.GameData;
+import gamedataclasses.Iterator;
+import statics.Static;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

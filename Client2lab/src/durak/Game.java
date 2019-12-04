@@ -1,14 +1,14 @@
 package durak;
 
-import durak.Observer.GameObserver;
-import durak.GameDataClasses.Card;
-import durak.GameDataClasses.CardPair;
-import durak.GameDataClasses.GameData;
-import durak.GameDataClasses.Iterator;
-import durak.Static.Constants;
-import durak.Static.Static;
-import durak.Threads.InputThread;
-import durak.Threads.PollingThread;
+import observer.GameObserver;
+import gamedataclasses.Card;
+import gamedataclasses.CardPair;
+import gamedataclasses.GameData;
+import gamedataclasses.Iterator;
+import statics.Constants;
+import statics.Static;
+import threads.InputThread;
+import threads.PollingThread;
 import java.io.IOException;
 import org.json.JSONException;
 
