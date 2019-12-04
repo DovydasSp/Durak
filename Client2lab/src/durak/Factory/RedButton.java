@@ -6,7 +6,6 @@ import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
 public class RedButton extends Button {
-
     public RedButton(Color background, String name) {
         super(background, name);
     }

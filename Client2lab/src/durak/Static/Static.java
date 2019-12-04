@@ -1,67 +1,68 @@
 package durak.Static;
+
 import java.util.*;
 
 public class Static {
-	// In Durak, the playing cards ranked 2-5 are not used.
+    // In Durak, the playing cards ranked 2-5 are not used.
+    // Rank constants:
+    // Rank names
+    public static final String[] ranks = {
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "Jack",
+        "Queen",
+        "King",
+        "Ace"
+    };
 
-	// Rank constants:
+    // Rank values
+    public static final Map<String, Integer> values;
 
-	// Rank names
-	public static final String[] ranks = {
-		"6",
-		"7",
-		"8",
-		"9",
-		"10",
-		"Jack",
-		"Queen",
-		"King",
-		"Ace"
-	};
+    static {
+        Map<String, Integer> valuesMap = new HashMap<String, Integer>();
+        valuesMap.put("6", 6);
+        valuesMap.put("7", 7);
+        valuesMap.put("8", 8);
+        valuesMap.put("9", 9);
+        valuesMap.put("10", 10);
+        valuesMap.put("Jack", 11);
+        valuesMap.put("Queen", 12);
+        valuesMap.put("King", 13);
+        valuesMap.put("Ace", 14);
+        values = Collections.unmodifiableMap(valuesMap);
+    }
 
+    // Suit constants:
+    public static final String[] suits = {
+        "Hearts",
+        "Diamonds",
+        "Clubs",
+        "Spades"
+    };
 
-	// Rank values
-	public static final Map<String, Integer> values;
-	static {
-		Map<String, Integer> valuesMap = new HashMap<String, Integer>();
-		valuesMap.put("6", 6);
-		valuesMap.put("7", 7);
-		valuesMap.put("8", 8);
-		valuesMap.put("9", 9);
-		valuesMap.put("10", 10);
-		valuesMap.put("Jack", 11);
-		valuesMap.put("Queen", 12);
-		valuesMap.put("King", 13);
-		valuesMap.put("Ace", 14);
-		values = Collections.unmodifiableMap(valuesMap);
-	}
+    // Colors constants: 
+    public static final Map<String, String> colors;
 
-	// Suit constants:
-	public static final String[] suits = {
-		"Hearts",
-		"Diamonds",
-		"Clubs",
-		"Spades"
-	};
+    static {
+        Map<String, String> colorsMap = new HashMap<String, String>();
+        colorsMap.put("Hearts", "Red");
+        colorsMap.put("Diamonds", "Red");
+        colorsMap.put("Clubs", "Black");
+        colorsMap.put("Spades", "Black");
+        colors = Collections.unmodifiableMap(colorsMap);
+    }
 
-	// Colors constants: 
-	public static final Map<String, String> colors;
-	static {
-		Map<String, String> colorsMap = new HashMap<String, String>();
-		colorsMap.put("Hearts", "Red");
-		colorsMap.put("Diamonds", "Red");
-		colorsMap.put("Clubs", "Black");
-		colorsMap.put("Spades", "Black");
-		colors = Collections.unmodifiableMap(colorsMap);
-	}
-        
-        public static final Map<String, String> symbols;
-	static {
-		Map<String, String> symbolsMap = new HashMap<String, String>();
-		symbolsMap.put("Hearts", "♥");
-		symbolsMap.put("Diamonds", "♦");
-		symbolsMap.put("Clubs", "♣");
-		symbolsMap.put("Spades", "♠");
-		symbols = Collections.unmodifiableMap(symbolsMap);
-	}
+    public static final Map<String, String> symbols;
+
+    static {
+        Map<String, String> symbolsMap = new HashMap<String, String>();
+        symbolsMap.put("Hearts", "♥");
+        symbolsMap.put("Diamonds", "♦");
+        symbolsMap.put("Clubs", "♣");
+        symbolsMap.put("Spades", "♠");
+        symbols = Collections.unmodifiableMap(symbolsMap);
+    }
 }

@@ -7,54 +7,48 @@ import durak.Observer.Observable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class pollingThread extends Observable implements Runnable {
+public class PollingThread extends Observable implements Runnable {
+
     private final GameConnectionToAPI connection;
     private GameData gameData;
     private Game game;
     private ProccessJsonsAdapter processJsonsAdapter = new ProccessJsonsAdapterImplementation();
-    
-    public pollingThread(GameConnectionToAPI connection_, GameData gameData_, Game game_) {
-      connection = connection_;
-      gameData = gameData_;
-      game = game_;
-   }
-    
+
+    public PollingThread(GameConnectionToAPI connection_, GameData gameData_, Game game_) {
+        connection = connection_;
+        gameData = gameData_;
+        game = game_;
+    }
+
     @Override
-    public void run() 
-    { 
-        try
-        { 
+    public void run() {
+        try {
             boolean run = true;
-            while(run){
+            while (run) {
                 Thread.sleep(100);
                 JSONObject json = connection.poll(gameData);
-                if(json != null){
+                if (json != null) {
                     gameData = decidePath(json, gameData);
-                    if(gameData.getWhatsChanged().equals("gameEnd"))
-                    {
+                    if (gameData.getWhatsChanged().equals("gameEnd")) {
                         run = false;
                     }
-                    if(!gameData.getWhatsChanged().equals("")){
+                    if (!gameData.getWhatsChanged().equals("")) {
                         notifyObservers(gameData);
                     }
                 }
-                
             }
-        } 
-        catch (Exception e) 
-        { 
+        } catch (Exception e) {
             // Throwing an exception 
-            System.out.println ("pollingThread Exception is caught: "+e);
+            System.out.println("pollingThread Exception is caught: " + e);
             game.play(gameData);
-            
+
         }
-    } 
-    
-    private GameData decidePath(JSONObject json, GameData gameData) throws JSONException, CloneNotSupportedException{
+    }
+
+    private GameData decidePath(JSONObject json, GameData gameData) throws JSONException, CloneNotSupportedException {
         String header = "";
         header = json.getString("header");
-        switch(header)
-        {
+        switch (header) {
             case "input":
                 gameData.setWhatsChanged("");
                 gameData.setWhatsChangedInPlayer("");
@@ -93,5 +87,5 @@ public class pollingThread extends Observable implements Runnable {
         }
         return gameData;
     }
-    
+
 }

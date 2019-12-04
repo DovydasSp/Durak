@@ -5,43 +5,43 @@ public class GameData {
     private Field field;
     private String whatsChanged = "";
     private String whatsChangedInPlayer = "";
-    
-    public GameData(){
+
+    public GameData() {
         player = new Player();
         field = new Field();
     }
-    
-    public void setPlayer(Player player_){
+
+    public void setPlayer(Player player_) {
         player = player_;
         whatsChanged = "player";
     }
-    
-    public void setField(Field field_){
+
+    public void setField(Field field_) {
         field = field_;
         whatsChanged = "field";
     }
-    
-    public void setWhatsChanged(String w){
+
+    public void setWhatsChanged(String w) {
         whatsChanged = w;
     }
-    
-    public String getWhatsChanged(){
+
+    public String getWhatsChanged() {
         return whatsChanged;
     }
-    
-    public void setWhatsChangedInPlayer(String w){
+
+    public void setWhatsChangedInPlayer(String w) {
         whatsChangedInPlayer = w;
     }
-    
-    public String getWhatsChangedInPlayer(){
+
+    public String getWhatsChangedInPlayer() {
         return whatsChangedInPlayer;
     }
-    
-    public Player getPlayer(){
+
+    public Player getPlayer() {
         return player;
     }
-    
-    public Field getField(){
+
+    public Field getField() {
         return field;
     }
 }

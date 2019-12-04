@@ -5,9 +5,10 @@ import durak.GameDataClasses.Card;
 import durak.GameDataClasses.CardPair;
 import durak.GameDataClasses.GameData;
 import durak.GameDataClasses.Iterator;
+import durak.Static.Constants;
 import durak.Static.Static;
-import durak.Threads.inputThread;
-import durak.Threads.pollingThread;
+import durak.Threads.InputThread;
+import durak.Threads.PollingThread;
 import java.io.IOException;
 import org.json.JSONException;
 
@@ -37,7 +38,7 @@ public class Game {
         gameUI.getFrame().setTitle("Durak - "+gameData.getPlayer().getPlayerName());
         
         System.out.println ("OBSERVER: observable polling thread created.");
-        pollingThread thread = new pollingThread(connection, gameData, this);
+        PollingThread thread = new PollingThread(connection, gameData, this);
         System.out.println ("OBSERVER: observer created.");
         GameObserver fo = new GameObserver(this, gameData);
         System.out.println ("OBSERVER: observer added to thread.");
@@ -68,22 +69,19 @@ public class Game {
     
     public void sendInput(int cardNr) throws Exception{
         GameConnectionToAPI connection2 = new GameConnectionToAPI();
-        inputThread thread2 = new inputThread(connection2, gameData, cardNr);
+        InputThread thread2 = new InputThread(connection2, gameData, cardNr);
         Thread t2 = new Thread(thread2);
-        if(cardNr == 0){
-            
+        if(cardNr == Constants.COMMAND_ROUND_END){   
             t2.start();
             t2.join();
-            //connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), cardNr);
         }
-        else if(cardNr == -1){
+        else if(cardNr == Constants.COMMAND_UNDO){
             t2.start();
             t2.join();
         }
         else if(checkIfTurnValid(cardNr)){
             t2.start();
             t2.join();
-            //connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), cardNr);
         }
     }
     

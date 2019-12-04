@@ -6,7 +6,6 @@ import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
 public class WhiteButton extends Button {
-
     public WhiteButton(Color background, String name) {
         super(background, name);
     }

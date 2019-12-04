@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package durak.Decorator;
 
 import java.awt.Color;
@@ -11,11 +6,9 @@ import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
 public class WhiteButton extends Buttonn {
-
     public WhiteButton(String name) {
         super(name);
     }
-    
     
     @Override
     public JButton createButton(){
