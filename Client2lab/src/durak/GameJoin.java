@@ -1,7 +1,7 @@
 package durak;
 
-import durak.GameDataClasses.GameData;
-import durak.GameDataClasses.Player;
+import gamedataclasses.GameData;
+import gamedataclasses.Player;
 import java.awt.Color;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -63,18 +63,18 @@ public class GameJoin{
                  {
                      Pair<String, String> pair;
                      try {
-                         pair = connection.createGame(s1);
-                         System.out.println("GameID: "+pair.getKey()+" PlayerID: "+pair.getValue());
-                         gameUI.getTablePanel().removeAll();
-                         gameUI.getTablePanel().revalidate();
-                         gameUI.getTablePanel().repaint();
-                         Player p = new Player();
-                         p.setPlayerIds(s1, pair.getValue(), pair.getKey());
-                         GameData gd = new GameData();
-                         gd.setPlayer(p);
-                         game.play(gd);
+                        pair = connection.createGame(s1);
+                        System.out.println("GameID: "+pair.getKey()+" PlayerID: "+pair.getValue());
+                        gameUI.getTablePanel().removeAll();
+                        gameUI.getTablePanel().revalidate();
+                        gameUI.getTablePanel().repaint();
+                        Player p = new Player();
+                        p.setPlayerIds(s1, pair.getValue(), pair.getKey());
+                        GameData gd = new GameData();
+                        gd.setPlayer(p);
+                        game.play(gd);
                      } catch (Exception ex) {
-                         Logger.getLogger(GameJoin.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(GameJoin.class.getName()).log(Level.SEVERE, null, ex);
                      }
                  }
             }
@@ -87,23 +87,22 @@ public class GameJoin{
                  {
                      Pair<String, String> pair;
                      try {
-                         pair = connection.joinGame(s1, s2);
-                         System.out.println("GameID: "+pair.getKey()+" PlayerID: "+pair.getValue());
-                         gameUI.getTablePanel().removeAll();
-                         gameUI.getTablePanel().revalidate();
-                         gameUI.getTablePanel().repaint();
-                         Player p = new Player();
-                         p.setPlayerIds(s1, pair.getValue(), pair.getKey());
-                         GameData gd = new GameData();
-                         gd.setPlayer(p);
-                         game.play(gd);
+                        pair = connection.joinGame(s1, s2);
+                        System.out.println("GameID: "+pair.getKey()+" PlayerID: "+pair.getValue());
+                        gameUI.getTablePanel().removeAll();
+                        gameUI.getTablePanel().revalidate();
+                        gameUI.getTablePanel().repaint();
+                        Player p = new Player();
+                        p.setPlayerIds(s1, pair.getValue(), pair.getKey());
+                        GameData gd = new GameData();
+                        gd.setPlayer(p);
+                        game.play(gd);
                      } catch (Exception ex) {
-                         Logger.getLogger(GameJoin.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(GameJoin.class.getName()).log(Level.SEVERE, null, ex);
                      }
                  }
             }
         });
-        
         gameUI.getTablePanel().add(l1); gameUI.getTablePanel().add(tf1); gameUI.getTablePanel().add(b1);
         gameUI.getTablePanel().add(l2); gameUI.getTablePanel().add(tf2); gameUI.getTablePanel().add(b2); 
         

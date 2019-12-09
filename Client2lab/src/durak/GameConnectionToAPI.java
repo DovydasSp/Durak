@@ -1,6 +1,6 @@
 package durak;
 
-import durak.GameDataClasses.GameData;
+import gamedataclasses.GameData;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,15 +14,12 @@ import org.json.JSONObject;
 
 public class GameConnectionToAPI {
     HttpURLConnection conn;
-    private String urlas = "https://durakserver.azurewebsites.net/";
-    //private String urlas = "http://192.168.0.106:8080/";
+    private String urlas = "https://durakserveris.azurewebsites.net/";
     
     public Pair<String, String> createGame(String playerName) throws Exception{
         try {
             URL url = new URL(urlas+"createGame");
             conn = (HttpURLConnection)url.openConnection();
-            
-            
         } catch (Exception e) {
             e.printStackTrace();
         }

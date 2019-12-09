@@ -1,10 +1,14 @@
 package durak;
 
-import durak.Decorator.*;
-import durak.GameDataClasses.Card;
-import durak.GameDataClasses.CardPair;
-import durak.GameDataClasses.GameData;
-import durak.Static.Static;
+import decorator.Buttonn;
+import decorator.GreenButton;
+import decorator.WhiteButton;
+import decorator.RedButton;
+import gamedataclasses.Card;
+import gamedataclasses.CardPair;
+import gamedataclasses.GameData;
+import gamedataclasses.Iterator;
+import statics.Static;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -178,8 +182,9 @@ public class GameUI {
                         } catch (Exception ex) {
                             Logger.getLogger(GameUI.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                }});
-                infoPanel.add(button);
+                    }
+                });
+            infoPanel.add(button);
             }
             else{
                 System.out.println ("Decorator: Red button was requested");
@@ -193,8 +198,9 @@ public class GameUI {
                         } catch (Exception ex) {
                             Logger.getLogger(GameUI.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                }});
-                infoPanel.add(button);
+                    }
+                });
+            infoPanel.add(button);
             }
         }
         System.out.println("Refreshed infoPanel");
@@ -234,15 +240,17 @@ public class GameUI {
                         } catch (Exception ex) {
                             Logger.getLogger(GameUI.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                }});
-                tablePanel.add(button);
-            
+                    }
+                });
+            tablePanel.add(button);
             tablePanel.revalidate();
             tablePanel.repaint();
         }
         else{
            int nr = 1;
-            for(CardPair c : gd.getField().getPairs()){
+            //for(CardPair c : gd.getField().getPairs()){
+            for(Iterator iter = gd.getField().getIterator(); iter.hasNext();){
+                CardPair c = (CardPair) iter.next();
                 //System.out.println(c.getAttacker().getColor()+" "+c.getAttacker().getRank()+" "+c.getAttacker().getSuit());
                 createTableCardButton(c.getAttacker(), nr, false);
                 if(c.isCompleted()){
@@ -288,7 +296,9 @@ public class GameUI {
         handCardPanel.revalidate();
         handCardPanel.repaint();
         int cardNr=1;
-        for(Card c : gd.getPlayer().getHand().getCards()){
+        //for(Card c : gd.getPlayer().getHand().getCards()){
+        for(Iterator iter = gd.getPlayer().getHand().getIterator(); iter.hasNext();){
+            Card c = (Card) iter.next();
             createCardButton(gd, c, cardNr);
             cardNr++;
         }
@@ -307,8 +317,7 @@ public class GameUI {
         button.setFont(new Font("Arial", Font.PLAIN, 20));
         if(color.equals("Red")){
             button.setForeground(Color.red);
-        } if(color.equals("Black"))
-        {
+        } if(color.equals("Black")){
             button.setForeground(Color.black);
         }
         if(gd.getPlayer().getYourTurn()){
