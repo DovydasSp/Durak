@@ -1,7 +1,7 @@
 package durak;
 
-import durak.GameDataClasses.GameData;
-import durak.GameDataClasses.Player;
+import gamedataclasses.GameData;
+import gamedataclasses.Player;
 import java.awt.Color;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
