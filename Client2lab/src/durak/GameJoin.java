@@ -74,7 +74,7 @@ public class GameJoin{
                         gd.setPlayer(p);
                         game.play(gd);
                      } catch (Exception ex) {
-                        Logger.getLogger(GameJoin.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(GameJoin.class.getName()).log(Level.SEVERE, null, ex); // :')
                      }
                  }
             }
@@ -98,7 +98,7 @@ public class GameJoin{
                         gd.setPlayer(p);
                         game.play(gd);
                      } catch (Exception ex) {
-                        Logger.getLogger(GameJoin.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(GameJoin.class.getName()).log(Level.SEVERE, null, ex);                     
                      }
                  }
             }

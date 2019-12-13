@@ -5,6 +5,7 @@ public class GameData {
     private Field field;
     private String whatsChanged = "";
     private String whatsChangedInPlayer = "";
+    private Chat chat = new Chat();
 
     public GameData() {
         player = new Player();
@@ -43,5 +44,13 @@ public class GameData {
 
     public Field getField() {
         return field;
+    }
+    
+    public void setChat(Chat chat_) {
+        chat = chat_;
+    }
+
+    public Chat getChat() {
+        return chat;
     }
 }

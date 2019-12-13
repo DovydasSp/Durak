@@ -1,5 +1,6 @@
 package threads;
 
+import chain.ChainLogger;
 import gamedataclasses.GameData;
 import statics.Static;
 import org.json.JSONException;
@@ -8,6 +9,7 @@ import org.json.JSONObject;
 public class ProccessJsonsAdapterImplementation implements ProccessJsonsAdapter {
 
     private final ProccessJsons proccessJsons = new ProccessJsons();
+        private ChainLogger loggerChain = new ChainLogger();
 
     @Override
     public GameData yourTurn(JSONObject myResponse, GameData gameData) throws JSONException {
@@ -116,5 +118,10 @@ public class ProccessJsonsAdapterImplementation implements ProccessJsonsAdapter 
         }
         System.out.println("ADAPTER: Checked win validity. WRONG");
         return gameData;
+    }
+    
+    @Override
+    public GameData chat(JSONObject myResponse, GameData gameData) throws JSONException {
+        return proccessJsons.chat(myResponse, gameData);
     }
 }

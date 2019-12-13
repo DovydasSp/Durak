@@ -1,5 +1,11 @@
 package durak;
 
+import chain.AbstractLogger;
+import chain.ChainLogger;
+import chain.ConsoleLogger;
+import chain.ErrorLogger;
+import chain.FileLogger;
+import chain.PatternLogger;
 import gamedataclasses.GameData;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,14 +20,19 @@ import org.json.JSONObject;
 
 public class GameConnectionToAPI {
     HttpURLConnection conn;
-    private String urlas = "https://durakserveris.azurewebsites.net/";
+    //private String urlas = "https://durakserveris.azurewebsites.net/";
+    private String urlas = "http://192.168.0.106:8080/";
     
+    public ChainLogger loggerChain = new ChainLogger();
+     
+   
     public Pair<String, String> createGame(String playerName) throws Exception{
         try {
             URL url = new URL(urlas+"createGame");
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
             e.printStackTrace();
+            loggerChain.logMessage(AbstractLogger.ERROR, e.toString());
         }
         
         String gameID = "", playerID = "";
@@ -61,6 +72,8 @@ public class GameConnectionToAPI {
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
             e.printStackTrace();
+            loggerChain.logMessage(AbstractLogger.ERROR, e.toString());
+            
         }
         
         String playerID = "";
@@ -98,7 +111,8 @@ public class GameConnectionToAPI {
             URL url = new URL(urlas+"input");
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
-            System.out.println("Input send to API failed");
+            loggerChain.logMessage(AbstractLogger.ERROR, "Input send to API failed");
+            //System.out.println("Input send to API failed");
             e.printStackTrace();
         }
         
@@ -129,6 +143,69 @@ public class GameConnectionToAPI {
             URL url = new URL(urlas+"undo");
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
+            loggerChain.logMessage(AbstractLogger.ERROR, "Input send to API failed");
+            //System.out.println("Input send to API failed");
+            e.printStackTrace();
+        }
+        
+        conn.setRequestMethod("POST");
+	conn.setRequestProperty("Content-Type", "application/json; utf-8");
+        conn.setRequestProperty("Accept", "application/json");
+	conn.setDoOutput(true);
+        String jsonInputString = "{gameID: "+gameID+"}"; //galima pridėt daugiau body elementų
+        
+        try(OutputStream os = conn.getOutputStream()) { //sudeda body parametrus
+            byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);           
+        }
+            
+        try(BufferedReader br = new BufferedReader(
+            new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+            response.append(responseLine.trim());
+            }
+        }
+        conn.disconnect();
+    }
+    
+    public void chat(String gameID, String playerID, String message) throws Exception{
+        try {
+            URL url = new URL(urlas+"chat");
+            conn = (HttpURLConnection)url.openConnection();
+        } catch (Exception e) {
+            System.out.println("Input send to API failed");
+            e.printStackTrace();
+        }
+        
+        conn.setRequestMethod("POST");
+	conn.setRequestProperty("Content-Type", "application/json; utf-8");
+        conn.setRequestProperty("Accept", "application/json");
+	conn.setDoOutput(true);
+        String jsonInputString = "{gameID: "+gameID+", playerID: "+playerID+", message: "+message+"}"; //galima pridėt daugiau body elementų
+        
+        try(OutputStream os = conn.getOutputStream()) { //sudeda body parametrus
+            byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);           
+        }
+            
+        try(BufferedReader br = new BufferedReader(
+            new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+            response.append(responseLine.trim());
+            }
+        }
+        conn.disconnect();
+    }
+    
+    public void restart(String gameID) throws Exception{
+        try {
+            URL url = new URL(urlas+"restart");
+            conn = (HttpURLConnection)url.openConnection();
+        } catch (Exception e) {
             System.out.println("Input send to API failed");
             e.printStackTrace();
         }
@@ -155,12 +232,12 @@ public class GameConnectionToAPI {
         conn.disconnect();
     }
     
-    
     public JSONObject poll(GameData gameData) throws IOException, JSONException{
         try {
             URL url = new URL(urlas+"poll/"+gameData.getPlayer().getIDs().getKey()+"/"+gameData.getPlayer().getIDs().getValue());
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
+             loggerChain.logMessage(AbstractLogger.ERROR, e.toString());
             e.printStackTrace();
         }
         

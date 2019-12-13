@@ -1,10 +1,14 @@
 package durak;
 
+import chain.*;
 import observer.GameObserver;
 import gamedataclasses.Card;
 import gamedataclasses.CardPair;
 import gamedataclasses.GameData;
 import gamedataclasses.Iterator;
+import interpreter.Expression;
+import interpreter.OrExpression;
+import interpreter.TerminalExpression;
 import statics.Constants;
 import statics.Static;
 import threads.InputThread;
@@ -16,15 +20,17 @@ public class Game {
     private final GameConnectionToAPI connection = new GameConnectionToAPI();
     private final GameUI gameUI = new GameUI(this);
     private GameData gameData = new GameData();
-    
+    public ChainLogger loggerChain = new ChainLogger();
+     
+  
     public void start(){
         gameUI.createFrame();
         gameUI.createBackPanel();
         gameUI.createInfoPanel();
         gameUI.createTablePanel();
         gameUI.createHandCardPanel();
+        gameUI.createChatPanel();
         gameUI.drawGameBoard();
-        
         join();
     }
     
@@ -36,15 +42,20 @@ public class Game {
     public void play(GameData gd){
         gameData = gd;
         gameUI.getFrame().setTitle("Durak - "+gameData.getPlayer().getPlayerName());
+        gameUI.getChatPanelText().append("DURAK: GameID- "+gameData.getPlayer().getIDs().getKey()+"\n");
         
-        System.out.println ("OBSERVER: observable polling thread created.");
+        //System.out.println ("OBSERVER: observable polling thread created.");
+        loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observable polling thread created.");
         PollingThread thread = new PollingThread(connection, gameData, this);
-        System.out.println ("OBSERVER: observer created.");
+        //System.out.println ("OBSERVER: observer created.");
+        loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observer created.");
         GameObserver fo = new GameObserver(this, gameData);
-        System.out.println ("OBSERVER: observer added to thread.");
+        //System.out.println ("OBSERVER: observer added to thread.");
+        loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observer added to thread.");
         thread.addObserver(fo);
         Thread t = new Thread(thread);
-        System.out.println ("OBSERVER: observable thread started.");
+       // System.out.println ("OBSERVER: observable thread started.");
+        loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observable thread started.");
         t.start();
     }
     
@@ -65,24 +76,45 @@ public class Game {
         else if(gameData.getWhatsChanged().equals("field")){
             gameUI.refreshField(gameData);
         }
+        else if(gameData.getWhatsChanged().equals("chat")){
+            gameUI.addChatMessage(gameData.getChat().getEnemyName(), gameData.getChat().getMessage());
+            gameData.setWhatsChanged("");
+        }
     }
     
-    public void sendInput(int cardNr) throws Exception{
+    public void sendInput(int command, String message) throws Exception{
         GameConnectionToAPI connection2 = new GameConnectionToAPI();
-        InputThread thread2 = new InputThread(connection2, gameData, cardNr);
+        InputThread thread2 = new InputThread(connection2, gameData, command, message);
         Thread t2 = new Thread(thread2);
-        if(cardNr == Constants.COMMAND_ROUND_END){   
+        if(command == Constants.COMMAND_CHAT || command == Constants.COMMAND_ROUND_END || command == Constants.COMMAND_UNDO || command == Constants.COMMAND_RESTART){
             t2.start();
             t2.join();
         }
-        else if(cardNr == Constants.COMMAND_UNDO){
+        else if(checkIfTurnValid(command)){
             t2.start();
             t2.join();
         }
-        else if(checkIfTurnValid(cardNr)){
-            t2.start();
-            t2.join();
+    }
+    
+    private static Expression getExpression(String e1, String e2){
+        Expression expr1 = new TerminalExpression(e1);
+        Expression expr2 = new TerminalExpression(e2);
+        return new OrExpression(expr1, expr2);
+    }
+    
+    public void chatCommand(String message) throws Exception{
+        Expression isUndo = getExpression("/undo", "/back");
+        Expression isRestart = getExpression("/restart", "/rr");
+        if(isUndo.interpret(message)){
+            sendInput(Constants.COMMAND_UNDO, "");
         }
+        if(isRestart.interpret(message)){
+            sendInput(Constants.COMMAND_RESTART, "");
+        }
+    }
+    
+    public void addChatMsg(String message){
+        gameUI.addChatMessage("DURAK", message);
     }
     
     public boolean checkIfTurnValid(int cardNr){
