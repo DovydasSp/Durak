@@ -27,9 +27,9 @@ import org.junit.runners.Parameterized.Parameters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(Parameterized.class)
+/*@RunWith(Parameterized.class)
 public class CreateGameRequestTest {
-    @Parameters
+    //@Parameters
     public static Collection<Pair<Boolean, String>> data() throws IOException, JSONException {
         ArrayList<Pair<Boolean, String>> list = new ArrayList<>();
         for (int j = 1; j <= 5; j++) {
@@ -113,4 +113,4 @@ public class CreateGameRequestTest {
         assertEquals(expectedResult, testData.has("gameID"));
         assertEquals(expectedResult, testData.has("playerID"));
     }
-}
+}*/

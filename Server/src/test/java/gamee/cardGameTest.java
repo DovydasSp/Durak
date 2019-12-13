@@ -18,7 +18,7 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(Parameterized.class)
+/*@RunWith(Parameterized.class)
 public class cardGameTest {
     @Parameters
     public static Collection<Quartet<Card, Card, Boolean, String>> data(){
@@ -81,4 +81,4 @@ public class cardGameTest {
         assertEquals(expected, result);
     }
 
-}
+}*/

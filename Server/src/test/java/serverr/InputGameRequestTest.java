@@ -16,7 +16,7 @@ import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class InputGameRequestTest {
+/*public class InputGameRequestTest {
     //@Test
     void inputGameTest() throws IOException, JSONException {
         for(int j = 1; j <= 5; j++){
@@ -115,4 +115,4 @@ public class InputGameRequestTest {
             SpringApplication.exit(context);
         }
     }
-}
+}*/
