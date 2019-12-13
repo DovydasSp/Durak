@@ -14,4 +14,5 @@ interface ProccessJsonsAdapter {
     public GameData roundEnd(JSONObject myResponse, GameData gameData) throws JSONException;
     public GameData deckCount(JSONObject myResponse, GameData gameData) throws JSONException;
     public GameData gameEnd(JSONObject myResponse, GameData gameData) throws JSONException;
+    public GameData chat(JSONObject myResponse, GameData gameData) throws JSONException;
 }

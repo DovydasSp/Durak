@@ -67,21 +67,21 @@ public class Game {
         else if(gameData.getWhatsChanged().equals("field")){
             gameUI.refreshField(gameData);
         }
+        else if(gameData.getWhatsChanged().equals("chat")){
+            gameUI.getChatPanelText().append(gameData.getChat().getEnemyName()+": "+gameData.getChat().getMessage()+" \n");
+            gameData.setWhatsChanged("");
+        }
     }
     
-    public void sendInput(int cardNr) throws Exception{
+    public void sendInput(int command, String message) throws Exception{
         GameConnectionToAPI connection2 = new GameConnectionToAPI();
-        InputThread thread2 = new InputThread(connection2, gameData, cardNr);
+        InputThread thread2 = new InputThread(connection2, gameData, command, message);
         Thread t2 = new Thread(thread2);
-        if(cardNr == Constants.COMMAND_ROUND_END){   
+        if(command == Constants.COMMAND_CHAT || command == Constants.COMMAND_ROUND_END || command == Constants.COMMAND_UNDO){
             t2.start();
             t2.join();
         }
-        else if(cardNr == Constants.COMMAND_UNDO){
-            t2.start();
-            t2.join();
-        }
-        else if(checkIfTurnValid(cardNr)){
+        else if(checkIfTurnValid(command)){
             t2.start();
             t2.join();
         }

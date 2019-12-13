@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.border.LineBorder;
 import org.json.JSONException; 
+import statics.Constants;
 
 public class GameUI {
 
@@ -92,7 +93,8 @@ public class GameUI {
                 try {
                     String s1=tf1.getText();
                     tf1.setText("");
-                    chatPanelText.append(s1+"\n");
+                    chatPanelText.append("YOU: "+s1+"\n");
+                    game.sendInput(Constants.COMMAND_CHAT, s1);
                 } catch (Exception ex){}
             }
         });
@@ -207,7 +209,7 @@ public class GameUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    game.sendInput(-1);
+                    game.sendInput(Constants.COMMAND_UNDO, "");
                 } catch (Exception ex) {
                     Logger.getLogger(GameUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -224,7 +226,7 @@ public class GameUI {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            game.sendInput(0);
+                            game.sendInput(Constants.COMMAND_ROUND_END, "");
                         } catch (Exception ex) {
                             Logger.getLogger(GameUI.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -239,7 +241,7 @@ public class GameUI {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            game.sendInput(0);
+                            game.sendInput(Constants.COMMAND_ROUND_END, "");
                         } catch (Exception ex) {
                             Logger.getLogger(GameUI.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -367,7 +369,7 @@ public class GameUI {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
-                        game.sendInput(cardNr);
+                        game.sendInput(cardNr, "");
                     } catch (Exception ex) {
                         Logger.getLogger(GameUI.class.getName()).log(Level.SEVERE, null, ex);
                     }

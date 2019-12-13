@@ -14,7 +14,8 @@ import org.json.JSONObject;
 
 public class GameConnectionToAPI {
     HttpURLConnection conn;
-    private String urlas = "https://durakserveris.azurewebsites.net/";
+    //private String urlas = "https://durakserveris.azurewebsites.net/";
+    private String urlas = "http://192.168.0.106:8080/";
     
     public Pair<String, String> createGame(String playerName) throws Exception{
         try {
@@ -155,7 +156,7 @@ public class GameConnectionToAPI {
         conn.disconnect();
     }
     
-    public void chat(String gameID, String playerName, String message) throws Exception{
+    public void chat(String gameID, String playerID, String message) throws Exception{
         try {
             URL url = new URL(urlas+"chat");
             conn = (HttpURLConnection)url.openConnection();
@@ -168,7 +169,7 @@ public class GameConnectionToAPI {
 	conn.setRequestProperty("Content-Type", "application/json; utf-8");
         conn.setRequestProperty("Accept", "application/json");
 	conn.setDoOutput(true);
-        String jsonInputString = "{gameID: "+gameID+", playerName: "+playerName+", message: "+message+"}"; //galima pridėt daugiau body elementų
+        String jsonInputString = "{gameID: "+gameID+", playerID: "+playerID+", message: "+message+"}"; //galima pridėt daugiau body elementų
         
         try(OutputStream os = conn.getOutputStream()) { //sudeda body parametrus
             byte[] input = jsonInputString.getBytes("utf-8");
