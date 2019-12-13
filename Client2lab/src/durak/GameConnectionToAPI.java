@@ -155,6 +155,36 @@ public class GameConnectionToAPI {
         conn.disconnect();
     }
     
+    public void chat(String gameID, String playerName, String message) throws Exception{
+        try {
+            URL url = new URL(urlas+"chat");
+            conn = (HttpURLConnection)url.openConnection();
+        } catch (Exception e) {
+            System.out.println("Input send to API failed");
+            e.printStackTrace();
+        }
+        
+        conn.setRequestMethod("POST");
+	conn.setRequestProperty("Content-Type", "application/json; utf-8");
+        conn.setRequestProperty("Accept", "application/json");
+	conn.setDoOutput(true);
+        String jsonInputString = "{gameID: "+gameID+", playerName: "+playerName+", message: "+message+"}"; //galima pridėt daugiau body elementų
+        
+        try(OutputStream os = conn.getOutputStream()) { //sudeda body parametrus
+            byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);           
+        }
+            
+        try(BufferedReader br = new BufferedReader(
+            new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+            response.append(responseLine.trim());
+            }
+        }
+        conn.disconnect();
+    }
     
     public JSONObject poll(GameData gameData) throws IOException, JSONException{
         try {
