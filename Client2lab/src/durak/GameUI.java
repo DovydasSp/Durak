@@ -1,4 +1,4 @@
-﻿package durak;
+package durak;
 
 import chain.AbstractLogger;
 import chain.ChainLogger;
@@ -6,6 +6,7 @@ import decorator.Buttonn;
 import decorator.GreenButton;
 import decorator.WhiteButton;
 import decorator.RedButton;
+import durak.Game;
 import gamedataclasses.Card;
 import gamedataclasses.CardPair;
 import gamedataclasses.GameData;
