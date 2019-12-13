@@ -52,13 +52,6 @@ public class Message {
         return builder;
     }
 
-    public static JSONObject formPlayerRole(Player player){
-        JSONObject builder = new JSONObject();
-        builder.put("header", "playerRole");
-        builder.put("attacker", player.isAttacker());
-        return builder;
-    }
-
     public static JSONObject formInput(int input){
         JSONObject builder = new JSONObject();
         builder.put("header", "input");
@@ -136,5 +129,11 @@ public class Message {
         return builder;
     }
 
-
+    public static JSONObject formChat(String playerName, String chat){
+        JSONObject builder = new JSONObject();
+        builder.put("header", "chat");
+        builder.put("message", chat);
+        builder.put("playerName", playerName);
+        return builder;
+    }
 }

@@ -6,11 +6,9 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.javatuples.Pair;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 public class Durak implements Runnable, Serializable {
@@ -26,13 +24,8 @@ public class Durak implements Runnable, Serializable {
     private Field currentField;
     private boolean roundInitiated; // If a round is occurring and has completed its initiation stages
     private boolean startAgain = false;
-    private Stack<Integer> playerOneInput = new Stack<>();
-    private Stack<Integer> playerTwoInput = new Stack<>();
     private Stack<String> durakBinaries = new Stack<>();
-
-    //public Scanner sc = new Scanner(System.in);
-    public Random r = new Random();
-    public Stack<Integer> input = new Stack<>();
+    private String state;
 
     // Set default trump to hearts
     public Durak() {
@@ -55,8 +48,6 @@ public class Durak implements Runnable, Serializable {
     }
 
     public void start() throws InterruptedException {
-        boolean running = true;
-        r.setSeed(4564654654L);
         setup();
         game();
         System.out.println("The game has ended.");
@@ -66,43 +57,27 @@ public class Durak implements Runnable, Serializable {
     public void setup() {
         System.out.println("Welcome to Durak!");
 
-        System.out.println("\nEnter the name of Player 1...\n");
-        //String oneName = sc.nextLine();
-        System.out.println("\nEnter the name of Player 2...\n");
-        //String twoName = sc.nextLine();
-
-        System.out.println("\nPlease wait!\n");
-        System.out.println("Creating game...\n");
-
-        System.out.println("Shuffling the cards...\n");
         deck = new Deck();
-
-        System.out.println("Dealing the cards...\n");
-        //one = new Player(deck, one.getName());
         one.setDeck(deck);
         one.drawCards(6);
-        //two = new Player(deck, two.getName());
+
         two.setDeck(deck);
         two.drawCards(6);
-        System.out.println("Determining trump card...\n");
+
         Card trumpCard = deck.draw();
-        String trumpSuit = trumpCard.getSuit();
-        TRUMP = trumpSuit;
+        TRUMP = trumpCard.getSuit();
 
         System.out.println("The trump is: " + TRUMP + "!\n");
-
-        System.out.println("Reinserting trump card...\n");
         deck.reinsert(trumpCard);
 
-        System.out.println("Resetting round count...\n");
         round = 1;
-
         System.out.println("The game is ready.\n");
     }
 
     // Running a game instance
     public void game() throws InterruptedException {
         System.out.println("Determining initial attacker...\n");
+        Random r = new Random();
         if (r.nextInt(2) < 1) {
             setAttacker(one);
             setDefender(two);
@@ -113,11 +88,7 @@ public class Durak implements Runnable, Serializable {
         one.addMessage(Message.formTrump(TRUMP));
         two.addMessage(Message.formTrump(TRUMP));
 
-        System.out.println("The initial attacker is: " + attacker + ".");
-        System.out.println("The initial defender is: " + defender + ".\n\n");
-
         // Round creation & handling until victoryAchieved()
-
         boolean gameOver = false;
 
         while (!gameOver) {
@@ -155,7 +126,6 @@ public class Durak implements Runnable, Serializable {
             one.addMessage(Message.formGameEnd(false));
             two.addMessage(Message.formGameEnd(true));
         }
-        return;
     }
 
     // Victory check
@@ -182,8 +152,6 @@ public class Durak implements Runnable, Serializable {
     // Returns true if attacker succeeded
     // Returns false if defender succeeded
     public boolean round() throws InterruptedException {
-        // Create references to attacker and defender
-
 
         // Generate header
         String roundName = "ROUND " + round;
@@ -212,8 +180,8 @@ public class Durak implements Runnable, Serializable {
         attacker.addMessage(Message.formPlayersHand(attacker.getHand()));
         defender.addMessage(Message.formEnemyCardCount(attacker.getHand()));
         //storeDurakToDB();
-        //  (CARD PLAYED: Check for victory!)
 
+        //  (CARD PLAYED: Check for victory!)
         if (victoryAchieved()) {
             return true; // Pop out of round (In game() screen, there should be a victoryAchieved() check after each round to immediately proceed from here)
         }
@@ -235,7 +203,6 @@ public class Durak implements Runnable, Serializable {
                 // OR as a result of the defender's turn, victory was achieved (CARD PLAYED: Check for victory!)
                 roundInitiated = false;
                 currentField = null;
-                //switchRoles();
                 return true; // Pop out of round
             }
             defender.addMessage(Message.formPlayersHand(defender.getHand()));
@@ -440,13 +407,6 @@ public class Durak implements Runnable, Serializable {
         return true; // Satisfy Java
     }
 
-    // Determines current attacker once game is initiated
-    // If true: one is attacker, two is defender
-    // If false: one is defender, two is attacker
-    public boolean whichAttacker() {
-        return one.isAttacker();
-    }
-
     public void setAttacker(Player p) {
         attacker = p;
         p.makeAttacker();
@@ -465,21 +425,9 @@ public class Durak implements Runnable, Serializable {
         two.switchRole();
     }
 
-    public Player getAttacker() {
-        return attacker;
-    }
-
-    public Player getDefender() {
-        return defender;
-    }
-
     public Player getPlayerOne() {return one;}
 
     public Player getPlayerTwo() {return two;}
-
-    public boolean roundInitiated() {
-        return roundInitiated;
-    }
 
     public Player getPlayerByID(String id){
         if(one.getID().toString().compareTo(id) == 0)
@@ -513,14 +461,11 @@ public class Durak implements Runnable, Serializable {
     }
 
     public boolean restartRound() throws InterruptedException {
-        // Create references to attacker and defender
-
-
         // Generate header
         String roundName = "ROUND " + round;
         String headerLine = "==================== " + roundName + " ====================" + "\n";
         String headerContent = "Attacker: " + attacker + " | " + "Defender: " + defender + "\n";
-        String header = "\n\n\n" + headerLine + headerContent + headerLine + "\n\n\n";
+        //String header = "\n\n\n" + headerLine + headerContent + headerLine + "\n\n\n";
         Boolean firstCheck = true;
         roundInitiated = false; // Round is in initial stages
         Field roundField;
@@ -642,4 +587,47 @@ public class Durak implements Runnable, Serializable {
             two.addMessage(Message.formField(empty));
         }
     }
+
+    public Memento saveState() {
+        try{
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream( stream );
+            oos.writeObject( this );
+            oos.close();
+            state = Base64.getEncoder().encodeToString(stream.toByteArray());
+            return new Memento(state);
+        } catch (IOException ex){
+            System.out.println(ex.toString());
+        }
+        return new Memento("");
+    }
+
+    public Durak restoreState(Memento memento){
+
+        //this.state = restoreState.getState();
+
+        memento.getState(this);
+        try{
+            byte [] data = Base64.getDecoder().decode(state);
+            ObjectInputStream ois = new ObjectInputStream(
+                    new ByteArrayInputStream(  data ) );
+            Object o  = ois.readObject();
+            Durak dur = (Durak)o;
+            return dur;
+        } catch (IOException | ClassNotFoundException ex){
+
+        }
+        System.out.println("restore state: " + this.getState());
+        return null;
+    }
+
+    public void setState(String newState){
+        System.out.println("set state: " + newState);
+        state = newState;
+    }
+
+    public String getState(){
+        return state;
+    }
+
 }

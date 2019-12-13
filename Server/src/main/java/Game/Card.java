@@ -92,10 +92,6 @@ public class Card implements Comparable, Serializable {
 
     }
 
-    public boolean isTrump() {
-        return suit.equals(Durak.TRUMP);
-    }
-
     public boolean sameSuit(Object o) {
 
         Card otherCard = (Card) o;
@@ -116,10 +112,6 @@ public class Card implements Comparable, Serializable {
 
     public String getRank() {
         return rank;
-    }
-
-    public int getValue() {
-        return Static.values.get(rank);
     }
 
     // Cards are supposed to be immutable
