@@ -23,7 +23,6 @@ public class ProccessJsons {
         gameData.setWhatsChanged("player");
         gameData.setWhatsChangedInPlayer("yourTurn");
         loggerChain.logMessage(AbstractLogger.INFO,"API sent your turn update");
-        //System.out.println("API sent your turn update");
         return gameData;
     }
 
@@ -36,7 +35,6 @@ public class ProccessJsons {
         }
         gameData.setWhatsChanged("player");
         gameData.setWhatsChangedInPlayer("isAttacker");
-        //System.out.println("API sent role update");
         loggerChain.logMessage(AbstractLogger.INFO,"API sent role update");
         return gameData;
     }
@@ -46,7 +44,6 @@ public class ProccessJsons {
         gameData.getPlayer().setTrump(trump);
         gameData.setWhatsChanged("player");
         gameData.setWhatsChangedInPlayer("trump");
-       // System.out.println("API sent trump update");
         loggerChain.logMessage(AbstractLogger.INFO, "API sent trump update");
        return gameData;
     }
@@ -56,7 +53,6 @@ public class ProccessJsons {
         gameData.getPlayer().setOponentCardCount(enemyPlayerCardCount);
         gameData.setWhatsChanged("player");
         gameData.setWhatsChangedInPlayer("oponentCardCount");
-        //System.out.println("API sent enemy card count update");
         loggerChain.logMessage(AbstractLogger.INFO, "API sent enemy card count update");
         return gameData;
     }
@@ -68,15 +64,13 @@ public class ProccessJsons {
 
         for (int i = 0; i < numberOfCards; i++) {
             JSONObject card_data = myResponse.getJSONObject("card" + i);
-            //System.out.println ("BUILDER: building a new card.");
-            loggerChain.logMessage(AbstractLogger.PATTERN,"BUILDER: building a new card.");
+            //loggerChain.logMessage(AbstractLogger.PATTERN,"BUILDER: building a new card.");
             hand.add(cb.setColor(card_data.getString("color")).setRank(card_data.getString("rank")).setSuit(card_data.getString("suit")).getCard());
         }
         gameData.getPlayer().setHand(hand);
         gameData.setWhatsChanged("player");
         gameData.setWhatsChangedInPlayer("hand");
         loggerChain.logMessage(AbstractLogger.INFO,"API sent hand update");
-        //System.out.println("API sent hand update");
         return gameData;
     }
 
@@ -91,14 +85,12 @@ public class ProccessJsons {
             JSONObject pair_data = myResponse.getJSONObject("pair" + i);
             boolean completed = pair_data.getBoolean("completed");
             JSONObject att_data = pair_data.getJSONObject("atackerCard");
-             loggerChain.logMessage(AbstractLogger.PATTERN,"BUILDER: building a new card.");
-           //System.out.println ("BUILDER: building a new card.");
+            //loggerChain.logMessage(AbstractLogger.PATTERN,"BUILDER: building a new card.");
             Card attCard = cb.setColor(att_data.getString("color")).setRank(att_data.getString("rank")).setSuit(att_data.getString("suits")).getCard();
             pairCopy.setAttacker(attCard);
             if (completed) {
                 JSONObject def_data = pair_data.getJSONObject("defenderCard");
-                loggerChain.logMessage(AbstractLogger.PATTERN,"BUILDER: building a new card.");
-                //System.out.println ("BUILDER: building a new card.");
+                //loggerChain.logMessage(AbstractLogger.PATTERN,"BUILDER: building a new card.");
                 Card defCard = cb.setColor(def_data.getString("color")).setRank(def_data.getString("rank")).setSuit(def_data.getString("suits")).getCard();
                 pairCopy.setDefender(defCard);
                 pairCopy.setCompleted(completed);
@@ -113,14 +105,12 @@ public class ProccessJsons {
         gameData.setWhatsChanged("field");
         gameData.setWhatsChangedInPlayer("");
         loggerChain.logMessage(AbstractLogger.INFO,"API sent field update");
-      //  System.out.println("API sent field update");
         return gameData;
     }
 
     public GameData roundEnd(JSONObject myResponse, GameData gameData) throws JSONException {
         gameData.setWhatsChanged("roundEnd");
         gameData.setField(new Field());
-        //System.out.println("API sent roundEnd call");
         loggerChain.logMessage(AbstractLogger.INFO,"API sent roundEnd call");
         return gameData;
     }
@@ -130,8 +120,7 @@ public class ProccessJsons {
         gameData.getPlayer().setDeckCardCount(deckCount);
         gameData.setWhatsChanged("player");
         gameData.setWhatsChangedInPlayer("deckCount");
-        //System.out.println("API sent deckCount update");
-         loggerChain.logMessage(AbstractLogger.INFO,"API sent deckCount update");
+        loggerChain.logMessage(AbstractLogger.INFO,"API sent deckCount update");
         return gameData;
     }
 
@@ -144,8 +133,7 @@ public class ProccessJsons {
         }
         gameData.setField(new Field());
         gameData.setWhatsChanged("gameEnd");
-        //System.out.println("API sent gameEnd call");
-         loggerChain.logMessage(AbstractLogger.INFO,"API sent gameEnd call");
+        loggerChain.logMessage(AbstractLogger.INFO,"API sent gameEnd call");
         return gameData;
     }
     
@@ -157,7 +145,6 @@ public class ProccessJsons {
         c.setMessage(message);
         gameData.setWhatsChanged("chat");
         gameData.setChat(c);
-        //System.out.println("API sent chat call");
         loggerChain.logMessage(AbstractLogger.INFO,"API sent chat call");
         return gameData;
     }

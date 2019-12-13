@@ -231,9 +231,8 @@ public class GameUI {
         deckCardCount.setBounds(200, 75, 200, 25);
         deckCardCount.setForeground(Color.white);
         infoPanel.add(deckCardCount);
-              
-        //System.out.println ("Decorator: White button was requested");
-        loggerChain.logMessage(AbstractLogger.PATTERN, "Decorator: White button was requested");
+
+        //loggerChain.logMessage(AbstractLogger.PATTERN, "Decorator: White button was requested");
                 Buttonn bu = new WhiteButton("UNDO");
                 JButton button0 = bu.createButton();               
                 button0.addActionListener(new ActionListener(){  
@@ -249,8 +248,7 @@ public class GameUI {
         
         if(gd.getPlayer().getYourTurn() && gd.getField().getPairCount() > 0){
             if(gd.getPlayer().getIsAttacker()){
-               // System.out.println ("Decorator: Green button was requested");
-               loggerChain.logMessage(AbstractLogger.PATTERN, "Decorator: Green button was requested");
+               //loggerChain.logMessage(AbstractLogger.PATTERN, "Decorator: Green button was requested");
                 Buttonn b = new GreenButton("DONE", bu);
                 JButton button = b.createButton();
                 button.addActionListener(new ActionListener() {
@@ -266,8 +264,7 @@ public class GameUI {
             infoPanel.add(button);
             }
             else{
-                //System.out.println ("Decorator: Red button was requested");
-                loggerChain.logMessage(AbstractLogger.PATTERN, "Decorator: Red button was requested");
+                //loggerChain.logMessage(AbstractLogger.PATTERN, "Decorator: Red button was requested");
                 Buttonn b = new RedButton("TAKE", bu);
                 JButton button = b.createButton();
                 button.addActionListener(new ActionListener() {

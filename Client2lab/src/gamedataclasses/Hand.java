@@ -1,10 +1,13 @@
 package gamedataclasses;
 
+import chain.AbstractLogger;
+import chain.ChainLogger;
 import java.util.*;
 
 public class Hand {
 
     private ArrayList<Card> cards;
+    private ChainLogger loggerChain = new ChainLogger();
 
     public Hand() {
         cards = new ArrayList<Card>();
@@ -36,6 +39,7 @@ public class Hand {
 
         @Override
         public boolean hasNext() {
+            loggerChain.logMessage(AbstractLogger.PATTERN,"Iterator of hand called hasNext.");
             if (index < cards.size()) {
                 return true;
             }
@@ -44,6 +48,7 @@ public class Hand {
 
         @Override
         public Object next() {
+            loggerChain.logMessage(AbstractLogger.PATTERN,"Iterator of hand called next.");
             if (this.hasNext()) {
                 return cards.get(index++);
             }
@@ -52,6 +57,7 @@ public class Hand {
 
         @Override
         public boolean hasPrevious() {
+            loggerChain.logMessage(AbstractLogger.PATTERN,"Iterator of hand called hasPrevious.");
             if (index > 0) {
                 return true;
             }
@@ -60,6 +66,7 @@ public class Hand {
 
         @Override
         public Object previous() {
+            loggerChain.logMessage(AbstractLogger.PATTERN,"Iterator of hand called previous.");
             if (this.hasPrevious()) {
                 return cards.get(--index);
             }
@@ -68,6 +75,7 @@ public class Hand {
 
         @Override
         public Object first() {
+            loggerChain.logMessage(AbstractLogger.PATTERN,"Iterator of hand called first.");
             return cards.get(0);
         }
     }

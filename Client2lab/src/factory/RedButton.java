@@ -17,7 +17,7 @@ public class RedButton extends Button {
         button.setBorder(new LineBorder(Color.BLACK));
         button.setFont(new Font("Arial", Font.PLAIN, 20));
         button.setBounds(1510,30,60,40);
-        System.out.println ("FACTORY: Red button was created and returned");
+        //System.out.println ("FACTORY: Red button was created and returned");
         return button;
     }
     
