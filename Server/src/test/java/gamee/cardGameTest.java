@@ -67,7 +67,7 @@ public class cardGameTest {
         Durak.TRUMP = data.getValue3();
     }
 
-    @Test
+    //@Test
     public void checkIfDefenderIsValid(){
         Game.Pair pair = new Game.Pair(atacker);
         boolean result = true;
