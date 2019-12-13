@@ -12,7 +12,7 @@ public class SecondState implements State {
     
     @Override
     public void doAction(Context context, Game game, String message) {
-        loggerChain.logMessage(AbstractLogger.INFO,"STATE: second state");
+        loggerChain.logMessage(AbstractLogger.PATTERN,"STATE: second state");
         try {
             game.sendInput(Constants.COMMAND_CHAT, message);
             game.addChatMsg("Wait until opponent responds!");

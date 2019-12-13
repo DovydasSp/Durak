@@ -11,7 +11,7 @@ public class BlockState implements State {
     
     @Override
     public void doAction(Context context, Game game, String message) {
-        loggerChain.logMessage(AbstractLogger.INFO,"STATE: block state");
+        loggerChain.logMessage(AbstractLogger.PATTERN,"STATE: block state");
         try {
             game.addChatMsg("BLOCKED! Wait until opponent responds!");
         } catch (Exception ex) {

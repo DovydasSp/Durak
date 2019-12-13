@@ -12,7 +12,7 @@ public class FirstState implements State {
     
     @Override
     public void doAction(Context context, Game game, String message) {
-        loggerChain.logMessage(AbstractLogger.INFO,"STATE: first state");
+        loggerChain.logMessage(AbstractLogger.PATTERN,"STATE: first state");
         try {
             game.sendInput(Constants.COMMAND_CHAT, message);
         } catch (Exception ex) {
