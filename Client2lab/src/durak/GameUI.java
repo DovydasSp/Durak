@@ -21,6 +21,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.border.LineBorder;
 import org.json.JSONException; 
+import state.Context;
+import state.FirstState;
 import statics.Constants;
 
 public class GameUI {
@@ -31,6 +33,7 @@ public class GameUI {
     private JPanel infoPanel;
     private JPanel tablePanel;
     private JPanel handCardPanel;
+    private Context context;
     
     public ChainLogger loggerChain = new ChainLogger();
     private JPanel chatPanel;
@@ -38,6 +41,9 @@ public class GameUI {
 
     GameUI(Game game_) {
         game = game_;
+        context = new Context();
+        FirstState state = new FirstState();
+        context.setState(state);
     }
 
     public void createFrame() {
@@ -103,8 +109,12 @@ public class GameUI {
                         game.chatCommand(s1);
                     }
                     else{
-                        chatPanelText.append("YOU: "+s1+"\n");
-                        game.sendInput(Constants.COMMAND_CHAT, s1);
+                        if(context.getState().stateNr() < 4)
+                        {
+                            chatPanelText.append("YOU: "+s1+"\n");
+                        }
+                        //game.sendInput(Constants.COMMAND_CHAT, s1);
+                        context.getState().doAction(context, game, s1);
                     }
                 } catch (Exception ex){}
             }
@@ -113,6 +123,14 @@ public class GameUI {
         chatPanel.add(scrollPanel);
         chatPanel.add(tf1);
         chatPanel.add(sendButton);
+    }
+    
+    public void addChatMessage(String sender, String message){
+        chatPanelText.append(sender+": "+message+"\n");
+        if(!sender.equals("DURAK")){
+            FirstState state = new FirstState();
+            context.setState(state);
+        }
     }
 
     public JFrame getFrame() {

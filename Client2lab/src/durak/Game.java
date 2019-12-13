@@ -77,7 +77,7 @@ public class Game {
             gameUI.refreshField(gameData);
         }
         else if(gameData.getWhatsChanged().equals("chat")){
-            gameUI.getChatPanelText().append(gameData.getChat().getEnemyName()+": "+gameData.getChat().getMessage()+" \n");
+            gameUI.addChatMessage(gameData.getChat().getEnemyName(), gameData.getChat().getMessage());
             gameData.setWhatsChanged("");
         }
     }
@@ -111,6 +111,10 @@ public class Game {
         if(isRestart.interpret(message)){
             sendInput(Constants.COMMAND_RESTART, "");
         }
+    }
+    
+    public void addChatMsg(String message){
+        gameUI.addChatMessage("DURAK", message);
     }
     
     public boolean checkIfTurnValid(int cardNr){

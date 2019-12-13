@@ -41,8 +41,6 @@ public class InputThread implements Runnable {
                 connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), input);
             }
         } catch (Exception e) {
-            // Throwing an exception 
-           // System.out.println("inputThread Exception is caught: " + e);
             loggerChain.logMessage(AbstractLogger.ERROR, "COMMAND: inputThread Exception is caught: " + e);
             run();
         }

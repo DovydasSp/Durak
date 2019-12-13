@@ -157,7 +157,8 @@ public class ProccessJsons {
         c.setMessage(message);
         gameData.setWhatsChanged("chat");
         gameData.setChat(c);
-        System.out.println("API sent chat call");
+        //System.out.println("API sent chat call");
+        loggerChain.logMessage(AbstractLogger.INFO,"API sent chat call");
         return gameData;
     }
 }
