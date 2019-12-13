@@ -1,9 +1,14 @@
 package gamedataclasses;
 
+import chain.AbstractLogger;
+import chain.ChainLogger;
+
 public class CardPair implements Cloneable {
 
     private Card attacker;
     private Card defender;
+    
+    private ChainLogger loggerChain = new ChainLogger();
 
     private boolean completed;
 
@@ -41,7 +46,8 @@ public class CardPair implements Cloneable {
         CardPair copy = (CardPair) cardPair.clone();
         int copyAddress = System.identityHashCode(copy);
         int cardPairAddress = System.identityHashCode(cardPair);
-        System.out.println("CardPair shallow copy made. CardPair: " + cardPairAddress + ", Copy: " + copyAddress);
+       // System.out.println("CardPair shallow copy made. CardPair: " + cardPairAddress + ", Copy: " + copyAddress);
+        loggerChain.logMessage(AbstractLogger.INFO,"CardPair shallow copy made. CardPair: " + cardPairAddress + ", Copy: " + copyAddress);
         return copy;
     }
 
@@ -51,7 +57,9 @@ public class CardPair implements Cloneable {
         copy.defender = (Card) defender.clone();
         int copyAddress = System.identityHashCode(copy);
         int cardPairAddress = System.identityHashCode(cardPair);
-        System.out.println("CardPair deep copy made. CardPair: " + cardPairAddress + ", Copy: " + copyAddress);
+       // System.out.println("CardPair deep copy made. CardPair: " + cardPairAddress + ", Copy: " + copyAddress);
+       loggerChain.logMessage(AbstractLogger.INFO,"CardPair deep copy made. CardPair: " + cardPairAddress + ", Copy: " + copyAddress);
         return copy;
+        
     }
 }

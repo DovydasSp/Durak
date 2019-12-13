@@ -1,5 +1,11 @@
 package durak;
 
+import chain.AbstractLogger;
+import chain.ChainLogger;
+import chain.ConsoleLogger;
+import chain.ErrorLogger;
+import chain.FileLogger;
+import chain.PatternLogger;
 import gamedataclasses.GameData;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,12 +23,16 @@ public class GameConnectionToAPI {
     //private String urlas = "https://durakserveris.azurewebsites.net/";
     private String urlas = "http://192.168.0.106:8080/";
     
+    public ChainLogger loggerChain = new ChainLogger();
+     
+   
     public Pair<String, String> createGame(String playerName) throws Exception{
         try {
             URL url = new URL(urlas+"createGame");
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
             e.printStackTrace();
+            loggerChain.logMessage(AbstractLogger.ERROR, e.toString());
         }
         
         String gameID = "", playerID = "";
@@ -62,6 +72,8 @@ public class GameConnectionToAPI {
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
             e.printStackTrace();
+            loggerChain.logMessage(AbstractLogger.ERROR, e.toString());
+            
         }
         
         String playerID = "";
@@ -99,7 +111,8 @@ public class GameConnectionToAPI {
             URL url = new URL(urlas+"input");
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
-            System.out.println("Input send to API failed");
+            loggerChain.logMessage(AbstractLogger.ERROR, "Input send to API failed");
+            //System.out.println("Input send to API failed");
             e.printStackTrace();
         }
         
@@ -130,7 +143,8 @@ public class GameConnectionToAPI {
             URL url = new URL(urlas+"undo");
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
-            System.out.println("Input send to API failed");
+            loggerChain.logMessage(AbstractLogger.ERROR, "Input send to API failed");
+            //System.out.println("Input send to API failed");
             e.printStackTrace();
         }
         
@@ -192,6 +206,7 @@ public class GameConnectionToAPI {
             URL url = new URL(urlas+"poll/"+gameData.getPlayer().getIDs().getKey()+"/"+gameData.getPlayer().getIDs().getValue());
             conn = (HttpURLConnection)url.openConnection();
         } catch (Exception e) {
+             loggerChain.logMessage(AbstractLogger.ERROR, e.toString());
             e.printStackTrace();
         }
         

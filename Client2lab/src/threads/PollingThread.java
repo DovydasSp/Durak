@@ -1,5 +1,7 @@
 package threads;
 
+import chain.AbstractLogger;
+import chain.ChainLogger;
 import durak.Game;
 import durak.GameConnectionToAPI;
 import gamedataclasses.GameData;
@@ -13,6 +15,7 @@ public class PollingThread extends Observable implements Runnable {
     private GameData gameData;
     private Game game;
     private ProccessJsonsAdapter processJsonsAdapter = new ProccessJsonsAdapterImplementation();
+        private ChainLogger loggerChain = new ChainLogger();
 
     public PollingThread(GameConnectionToAPI connection_, GameData gameData_, Game game_) {
         connection = connection_;
@@ -39,7 +42,8 @@ public class PollingThread extends Observable implements Runnable {
             }
         } catch (Exception e) {
             // Throwing an exception 
-            System.out.println("pollingThread Exception is caught: " + e);
+           // System.out.println("pollingThread Exception is caught: " + e);
+            loggerChain.logMessage(AbstractLogger.ERROR, "pollingThread Exception is caught: " + e);
             game.play(gameData);
 
         }
