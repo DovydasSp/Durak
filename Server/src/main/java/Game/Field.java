@@ -119,9 +119,7 @@ public class Field implements Serializable {
         ArrayList<Card> ret = new ArrayList<Card>();
         for (Pair pair : pairs) {
             ArrayList<Card> pairCards = pair.fetchAllCards();
-            for (Card card: pairCards) {
-                ret.add(card);
-            }
+            ret.addAll(pairCards);
         }
         return ret;
     }

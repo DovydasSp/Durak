@@ -83,11 +83,6 @@ public class Player implements Serializable {
         hand.add(c);
     }
 
-    // Discards a given card from Player's hand.
-    public void discard(Card c) {
-        hand.remove(c);
-    }
-
     public int cardsInHand() {
         return hand.size();
     }
@@ -158,7 +153,6 @@ public class Player implements Serializable {
     public ObjectId getID() { return id; }
 
     public void setName(String name) { this.name = name; }
-    public String getName() {return name;}
 
     public void addInput(int Input){
         synchronized(input) {
@@ -190,6 +184,5 @@ public class Player implements Serializable {
     }
 
     public void setDeck(Deck deck){ this.deck = deck; }
-    public void setHand(Hand hand) { this.hand = hand;}
     public Hand getHand() {return hand;}
 }

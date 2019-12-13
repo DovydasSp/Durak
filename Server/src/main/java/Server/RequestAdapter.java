@@ -1,6 +1,7 @@
 package Server;
 
 import Game.Durak;
+import Game.DurakFactory;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -17,9 +18,13 @@ public class RequestAdapter implements Request {
         return false;
     }
 
-    public boolean joinGameRequest(HashMap<String, Durak> gameMap, JSONObject obj){
+    public boolean joinGameRequest(JSONObject obj){
         if(obj.getString("gameID") != null && obj.getString("playerName") != null){
-            gameMap.get(obj.getString("gameID")).getPlayerTwo().setName(obj.getString("playerName"));
+            Durak game =  DurakFactory.getDurak(obj.getString("gameID"));
+            game.getPlayerTwo().setName(obj.getString("playerName"));
+            Thread thread = DurakFactory.getGameThread(obj.getString("gameID"));
+            thread.start();
+            DurakFactory.getCareTaker(obj.getString("gameID")).add(game.saveState());
             System.out.println("RequestAdapter joinGameRequest success");
             return true;
         }
@@ -27,15 +32,13 @@ public class RequestAdapter implements Request {
         return false;
     }
 
-    public String pollRequest(HashMap<String, Durak>  gameMap, String gameID, String playerID){
-        if(gameMap.get(gameID) != null){
-            Durak durak = gameMap.get(gameID);
-            if(durak.getPlayerByID(playerID) != null){
-                System.out.println("RequestAdapter pollRequest success");
-                return durak.getPlayerByID(playerID).popMessage();
-            }
+    public String pollRequest(String gameID, String playerID){
+        Durak durak = DurakFactory.getDurak(gameID);
+        if(durak.getPlayerByID(playerID) != null){
+            //System.out.println("RequestAdapter pollRequest success");
+            return durak.getPlayerByID(playerID).popMessage();
         }
-        System.out.println("RequestAdapter pollRequest failed");
+        //System.out.println("RequestAdapter pollRequest failed");
         return "";
     }
 }
