@@ -14,22 +14,19 @@ public abstract class Observable {
     
     public void addObserver(Observer observer) {
         this.observers.add(observer);
-       // System.out.println("Observer '" + observer.toString() + "' was added.");
-        loggerChain.logMessage(AbstractLogger.PATTERN, "Observer '" + observer.toString() + "' was added.");
+        //loggerChain.logMessage(AbstractLogger.PATTERN, "Observer '" + observer.toString() + "' was added.");
     }
 
     public void removeObserver(Observer observer) {
         this.observers.remove(observer);
-        //System.out.println("Observer '" + observer.toString() + "' was removed.");
-        loggerChain.logMessage(AbstractLogger.PATTERN,"Observer '" + observer.toString() + "' was removed.");
+        //loggerChain.logMessage(AbstractLogger.PATTERN,"Observer '" + observer.toString() + "' was removed.");
     }
 
     public void notifyObservers(Object o) {
         this.o = o;
         for (Iterator iter = getIterator(); iter.hasNext();) {
             Observer observer = (Observer) iter.next();
-         //   System.out.println("Observer '" + observer.toString() + "' was notified.");
-            loggerChain.logMessage(AbstractLogger.PATTERN,"Observer '" + observer.toString() + "' was notified.");
+            //loggerChain.logMessage(AbstractLogger.PATTERN,"Observer '" + observer.toString() + "' was notified.");
             observer.update(this.o);
         }
     }
@@ -44,6 +41,7 @@ public abstract class Observable {
 
         @Override
         public boolean hasNext() {
+            loggerChain.logMessage(AbstractLogger.PATTERN,"Iterator of observable called hasNext.");
             if (index < observers.size()) {
                 return true;
             }
@@ -52,6 +50,7 @@ public abstract class Observable {
 
         @Override
         public Object next() {
+            loggerChain.logMessage(AbstractLogger.PATTERN,"Iterator of observable called next.");
             if (this.hasNext()) {
                 return observers.get(index++);
             }
@@ -60,6 +59,7 @@ public abstract class Observable {
 
         @Override
         public boolean hasPrevious() {
+            loggerChain.logMessage(AbstractLogger.PATTERN,"Iterator of observable called hasPrevious.");
             if (index > 0) {
                 return true;
             }
@@ -68,6 +68,7 @@ public abstract class Observable {
 
         @Override
         public Object previous() {
+            loggerChain.logMessage(AbstractLogger.PATTERN,"Iterator of observable called previous.");
             if (this.hasPrevious()) {
                 return observers.get(--index);
             }
@@ -76,6 +77,7 @@ public abstract class Observable {
 
         @Override
         public Object first() {
+            loggerChain.logMessage(AbstractLogger.PATTERN,"Iterator of observable called first.");
             return observers.get(0);
         }
     }

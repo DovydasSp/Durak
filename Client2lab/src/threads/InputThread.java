@@ -25,23 +25,22 @@ public class InputThread implements Runnable {
     public void run() {
         try {
             if(input == Constants.COMMAND_CHAT){
-                loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent CHAT message");
+                //loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent CHAT message");
                 connection.chat(gameData.getPlayer().getIDs().getKey(), gameData.getPlayer().getIDs().getValue(), message);
             }
             else if (input == Constants.COMMAND_RESTART) {
-                loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent RESTART request");
+                //loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent RESTART request");
                 connection.restart(gameData.getPlayer().getIDs().getKey());
             }
             else if (input == Constants.COMMAND_UNDO) {
-                loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent UNDO request");
+                //loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent UNDO request");
                 connection.undo(gameData.getPlayer().getIDs().getKey());
             } else {
-               // System.out.println("inputThread: sent input request");
-                 loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent input request");
+                 //loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent input request");
                 connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), input);
             }
         } catch (Exception e) {
-            loggerChain.logMessage(AbstractLogger.ERROR, "COMMAND: inputThread Exception is caught: " + e);
+            //loggerChain.logMessage(AbstractLogger.ERROR, "COMMAND: inputThread Exception is caught: " + e);
             run();
         }
     }

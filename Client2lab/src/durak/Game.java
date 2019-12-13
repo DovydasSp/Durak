@@ -44,18 +44,14 @@ public class Game {
         gameUI.getFrame().setTitle("Durak - "+gameData.getPlayer().getPlayerName());
         gameUI.getChatPanelText().append("DURAK: GameID- "+gameData.getPlayer().getIDs().getKey()+"\n");
         
-        //System.out.println ("OBSERVER: observable polling thread created.");
-        loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observable polling thread created.");
+        //loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observable polling thread created.");
         PollingThread thread = new PollingThread(connection, gameData, this);
-        //System.out.println ("OBSERVER: observer created.");
-        loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observer created.");
+        //loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observer created.");
         GameObserver fo = new GameObserver(this, gameData);
-        //System.out.println ("OBSERVER: observer added to thread.");
-        loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observer added to thread.");
+        //loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observer added to thread.");
         thread.addObserver(fo);
         Thread t = new Thread(thread);
-       // System.out.println ("OBSERVER: observable thread started.");
-        loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observable thread started.");
+        //loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observable thread started.");
         t.start();
     }
     

@@ -14,20 +14,20 @@ public class ProccessJsonsAdapterImplementation implements ProccessJsonsAdapter 
     @Override
     public GameData yourTurn(JSONObject myResponse, GameData gameData) throws JSONException {
         if (myResponse.has("yourTurn") && !myResponse.isNull("yourTurn")) {
-            System.out.println("ADAPTER: Checked yourTurn validity");
+            //System.out.println("ADAPTER: Checked yourTurn validity");
             return proccessJsons.yourTurn(myResponse, gameData);
         }
-        System.out.println("ADAPTER: Checked yourTurn validity. WRONG");
+        //System.out.println("ADAPTER: Checked yourTurn validity. WRONG");
         return gameData;
     }
 
     @Override
     public GameData role(JSONObject myResponse, GameData gameData) throws JSONException {
         if (myResponse.has("role") && !myResponse.isNull("role")) {
-            System.out.println("ADAPTER: Checked role validity");
+            //System.out.println("ADAPTER: Checked role validity");
             return proccessJsons.role(myResponse, gameData);
         }
-        System.out.println("ADAPTER: Checked role validity. WRONG");
+        //System.out.println("ADAPTER: Checked role validity. WRONG");
         return gameData;
     }
 
@@ -36,11 +36,11 @@ public class ProccessJsonsAdapterImplementation implements ProccessJsonsAdapter 
         if (myResponse.has("trump") && !myResponse.isNull("trump")) {
             if (myResponse.getString("trump").equalsIgnoreCase(Static.suits[0]) || myResponse.getString("trump").equalsIgnoreCase(Static.suits[1])
                     || myResponse.getString("trump").equalsIgnoreCase(Static.suits[2]) || myResponse.getString("trump").equalsIgnoreCase(Static.suits[3])) {
-                System.out.println("ADAPTER: Checked trump validity.");
+                //System.out.println("ADAPTER: Checked trump validity.");
                 return proccessJsons.trump(myResponse, gameData);
             }
         }
-        System.out.println("ADAPTER: Checked trump validity. WRONG");
+        //System.out.println("ADAPTER: Checked trump validity. WRONG");
         return gameData;
     }
 
@@ -48,11 +48,11 @@ public class ProccessJsonsAdapterImplementation implements ProccessJsonsAdapter 
     public GameData enemyPlayerCardCount(JSONObject myResponse, GameData gameData) throws JSONException {
         if (myResponse.has("count") && !myResponse.isNull("count")) {
             if (myResponse.getInt("count") > -1) {
-                System.out.println("ADAPTER: Checked enemyPlayerCardCount validity.");
+                //System.out.println("ADAPTER: Checked enemyPlayerCardCount validity.");
                 return proccessJsons.enemyPlayerCardCount(myResponse, gameData);
             }
         }
-        System.out.println("ADAPTER: Checked enemyPlayerCardCount validity. WRONG");
+        //System.out.println("ADAPTER: Checked enemyPlayerCardCount validity. WRONG");
         return gameData;
     }
 
@@ -67,34 +67,34 @@ public class ProccessJsonsAdapterImplementation implements ProccessJsonsAdapter 
                                 || card_data.getString("suit").equalsIgnoreCase(Static.suits[1]) && card_data.getString("color").equalsIgnoreCase(Static.colors.get(Static.suits[1]))
                                 || card_data.getString("suit").equalsIgnoreCase(Static.suits[2]) && card_data.getString("color").equalsIgnoreCase(Static.colors.get(Static.suits[2]))
                                 || card_data.getString("suit").equalsIgnoreCase(Static.suits[3]) && card_data.getString("color").equalsIgnoreCase(Static.colors.get(Static.suits[3])))) {
-                            System.out.println("ADAPTER: Checked numberOfCards validity. WRONG");
+                            //System.out.println("ADAPTER: Checked numberOfCards validity. WRONG");
                             return gameData;
                         }
                     } else {
-                        System.out.println("ADAPTER: Checked numberOfCards validity. WRONG");
+                        //System.out.println("ADAPTER: Checked numberOfCards validity. WRONG");
                         return gameData;
                     }
                 }
-                System.out.println("ADAPTER: Checked numberOfCards validity");
+                //System.out.println("ADAPTER: Checked numberOfCards validity");
                 return proccessJsons.playersHand(myResponse, gameData);
             } else {
-                System.out.println("ADAPTER: Checked numberOfCards validity. WRONG");
+                //System.out.println("ADAPTER: Checked numberOfCards validity. WRONG");
                 return gameData;
             }
         }
-        System.out.println("ADAPTER: Checked numberOfCards validity. WRONG");
+        //System.out.println("ADAPTER: Checked numberOfCards validity. WRONG");
         return gameData;
     }
 
     @Override
     public GameData field(JSONObject myResponse, GameData gameData) throws JSONException, CloneNotSupportedException {
-        System.out.println("ADAPTER: Checked field validity");
+        //System.out.println("ADAPTER: Checked field validity");
         return proccessJsons.field(myResponse, gameData);
     }
 
     @Override
     public GameData roundEnd(JSONObject myResponse, GameData gameData) throws JSONException {
-        System.out.println("ADAPTER: Checked roundEnd validity");
+        //System.out.println("ADAPTER: Checked roundEnd validity");
         return proccessJsons.roundEnd(myResponse, gameData);
     }
 
@@ -102,21 +102,21 @@ public class ProccessJsonsAdapterImplementation implements ProccessJsonsAdapter 
     public GameData deckCount(JSONObject myResponse, GameData gameData) throws JSONException {
         if (myResponse.has("count") && !myResponse.isNull("count")) {
             if (myResponse.getInt("count") > -1) {
-                System.out.println("ADAPTER: Checked deckCount validity.");
+                //System.out.println("ADAPTER: Checked deckCount validity.");
                 return proccessJsons.deckCount(myResponse, gameData);
             }
         }
-        System.out.println("ADAPTER: Checked deckCount validity. WRONG");
+        //System.out.println("ADAPTER: Checked deckCount validity. WRONG");
         return gameData;
     }
 
     @Override
     public GameData gameEnd(JSONObject myResponse, GameData gameData) throws JSONException {
         if (myResponse.has("win") && !myResponse.isNull("win")) {
-            System.out.println("ADAPTER: Checked win validity.");
+            //System.out.println("ADAPTER: Checked win validity.");
             return proccessJsons.gameEnd(myResponse, gameData);
         }
-        System.out.println("ADAPTER: Checked win validity. WRONG");
+        //System.out.println("ADAPTER: Checked win validity. WRONG");
         return gameData;
     }
     

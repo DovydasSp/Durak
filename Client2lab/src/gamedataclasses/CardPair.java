@@ -46,8 +46,7 @@ public class CardPair implements Cloneable {
         CardPair copy = (CardPair) cardPair.clone();
         int copyAddress = System.identityHashCode(copy);
         int cardPairAddress = System.identityHashCode(cardPair);
-       // System.out.println("CardPair shallow copy made. CardPair: " + cardPairAddress + ", Copy: " + copyAddress);
-        loggerChain.logMessage(AbstractLogger.INFO,"CardPair shallow copy made. CardPair: " + cardPairAddress + ", Copy: " + copyAddress);
+        //loggerChain.logMessage(AbstractLogger.INFO,"CardPair shallow copy made. CardPair: " + cardPairAddress + ", Copy: " + copyAddress);
         return copy;
     }
 
@@ -57,8 +56,7 @@ public class CardPair implements Cloneable {
         copy.defender = (Card) defender.clone();
         int copyAddress = System.identityHashCode(copy);
         int cardPairAddress = System.identityHashCode(cardPair);
-       // System.out.println("CardPair deep copy made. CardPair: " + cardPairAddress + ", Copy: " + copyAddress);
-       loggerChain.logMessage(AbstractLogger.INFO,"CardPair deep copy made. CardPair: " + cardPairAddress + ", Copy: " + copyAddress);
+        //loggerChain.logMessage(AbstractLogger.INFO,"CardPair deep copy made. CardPair: " + cardPairAddress + ", Copy: " + copyAddress);
         return copy;
         
     }
