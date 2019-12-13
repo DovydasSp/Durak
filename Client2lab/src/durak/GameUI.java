@@ -98,8 +98,14 @@ public class GameUI {
                 try {
                     String s1=tf1.getText();
                     tf1.setText("");
-                    chatPanelText.append("YOU: "+s1+"\n");
-                    game.sendInput(Constants.COMMAND_CHAT, s1);
+                    String isCommand = s1.substring(0, 1);
+                    if(isCommand.equals("/")){
+                        game.chatCommand(s1);
+                    }
+                    else{
+                        chatPanelText.append("YOU: "+s1+"\n");
+                        game.sendInput(Constants.COMMAND_CHAT, s1);
+                    }
                 } catch (Exception ex){}
             }
         });

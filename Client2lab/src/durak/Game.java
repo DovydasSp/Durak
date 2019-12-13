@@ -6,6 +6,9 @@ import gamedataclasses.Card;
 import gamedataclasses.CardPair;
 import gamedataclasses.GameData;
 import gamedataclasses.Iterator;
+import interpreter.Expression;
+import interpreter.OrExpression;
+import interpreter.TerminalExpression;
 import statics.Constants;
 import statics.Static;
 import threads.InputThread;
@@ -83,13 +86,30 @@ public class Game {
         GameConnectionToAPI connection2 = new GameConnectionToAPI();
         InputThread thread2 = new InputThread(connection2, gameData, command, message);
         Thread t2 = new Thread(thread2);
-        if(command == Constants.COMMAND_CHAT || command == Constants.COMMAND_ROUND_END || command == Constants.COMMAND_UNDO){
+        if(command == Constants.COMMAND_CHAT || command == Constants.COMMAND_ROUND_END || command == Constants.COMMAND_UNDO || command == Constants.COMMAND_RESTART){
             t2.start();
             t2.join();
         }
         else if(checkIfTurnValid(command)){
             t2.start();
             t2.join();
+        }
+    }
+    
+    private static Expression getExpression(String e1, String e2){
+        Expression expr1 = new TerminalExpression(e1);
+        Expression expr2 = new TerminalExpression(e2);
+        return new OrExpression(expr1, expr2);
+    }
+    
+    public void chatCommand(String message) throws Exception{
+        Expression isUndo = getExpression("/undo", "/back");
+        Expression isRestart = getExpression("/restart", "/rr");
+        if(isUndo.interpret(message)){
+            sendInput(Constants.COMMAND_UNDO, "");
+        }
+        if(isRestart.interpret(message)){
+            sendInput(Constants.COMMAND_RESTART, "");
         }
     }
     

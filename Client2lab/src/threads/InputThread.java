@@ -28,6 +28,10 @@ public class InputThread implements Runnable {
                 loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent CHAT message");
                 connection.chat(gameData.getPlayer().getIDs().getKey(), gameData.getPlayer().getIDs().getValue(), message);
             }
+            else if (input == Constants.COMMAND_RESTART) {
+                loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent RESTART request");
+                connection.restart(gameData.getPlayer().getIDs().getKey());
+            }
             else if (input == Constants.COMMAND_UNDO) {
                 loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent UNDO request");
                 connection.undo(gameData.getPlayer().getIDs().getKey());
