@@ -88,6 +88,9 @@ public class PollingThread extends Observable implements Runnable {
             case "gameEnd":
                 gameData = processJsonsAdapter.gameEnd(json, gameData);
                 break;
+            case "chat":
+                gameData = processJsonsAdapter.chat(json, gameData);
+                break;
         }
         return gameData;
     }

@@ -1,12 +1,4 @@
 /Client/dist/
-Client/nbproject/private/private.properties
-Client2lab/nbproject/private/private.xml
-Client/nbproject/private/private.xml
-*.class
-Client2lab/nbproject/private/private.xml
-*.class
-*.class
-Client2lab/nbproject/private/private.xml
-Client2lab/nbproject/private/private.xml
-Client2lab/nbproject/private/private.properties
-*.xml
+/Client2lab/nbproject/private/private.properties
+/Client2lab/nbproject/private/private.xml
+/Client2lab/build/

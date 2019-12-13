@@ -6,6 +6,7 @@ import chain.ChainLogger;
 import gamedataclasses.Card;
 import gamedataclasses.CardBuilder;
 import gamedataclasses.CardPair;
+import gamedataclasses.Chat;
 import gamedataclasses.Field;
 import gamedataclasses.GameData;
 import gamedataclasses.Hand;
@@ -145,6 +146,18 @@ public class ProccessJsons {
         gameData.setWhatsChanged("gameEnd");
         //System.out.println("API sent gameEnd call");
          loggerChain.logMessage(AbstractLogger.INFO,"API sent gameEnd call");
+        return gameData;
+    }
+    
+    public GameData chat(JSONObject myResponse, GameData gameData) throws JSONException {
+        String playerName = myResponse.getString("playerName");
+        String message = myResponse.getString("message");
+        Chat c = new Chat();
+        c.setEnemyName(playerName);
+        c.setMessage(message);
+        gameData.setWhatsChanged("chat");
+        gameData.setChat(c);
+        System.out.println("API sent chat call");
         return gameData;
     }
 }

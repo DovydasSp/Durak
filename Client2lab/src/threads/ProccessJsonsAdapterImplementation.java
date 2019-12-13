@@ -119,4 +119,9 @@ public class ProccessJsonsAdapterImplementation implements ProccessJsonsAdapter 
         System.out.println("ADAPTER: Checked win validity. WRONG");
         return gameData;
     }
+    
+    @Override
+    public GameData chat(JSONObject myResponse, GameData gameData) throws JSONException {
+        return proccessJsons.chat(myResponse, gameData);
+    }
 }

@@ -11,19 +11,24 @@ public class InputThread implements Runnable {
     private final GameConnectionToAPI connection;
     private GameData gameData;
     private int input;
-        private ChainLogger loggerChain = new ChainLogger();
+    private String message;
+    private ChainLogger loggerChain = new ChainLogger();
 
-    public InputThread(GameConnectionToAPI connection_, GameData gameData_, int input_) {
+    public InputThread(GameConnectionToAPI connection_, GameData gameData_, int input_, String message_) {
         connection = connection_;
         gameData = gameData_;
         input = input_;
+        message = message_;
     }
 
     @Override
     public void run() {
         try {
-            if (input == Constants.COMMAND_UNDO) {
-               // System.out.println("inputThread: sent UNDO request");
+            if(input == Constants.COMMAND_CHAT){
+                loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent CHAT message");
+                connection.chat(gameData.getPlayer().getIDs().getKey(), gameData.getPlayer().getIDs().getValue(), message);
+            }
+            else if (input == Constants.COMMAND_UNDO) {
                 loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent UNDO request");
                 connection.undo(gameData.getPlayer().getIDs().getKey());
             } else {
