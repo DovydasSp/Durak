@@ -1,5 +1,7 @@
 package threads;
 
+import chain.AbstractLogger;
+import chain.ChainLogger;
 import durak.GameConnectionToAPI;
 import gamedataclasses.GameData;
 import statics.Constants;
@@ -9,6 +11,7 @@ public class InputThread implements Runnable {
     private final GameConnectionToAPI connection;
     private GameData gameData;
     private int input;
+        private ChainLogger loggerChain = new ChainLogger();
 
     public InputThread(GameConnectionToAPI connection_, GameData gameData_, int input_) {
         connection = connection_;
@@ -20,15 +23,18 @@ public class InputThread implements Runnable {
     public void run() {
         try {
             if (input == Constants.COMMAND_UNDO) {
-                System.out.println("inputThread: sent UNDO request");
+               // System.out.println("inputThread: sent UNDO request");
+                loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent UNDO request");
                 connection.undo(gameData.getPlayer().getIDs().getKey());
             } else {
-                System.out.println("inputThread: sent input request");
+               // System.out.println("inputThread: sent input request");
+                 loggerChain.logMessage(AbstractLogger.PATTERN, "COMMAND: inputThread: sent input request");
                 connection.input(gameData.getPlayer().getIDs().getValue(), gameData.getPlayer().getIDs().getKey(), input);
             }
         } catch (Exception e) {
             // Throwing an exception 
-            System.out.println("inputThread Exception is caught: " + e);
+           // System.out.println("inputThread Exception is caught: " + e);
+            loggerChain.logMessage(AbstractLogger.ERROR, "COMMAND: inputThread Exception is caught: " + e);
             run();
         }
     }

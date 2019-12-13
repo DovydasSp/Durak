@@ -1,5 +1,7 @@
 package durak;
 
+import chain.AbstractLogger;
+import chain.ChainLogger;
 import decorator.Buttonn;
 import decorator.GreenButton;
 import decorator.WhiteButton;
@@ -26,6 +28,8 @@ public class GameUI {
     private JPanel infoPanel;
     private JPanel tablePanel;
     private JPanel handCardPanel;
+    
+    public ChainLogger loggerChain = new ChainLogger();
     
     GameUI(Game game_){
         game = game_;
@@ -93,7 +97,8 @@ public class GameUI {
     }
     
     public void refreshPlayer(GameData gd) throws IOException, JSONException, InterruptedException{
-        System.out.println("Refreshing player");
+        //System.out.println("Refreshing player");
+        loggerChain.logMessage(AbstractLogger.INFO, "Refreshing player");
         if(gd.getWhatsChangedInPlayer().equals("hand")){
             refreshHandCardPanel(gd);
         }
@@ -155,7 +160,8 @@ public class GameUI {
         deckCardCount.setForeground(Color.white);
         infoPanel.add(deckCardCount);
               
-        System.out.println ("Decorator: White button was requested");
+        //System.out.println ("Decorator: White button was requested");
+        loggerChain.logMessage(AbstractLogger.PATTERN, "Decorator: White button was requested");
                 Buttonn bu = new WhiteButton("UNDO");
                 JButton button0 = bu.createButton();               
                 button0.addActionListener(new ActionListener(){  
@@ -171,7 +177,8 @@ public class GameUI {
         
         if(gd.getPlayer().getYourTurn() && gd.getField().getPairCount() > 0){
             if(gd.getPlayer().getIsAttacker()){
-                System.out.println ("Decorator: Green button was requested");
+               // System.out.println ("Decorator: Green button was requested");
+               loggerChain.logMessage(AbstractLogger.PATTERN, "Decorator: Green button was requested");
                 Buttonn b = new GreenButton("DONE", bu);
                 JButton button = b.createButton();               
                 button.addActionListener(new ActionListener(){  
@@ -187,7 +194,8 @@ public class GameUI {
             infoPanel.add(button);
             }
             else{
-                System.out.println ("Decorator: Red button was requested");
+                //System.out.println ("Decorator: Red button was requested");
+                loggerChain.logMessage(AbstractLogger.PATTERN, "Decorator: Red button was requested");
                 Buttonn b = new RedButton("TAKE", bu);
                 JButton button = b.createButton(); 
                 button.addActionListener(new ActionListener(){  
@@ -203,18 +211,21 @@ public class GameUI {
             infoPanel.add(button);
             }
         }
-        System.out.println("Refreshed infoPanel");
+       // System.out.println("Refreshed infoPanel");
+        loggerChain.logMessage(AbstractLogger.INFO, "Refreshed infoPanel");
         infoPanel.revalidate();
         infoPanel.repaint();
     }
     
     public void refreshField(GameData gd){
-        System.out.println("Refreshing field");
+       // System.out.println("Refreshing field");
+       loggerChain.logMessage(AbstractLogger.INFO, "Refreshing field");
         tablePanel.removeAll();
         tablePanel.revalidate();
         tablePanel.repaint();
         if(gd.getWhatsChanged().equals("gameEnd")){
-            System.out.println("Refreshed UI to game ending screen");
+            //System.out.println("Refreshed UI to game ending screen");
+            loggerChain.logMessage(AbstractLogger.INFO,"Refreshed UI to game ending screen");
             JLabel wonLabel = new JLabel();
             if(gd.getPlayer().getWon()){
                 wonLabel=new JLabel("You won! ☺");
@@ -302,7 +313,8 @@ public class GameUI {
             createCardButton(gd, c, cardNr);
             cardNr++;
         }
-        System.out.println("Refreshed hand card panel");
+        loggerChain.logMessage(AbstractLogger.INFO,"Refreshed hand card panel");
+       // System.out.println("Refreshed hand card panel");
     }
     
     private void createCardButton(GameData gd, Card card, int cardNr) throws IOException, JSONException, InterruptedException

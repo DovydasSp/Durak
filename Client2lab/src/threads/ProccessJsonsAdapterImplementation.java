@@ -1,5 +1,6 @@
 package threads;
 
+import chain.ChainLogger;
 import gamedataclasses.GameData;
 import statics.Static;
 import org.json.JSONException;
@@ -8,6 +9,7 @@ import org.json.JSONObject;
 public class ProccessJsonsAdapterImplementation implements ProccessJsonsAdapter {
 
     private final ProccessJsons proccessJsons = new ProccessJsons();
+        private ChainLogger loggerChain = new ChainLogger();
 
     @Override
     public GameData yourTurn(JSONObject myResponse, GameData gameData) throws JSONException {

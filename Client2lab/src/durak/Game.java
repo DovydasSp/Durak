@@ -1,5 +1,6 @@
 package durak;
 
+import chain.*;
 import observer.GameObserver;
 import gamedataclasses.Card;
 import gamedataclasses.CardPair;
@@ -16,7 +17,9 @@ public class Game {
     private final GameConnectionToAPI connection = new GameConnectionToAPI();
     private final GameUI gameUI = new GameUI(this);
     private GameData gameData = new GameData();
-    
+    public ChainLogger loggerChain = new ChainLogger();
+     
+  
     public void start(){
         gameUI.createFrame();
         gameUI.createBackPanel();
@@ -24,7 +27,6 @@ public class Game {
         gameUI.createTablePanel();
         gameUI.createHandCardPanel();
         gameUI.drawGameBoard();
-        
         join();
     }
     
@@ -37,14 +39,18 @@ public class Game {
         gameData = gd;
         gameUI.getFrame().setTitle("Durak - "+gameData.getPlayer().getPlayerName());
         
-        System.out.println ("OBSERVER: observable polling thread created.");
+        //System.out.println ("OBSERVER: observable polling thread created.");
+        loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observable polling thread created.");
         PollingThread thread = new PollingThread(connection, gameData, this);
-        System.out.println ("OBSERVER: observer created.");
+        //System.out.println ("OBSERVER: observer created.");
+        loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observer created.");
         GameObserver fo = new GameObserver(this, gameData);
-        System.out.println ("OBSERVER: observer added to thread.");
+        //System.out.println ("OBSERVER: observer added to thread.");
+        loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observer added to thread.");
         thread.addObserver(fo);
         Thread t = new Thread(thread);
-        System.out.println ("OBSERVER: observable thread started.");
+       // System.out.println ("OBSERVER: observable thread started.");
+        loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observable thread started.");
         t.start();
     }
     
