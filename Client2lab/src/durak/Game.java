@@ -26,6 +26,7 @@ public class Game {
         gameUI.createInfoPanel();
         gameUI.createTablePanel();
         gameUI.createHandCardPanel();
+        gameUI.createChatPanel();
         gameUI.drawGameBoard();
         join();
     }
@@ -38,6 +39,7 @@ public class Game {
     public void play(GameData gd){
         gameData = gd;
         gameUI.getFrame().setTitle("Durak - "+gameData.getPlayer().getPlayerName());
+        gameUI.getChatPanelText().append("DURAK: GameID- "+gameData.getPlayer().getIDs().getKey()+"\n");
         
         //System.out.println ("OBSERVER: observable polling thread created.");
         loggerChain.logMessage(AbstractLogger.PATTERN, "OBSERVER: observable polling thread created.");
